@@ -190,10 +190,10 @@ class SOSJetCleaner:
         ret = { "nJetSel"+self.label : len(jets) }
         ret["htJet25Sel"+self.label] = sum(l[0] for l in leps) + sum(J[0] for J in jets)
 
-        ret["nBJetLoose25Sel"+self.label]  =  sum((J[4]>0.46) for J in jets)
-        ret["nBJetMedium25Sel"+self.label] =  sum((J[4]>0.80) for J in jets)
-        ret["nBJetLoose40Sel"+self.label]  =  sum((J[4]>0.46 and J[0]>40) for J in jets)
-        ret["nBJetMedium40Sel"+self.label] =  sum((J[4]>0.80 and J[0]>40) for J in jets)
+        ret["nBJetLoose25Sel"+self.label]  =  sum((J[4]>0.5426) for J in jets)
+        ret["nBJetMedium25Sel"+self.label] =  sum((J[4]>0.8484) for J in jets)
+        ret["nBJetLoose40Sel"+self.label]  =  sum((J[4]>0.5426 and J[0]>40) for J in jets)
+        ret["nBJetMedium40Sel"+self.label] =  sum((J[4]>0.8484 and J[0]>40) for J in jets)
         
         ret["JetSel"+self.label+"_pt"] = [ J[0] for J in jets ]
         ret["JetSel"+self.label+"_id"] = [ J[3] for J in jets ]
