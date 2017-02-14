@@ -214,6 +214,17 @@ MODULES = [
 ]
 
 
+utility_files_dir = os.path.join(os.environ["CMSSW_BASE"], "src/CMGTools/TTHAnalysis/data/")
+from CMGTools.TTHAnalysis.tools.bTagWeightAnalyzer import bTagWeightAnalyzer
+btagsf_payload_fullsim  = os.path.join(utility_files_dir, "btag", "CSVv2_Moriond17_B_H.csv"                )
+btagsf_payload_fastsim  = os.path.join(utility_files_dir, "btag", "fastsim_csvv2_ttbar_26_1_2017_fixed.csv"          )
+btag_efficiency_fullsim = os.path.join(utility_files_dir, "btag", "btageff__ttbar_powheg_pythia8_25ns_Moriond17.root")
+btag_efficiency_fastsim = os.path.join(utility_files_dir, "btag", "btageff__SMS-T1bbbb-T1qqqq_25ns_Moriond17.root"   )
+bTagEventWeightFullSim   = lambda : bTagWeightAnalyzer(btagsf_payload_fullsim, btag_efficiency_fullsim, recllabel='')
+bTagEventWeightFastSim   = lambda : bTagWeightAnalyzer(btagsf_payload_fastsim, btag_efficiency_fastsim, recllabel='', isFastSim=True)
+MODULES.append( ('bTagEventWeightFullSim'  , bTagEventWeightFullSim ))
+MODULES.append( ('bTagEventWeightFastSim'  , bTagEventWeightFastSim ))
+
 
 def bestZ1TL(lepsl,lepst,cut=lambda lep:True):
       pairs = []

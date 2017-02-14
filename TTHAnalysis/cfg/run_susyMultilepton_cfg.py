@@ -351,6 +351,9 @@ else:
     susyScanAna.doLHE=True
     susyCounter.bypass_trackMass_check = False
     susyCounter.SMS_varying_masses=['genSusyMGluino','genSusyMNeutralino','genSusyMChargino','genSusyMNeutralino2', 'genSusyMStau', 'genSusyMSnuTau', 'genSusyMStop']
+    susyCounter.SMS_varying_masses += ['genSusyMScan1', 'genSusyMScan2', 'genSusyMScan3', 'genSusyMScan4']
+    susyCounter.SMS_mass_1 = 'genSusyMChargino' ##ForTChiWZ
+    susyCounter.SMS_mass_2 = 'genSusyMNeutralino' ##ForTChiWZ
     susyCoreSequence.insert(susyCoreSequence.index(susyScanAna)+1,susyCounter)
 
 # HBHE new filter
@@ -384,7 +387,7 @@ if not skipT1METCorr:
 
 
 #ISR jet collection
-if analysis=='SOS':
+if analysis=='SOS' and not runData:
     from CMGTools.TTHAnalysis.analyzers.nIsrAnalyzer import NIsrAnalyzer
     nIsrAnalyzer = cfg.Analyzer(
         NIsrAnalyzer, name='nIsrAnalyzer',
@@ -473,15 +476,19 @@ if analysis=='susy':
 
 elif analysis=='SOS':
 
-    selectedComponents = selectedComponents
-    #samples_scans = [SMS_TChiWZ, SMS_T2ttDiLep_mStop_10to80] 
-    #samples_privateSig = Higgsino 
-    #samples_mainBkg = [TTJets_DiLepton, TBar_tWch_ext, T_tWch_ext] + DYJetsM5to50HT + DYJetsM50HT
-    #samples_mainBkgVV = [VVTo2L2Nu, VVTo2L2Nu_ext]
-    #samples_fakesBkg = [TTJets_SingleLeptonFromTbar, TTJets_SingleLeptonFromT, WJetsToLNuHT] 
-    #samples_rareBkg = [WZTo3LNu, WWToLNuQQ, WZTo1L3Nu, WZTo1L1Nu2Q, ZZTo2L2Q, ZZTo4L, WWW, WZZ, WWZ, ZZZ, T_tch_powheg, TBar_tch_powheg, TToLeptons_sch_amcatnlo, TTHnobb_pow, WWDouble, WpWpJJ, TTWToLNu_ext, TTZToLLNuNu_ext, TTZToLLNuNu_m1to10, TTGJets, WGToLNuG_amcatnlo_ext, ZGTo2LG_ext, TGJets] #WZTo2L2Q,WGToLNuG, #still missing
-    #selectedComponents = samples_mainBkg + samples_mainBkgVV
-    #configureSplittingFromTime(samples_mainBkg,150,3)
+    #selectedComponents = [TTJets_DiLepton]
+    samples_scans = [SMS_TChiWZ, SMS_T2ttDiLep_mStop_10to80] 
+    samples_privateSig = Higgsino 
+    samples_mainBkg = [TTJets_DiLepton, TBar_tWch_ext, T_tWch_ext] + DYJetsM5to50HT + DYJetsM50HT
+    samples_mainBkgVV = [VVTo2L2Nu, VVTo2L2Nu_ext]
+    samples_fakesBkg = [TTJets_SingleLeptonFromTbar, TTJets_SingleLeptonFromT] + WJetsToLNuHT 
+    samples_rareBkg = [WZTo3LNu, WWToLNuQQ, WZTo1L3Nu, WZTo1L1Nu2Q, ZZTo2L2Q, ZZTo4L, WWW, WZZ, WWZ, ZZZ, T_tch_powheg, TBar_tch_powheg, TToLeptons_sch_amcatnlo, WWDouble, WpWpJJ, TTWToLNu_ext, TTZToLLNuNu_ext, TTZToLLNuNu_m1to10, TTGJets, WGToLNuG_amcatnlo_ext, ZGTo2LG_ext, TGJets] #WZTo2L2Q,WGToLNuG, #still missing
+    #selectedComponents = samples_mainBkg + samples_mainBkgVV + samples_rareBkg
+    selectedComponents = [SMS_TChiWZ]
+    configureSplittingFromTime(samples_fakesBkg,50,3)
+    configureSplittingFromTime(samples_mainBkg,50,3)
+    configureSplittingFromTime(samples_rareBkg,100,3)
+    cropToLumi([WWW, WZZ, WWZ, ZZZ, WWToLNuQQ, WZTo1L3Nu, WZTo1L1Nu2Q, ZZTo2L2Q, TTWToLNu_ext, TTZToLLNuNu_ext, TTZToLLNuNu_m1to10],200)
 
     
 
