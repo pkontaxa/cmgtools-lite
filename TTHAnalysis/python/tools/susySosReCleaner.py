@@ -143,11 +143,14 @@ class SOSJetCleaner:
         self.label = label
         self.floats = [ ]
         self.ints = [ ]
-        self.branches =  [ ("nJetSel"+self.label, "I") ]
-        self.branches += [ ("JetSel"+self.label+"_"+V, "F", 20, "nJetSel"+self.label) for V in ["pt"]+self.floats]
-        self.branches += [ ("JetSel"+self.label+"_"+V, "I", 20, "nJetSel"+self.label) for V in ["id"]+self.ints]
-        self.branches += [ ("htJet25Sel"+self.label, "F") ]
-        self.branches += [ (("nBJet%s%dSel"%(W,P))+self.label, "I") for W in ("Loose","Medium") for P in (25,40)]
+        self.branches = []
+        for postfix in "", "_jecUp", "_jecDown":
+            self.branches +=  [ ("nJetSel"+self.label+postfix, "I") ]
+            self.branches += [ ("iJSel"+self.label+postfix, "I", 20, "nJetSel"+self.label+postfix) ]
+            self.branches += [ ("JetSel"+self.label+postfix+"_"+V, "F", 20, "nJetSel"+self.label+postfix) for V in ["pt"]+self.floats]
+            self.branches += [ ("JetSel"+self.label+postfix+"_"+V, "I", 20, "nJetSel"+self.label+postfix) for V in ["id"]+self.ints]
+            self.branches += [ ("htJet25Sel"+self.label+postfix, "F") ]
+            self.branches += [ (("nBJet%s%dSel"%(W,P))+self.label+postfix, "I") for W in ("Loose","Medium") for P in (25,40)]
         self.leptons = leptons
         self.lepPtCut = lepPtCut
     def listBranches(self):
@@ -156,49 +159,51 @@ class SOSJetCleaner:
         self._ttreereaderversion = tree._ttreereaderversion
         for B in "nLepGood",: setattr(self, B, tree.valueReader(B))
         for B in "pt", "eta", "phi": setattr(self,"LepGood_"+B, tree.arrayReader("LepGood_"+B))
-        for J in "Jet", "DiscJet":
-            for B in "n"+J,: setattr(self, B, tree.valueReader(B))
-            for B in "pt", "eta", "phi","btagCSV","id": setattr(self,J+"_"+B, tree.arrayReader(J+"_"+B))
+        for postfix in "", "_jecUp", "_jecDown":
+            for J in "Jet"+postfix,"DiscJet"+postfix:
+                for B in "n"+J,: setattr(self, B, tree.valueReader(B))
+                for B in "pt", "eta", "phi","btagCSV","id": setattr(self,J+"_"+B, tree.arrayReader(J+"_"+B))
     def __call__(self,event):
         ## Init
         if event._tree._ttreereaderversion > self._ttreereaderversion: 
             self.init(event._tree)
         iLepSel = getattr(event, "i"+self.leptons)
         leps = [ (self.LepGood_pt.At(i),self.LepGood_eta.At(i),self.LepGood_phi.At(i)) for i in iLepSel ]
-        jets = []; 
-        for J in "Jet","DiscJet":
-            nJ = getattr(self, "n"+J).Get()[0]
-            if nJ == 0: continue
-            pt = getattr(self, J+"_pt").At
-            eta = getattr(self, J+"_eta").At
-            phi = getattr(self, J+"_phi").At
-            jid = getattr(self, J+"_id").At
-            btag = getattr(self, J+"_btagCSV").At
-            copys = [ getattr(self, J+"_"+V).At for V in self.ints + self.floats ]
-            for iJ in xrange(nJ):
-                jets.append( (pt(iJ),eta(iJ),phi(iJ),jid(iJ),btag(iJ), [c(iJ) for c in copys]) )
-        badjets = []
-        for (lpt,leta,lphi) in leps:
-            if lpt <= self.lepPtCut: continue
-            imin, drmin = -1, 0.4
-            for (iJ,J) in enumerate(jets):
-                dr = deltaR(leta,lphi,J[1],J[2])
-                if dr < drmin: (imin,drmin) = (iJ,dr)
-            if imin >= 0: badjets.append(imin)
-        jets = [J for (i,J) in enumerate(jets) if i not in badjets and J[0] > 25 and abs(J[1]) < 2.4 and J[3] > 0 ]
+        ret = {}
+        for postfix in "", "_jecUp", "_jecDown":
+            jets = [];
+            for J in "Jet"+postfix,"DiscJet"+postfix:
+                nJ = getattr(self, "n"+J).Get()[0]
+                if nJ == 0: continue
+                pt = getattr(self, J+"_pt").At
+                eta = getattr(self, J+"_eta").At
+                phi = getattr(self, J+"_phi").At
+                jid = getattr(self, J+"_id").At
+                btag = getattr(self, J+"_btagCSV").At
+                copys = [ getattr(self, J+"_"+V).At for V in self.ints + self.floats ]
+                for iJ in xrange(nJ):
+                    jets.append( (pt(iJ),eta(iJ),phi(iJ),jid(iJ),btag(iJ),(-iJ-1 if J=="DiscJet" else iJ),[c(iJ) for c in copys]) )
+            badjets = []
+            for (lpt,leta,lphi) in leps:
+                if lpt <= self.lepPtCut: continue
+                imin, drmin = -1, 0.4
+                for (iJ,J) in enumerate(jets):
+                    dr = deltaR(leta,lphi,J[1],J[2])
+                    if dr < drmin: (imin,drmin) = (iJ,dr)
+                if imin >= 0: badjets.append(imin)
+            jets = [J for (i,J) in enumerate(jets) if i not in badjets and J[0] > 25 and abs(J[1]) < 2.4 and J[3] > 0 ]
 
-        ret = { "nJetSel"+self.label : len(jets) }
-        ret["htJet25Sel"+self.label] = sum(l[0] for l in leps) + sum(J[0] for J in jets)
-
-        ret["nBJetLoose25Sel"+self.label]  =  sum((J[4]>0.5426) for J in jets)
-        ret["nBJetMedium25Sel"+self.label] =  sum((J[4]>0.8484) for J in jets)
-        ret["nBJetLoose40Sel"+self.label]  =  sum((J[4]>0.5426 and J[0]>40) for J in jets)
-        ret["nBJetMedium40Sel"+self.label] =  sum((J[4]>0.8484 and J[0]>40) for J in jets)
-        
-        ret["JetSel"+self.label+"_pt"] = [ J[0] for J in jets ]
-        ret["JetSel"+self.label+"_id"] = [ J[3] for J in jets ]
-        for i,V in enumerate(self.ints+self.floats):
-            ret["JetSel"+self.label+"_"+V] = [ J[5][i] for J in jets ]
+            ret["nJetSel"+self.label+postfix] = len(jets) 
+            ret["htJet25Sel"+self.label+postfix] = sum(l[0] for l in leps) + sum(J[0] for J in jets)
+            ret["nBJetLoose25Sel"+self.label+postfix]  =  sum((J[4]>0.5426) for J in jets)
+            ret["nBJetMedium25Sel"+self.label+postfix] =  sum((J[4]>0.8484) for J in jets)
+            ret["nBJetLoose40Sel"+self.label+postfix]  =  sum((J[4]>0.5426 and J[0]>40) for J in jets)
+            ret["nBJetMedium40Sel"+self.label+postfix] =  sum((J[4]>0.8484 and J[0]>40) for J in jets)
+            ret["JetSel"+self.label+postfix+"_pt"] = [ J[0] for J in jets ]
+            ret["JetSel"+self.label+postfix+"_id"] = [ J[3] for J in jets ]
+            ret["iJSel"+self.label+postfix] = [ J[5] for J in jets]
+            for i,V in enumerate(self.ints+self.floats):
+                ret["JetSel"+self.label+postfix+"_"+V] = [ J[6][i] for J in jets ]
 
         return ret
 
