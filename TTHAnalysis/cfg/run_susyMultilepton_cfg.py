@@ -476,7 +476,7 @@ if analysis=='susy':
 
 elif analysis=='SOS':
 
-    #selectedComponents = [TTJets_DiLepton]
+    selectedComponents = [TTJets_DiLepton_ext]
     samples_scans = [SMS_TChiWZ, SMS_T2ttDiLep_mStop_10to80] 
     samples_privateSig = Higgsino 
     samples_mainBkg = [TTJets_DiLepton, TBar_tWch_ext, T_tWch_ext] + DYJetsM5to50HT + DYJetsM50HT
@@ -484,7 +484,7 @@ elif analysis=='SOS':
     samples_fakesBkg = [TTJets_SingleLeptonFromTbar, TTJets_SingleLeptonFromT] + WJetsToLNuHT 
     samples_rareBkg = [WZTo3LNu, WWToLNuQQ, WZTo1L3Nu, WZTo1L1Nu2Q, ZZTo2L2Q, ZZTo4L, WWW, WZZ, WWZ, ZZZ, T_tch_powheg, TBar_tch_powheg, TToLeptons_sch_amcatnlo, WWDouble, WpWpJJ, TTWToLNu_ext, TTZToLLNuNu_ext, TTZToLLNuNu_m1to10, TTGJets, WGToLNuG_amcatnlo_ext, ZGTo2LG_ext, TGJets] #WZTo2L2Q,WGToLNuG, #still missing
     #selectedComponents = samples_mainBkg + samples_mainBkgVV + samples_rareBkg
-    selectedComponents = [SMS_TChiWZ]
+    #selectedComponents = [SMS_TChiWZ]
     configureSplittingFromTime(samples_fakesBkg,50,3)
     configureSplittingFromTime(samples_mainBkg,50,3)
     configureSplittingFromTime(samples_rareBkg,100,3)
@@ -526,27 +526,49 @@ if runData and not isTest: # For running on data
     #json = os.environ['CMSSW_BASE']+'/src/CMGTools/TTHAnalysis/data/json/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt' # 36.15/fb
     json = os.environ['CMSSW_BASE']+ '/src/CMGTools/TTHAnalysis/data/json/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt' # 36.46 /fb
 
-    #processing = "Run2016B-23Sep2016-v1"; short = "Run2016B_23Sep2016_v1"; run_ranges = [(272760,273017)]; useAAA=True; # -v2 starts from 272760 to 273017
-    #dataChunks.append((json,processing,short,run_ranges,useAAA))
-    processing = "Run2016B-23Sep2016-v3"; short = "Run2016B_23Sep2016_v3"; run_ranges = [(273150,275376)]; useAAA=True; # -v3 starts from 273150 to 275376
+    # #processing = "Run2016B-23Sep2016-v1"; short = "Run2016B_23Sep2016_v1"; run_ranges = [(272760,273017)]; useAAA=True; # -v2 starts from 272760 to 273017
+    # #dataChunks.append((json,processing,short,run_ranges,useAAA))
+    # processing = "Run2016B-23Sep2016-v3"; short = "Run2016B_23Sep2016_v3"; run_ranges = [(273150,275376)]; useAAA=True; # -v3 starts from 273150 to 275376
+    # dataChunks.append((json,processing,short,run_ranges,useAAA))
+    # processing = "Run2016C-23Sep2016-v1"; short = "Run2016C_23Sep2016_v1"; run_ranges = [(271036,284044)]; useAAA=True;
+    # dataChunks.append((json,processing,short,run_ranges,useAAA))
+    # processing = "Run2016D-23Sep2016-v1"; short = "Run2016D_23Sep2016_v1"; run_ranges = [(271036,284044)]; useAAA=True;
+    # dataChunks.append((json,processing,short,run_ranges,useAAA))
+    # processing = "Run2016E-23Sep2016-v1"; short = "Run2016E_23Sep2016_v1"; run_ranges = [(271036,284044)]; useAAA=True;
+    # dataChunks.append((json,processing,short,run_ranges,useAAA))
+    # processing = "Run2016F-23Sep2016-v1"; short = "Run2016F_23Sep2016_v1"; run_ranges = [(271036,284044)]; useAAA=True;
+    # dataChunks.append((json,processing,short,run_ranges,useAAA))
+    # processing = "Run2016G-23Sep2016-v1"; short = "Run2016G_23Sep2016_v1"; run_ranges = [(271036,284044)]; useAAA=True;
+    # dataChunks.append((json,processing,short,run_ranges,useAAA))
+    # #run H ==============================================================================================================
+    # processing = "Run2016H-PromptReco-v1"; short = "Run2016H-PromptReco-v1"; run_ranges = [(281085,281201)]; useAAA=True;
+    # dataChunks.append((json,processing,short,run_ranges,useAAA))
+    # processing = "Run2016H-PromptReco-v2"; short = "Run2016H-PromptReco-v2"; run_ranges = [(281207,284035)]; useAAA=True;
+    # dataChunks.append((json,processing,short,run_ranges,useAAA))
+    # processing = "Run2016H-PromptReco-v3"; short = "Run2016H-PromptReco-v3"; run_ranges = [(284036,284044)]; useAAA=True;
+    # dataChunks.append((json,processing,short,run_ranges,useAAA))
+
+
+    ### reminiAOD
+
+    processing = "Run2016B-03Feb2017_ver2-v2"; short = "Run2016B_03Feb2017_ver2_v2"; run_ranges = [(273150,275376)]; useAAA=True; #      -v3 starts from 273150 to 275376
     dataChunks.append((json,processing,short,run_ranges,useAAA))
-    processing = "Run2016C-23Sep2016-v1"; short = "Run2016C_23Sep2016_v1"; run_ranges = [(271036,284044)]; useAAA=True;
+    processing = "Run2016C-03Feb2017-v1"; short = "Run2016C_03Feb2017_v1"; run_ranges = [(271036,284044)]; useAAA=True;
     dataChunks.append((json,processing,short,run_ranges,useAAA))
-    processing = "Run2016D-23Sep2016-v1"; short = "Run2016D_23Sep2016_v1"; run_ranges = [(271036,284044)]; useAAA=True;
+    processing = "Run2016D-03Feb2017-v1"; short = "Run2016D_03Feb2017_v1"; run_ranges = [(271036,284044)]; useAAA=True;
     dataChunks.append((json,processing,short,run_ranges,useAAA))
-    processing = "Run2016E-23Sep2016-v1"; short = "Run2016E_23Sep2016_v1"; run_ranges = [(271036,284044)]; useAAA=True;
+    processing = "Run2016E-03Feb2017-v1"; short = "Run2016E_03Feb2017_v1"; run_ranges = [(271036,284044)]; useAAA=True;
     dataChunks.append((json,processing,short,run_ranges,useAAA))
-    processing = "Run2016F-23Sep2016-v1"; short = "Run2016F_23Sep2016_v1"; run_ranges = [(271036,284044)]; useAAA=True;
+    processing = "Run2016F-03Feb2017-v1"; short = "Run2016F_03Feb2017_v1"; run_ranges = [(271036,284044)]; useAAA=True;
     dataChunks.append((json,processing,short,run_ranges,useAAA))
-    processing = "Run2016G-23Sep2016-v1"; short = "Run2016G_23Sep2016_v1"; run_ranges = [(271036,284044)]; useAAA=True;
+    processing = "Run2016G-03Feb2017-v1"; short = "Run2016G_03Feb2017_v1"; run_ranges = [(271036,284044)]; useAAA=True;
     dataChunks.append((json,processing,short,run_ranges,useAAA))
     #run H ==============================================================================================================
-    processing = "Run2016H-PromptReco-v1"; short = "Run2016H-PromptReco-v1"; run_ranges = [(281085,281201)]; useAAA=True;
+    processing = "Run2016H-03Feb2017_ver2-v1"; short = "Run2016H_03Feb2017_ver2_v1"; run_ranges = [(281085,284035)]; useAAA=True;
     dataChunks.append((json,processing,short,run_ranges,useAAA))
-    processing = "Run2016H-PromptReco-v2"; short = "Run2016H-PromptReco-v2"; run_ranges = [(281207,284035)]; useAAA=True;
+    processing = "Run2016H-03Feb2017_ver3-v1"; short = "Run2016H_03Feb2017_ver3_v1"; run_ranges = [(284036,284044)]; useAAA=True;
     dataChunks.append((json,processing,short,run_ranges,useAAA))
-    processing = "Run2016H-PromptReco-v3"; short = "Run2016H-PromptReco-v3"; run_ranges = [(284036,284044)]; useAAA=True;
-    dataChunks.append((json,processing,short,run_ranges,useAAA))
+
 
 
     compSelection = ""; compVeto = ""
@@ -556,7 +578,7 @@ if runData and not isTest: # For running on data
  
     if analysis in ['SOS']:
         DatasetsAndTriggers.append( ("MET", triggers_SOS_highMET + triggers_SOS_doublemulowMET) )
-        DatasetsAndTriggers.append( ("DoubleMuon", triggers_SOS_tripleMu) )
+        #DatasetsAndTriggers.append( ("DoubleMuon", triggers_SOS_tripleMu) )
         #DatasetsAndTriggers.append( ("MET", triggers_Jet80MET90 + triggers_Jet80MET120 + triggers_MET120Mu5 ) )
         #DatasetsAndTriggers.append( ("SingleMuon", triggers_1mu_iso + triggers_1mu_noniso) )
         #DatasetsAndTriggers.append( ("SingleElectron", triggers_1e ) )
