@@ -35,6 +35,13 @@ SMS_TChiZZ4L=kreator.makeMCComponent("SMS_TChiZZ4L","/SMS-TChiZZ_ZToLL_ZToLL_Tun
 SMS_TChiHZ=kreator.makeMCComponent("SMS_TChiHZ","/SMS-TChiHZ_HToWWZZTauTau_2LFilter_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16Fast_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/MINIAODSIM","CMS",".*root",1,True)
 SMS_TChiHH=kreator.makeMCComponent("SMS_TChiHH","/SMS-TChiHH_HToWWZZTauTau_HToWWZZTauTau_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16Fast_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/MINIAODSIM","CMS",".*root",1,True)
 
+SMS_N2C1_Higgsino=kreator.makeMCComponent("SMS_N2C1_Higgsino","/SMS-N2C1-higgsino_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUSummer16Fast_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM","CMS",".*root",1)
+SMS_N2N1_Higgsino=kreator.makeMCComponent("SMS_N2N1_Higgsino","/SMS-N2N1-higgsino_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUSummer16Fast_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM","CMS",".*root",1)
+pMSSM_Higgsino=kreator.makeMCComponent("pMSSM_Higgsino","/MSSM-higgsino_no1l_2lfilter_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUSummer16Fast_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM","CMS",".*root",1)
+
+
+
+
 
 
 SignalSUSY = [
@@ -58,7 +65,10 @@ SMS_TChiHH,
 SMS_TChiSlepSnux0p95,
 SMS_TChiSlepSnuTEx0p05,
 SMS_TChiSlepSnuTEx0p5,
-SMS_TChiSlepSnuTEx0p95
+SMS_TChiSlepSnuTEx0p95,
+SMS_N2C1_Higgsino,
+SMS_N2N1_Higgsino,
+pMSSM_Higgsino
 ]
 
 ### ----------------------------- summary ----------------------------------------
