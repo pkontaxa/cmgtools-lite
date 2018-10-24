@@ -200,7 +200,7 @@ DYNJetsToLL = [
     DY3JetsToLL_M50_LO, DY3JetsToLL_M50_LO_ext,
     DY4JetsToLL_M50_LO,
 ]
-
+'''
 ## Cross sections from getXSecAnalyzer
 DYJetsToLL_M4to50_HT70to100       = kreator.makeMCComponent("DYJetsToLL_M4to50_HT70to100",      "/DYJetsToLL_M-4to50_HT-70to100_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM",        "CMS", ".*root", 145.4)
 DYJetsToLL_M4to50_HT70to100_ext1  = kreator.makeMCComponent("DYJetsToLL_M4to50_HT70to100_ext1", "/DYJetsToLL_M-4to50_HT-70to100_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10_ext1-v1/MINIAODSIM",   "CMS", ".*root", 145.4)
@@ -218,7 +218,7 @@ DYJetsToLLM4to50HT = [
     DYJetsToLL_M4to50_HT400to600,    DYJetsToLL_M4to50_HT400to600_ext1,
     DYJetsToLL_M4to50_HT600toInf,
 ]
-
+'''
 ## Cross sections from getXSecAnalyzer times k-factor 1.08 from ratio of FEWZ to inclusive DYJetsToLL_M50_LO
 DYJetsToLL_M50_HT100to200      = kreator.makeMCComponent("DYJetsToLL_M50_HT100to200",      "/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM",       "CMS", ".*root", 161.1*1.08)
 DYJetsToLL_M50_HT100to200_ext1   = kreator.makeMCComponent("DYJetsToLL_M50_HT100to200_ext1",   "/DYJetsToLL_M-50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10_ext1-v1/MINIAODSIM",   "CMS", ".*root", 161.1*1.08)
@@ -241,7 +241,7 @@ DYJetsToLLM50HT = [
     DYJetsToLL_M50_HT2500toInf,
 ]
 
-DYs = DYJets + DYNJetsToLL + DYJetsToLLM4to50HT + DYJetsToLLM50HT
+DYs = DYJets + DYNJetsToLL + DYJetsToLLM50HT #+ DYJetsToLLM4to50HT 
 
 
 # VJetsQQ HT-binned

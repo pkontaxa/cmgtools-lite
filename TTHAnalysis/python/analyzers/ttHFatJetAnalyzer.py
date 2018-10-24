@@ -65,11 +65,11 @@ class ttHFatJetAnalyzer( Analyzer ):
 
     def testJetID(self, jet):
         #jet.puJetIdPassed = jet.puJetId() 
-        jet.pfJetIdPassed = jet.jetID('POG_PFID_Loose') 
-        if self.cfg_ana.relaxJetId:
-            return True
-        else:
-            return jet.pfJetIdPassed
+#        jet.pfJetIdPassed = jet.jetID('POG_PFID_Loose') 
+#        if self.cfg_ana.relaxJetId:
+        return True
+#        else:
+#            return jet.pfJetIdPassed
             #return jet.pfJetIdPassed and (jet.puJetIdPassed or not(self.doPuId)) 
         
     def testJetNoID( self, jet ):

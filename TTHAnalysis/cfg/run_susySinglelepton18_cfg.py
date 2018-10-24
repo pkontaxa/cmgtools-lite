@@ -33,7 +33,7 @@ sample = "main"
 #sample = "z3l"
 
 # Lepton Skimming
-ttHLepSkim.minLeptons = 2
+ttHLepSkim.minLeptons = 1
 ttHLepSkim.maxLeptons = 999
 #ttHLepSkim.idCut  = ""
 #ttHLepSkim.ptCuts = []
@@ -60,6 +60,13 @@ jetAnaScaleUp.lepSelCut = lambda lep : False # no cleaning of jets with leptons
 jetAna.copyJetsByValue = True # do not remove this
 metAna.copyMETsByValue = True # do not remove this
 jetAna.doQG = True
+jetAna.jetPt = 20
+jetAna.jetEta = 2.4
+jetAna.minLepPt = 10
+jetAna.doQG = True
+isoTrackAna.setOff = False
+isoTrackAna.doRelIsolation = True
+genAna.allGenTaus = True
 if not removeJecUncertainty:
     jetAna.addJECShifts = True
     jetAna.jetPtOrUpOrDnSelection = True
@@ -120,10 +127,44 @@ ttHJetTauAna = cfg.Analyzer(
 ## Insert the SV analyzer in the sequence
 #susyCoreSequence.insert(susyCoreSequence.index(ttHCoreEventAna), ttHSVAna)
 #ttHSVAna.preselection = lambda ivf : abs(ivf.dxy.value())<2 and ivf.cosTheta>0.98
-for M in isoTrackAna, badMuonAna, badMuonAnaMoriond2017, badCloneMuonAnaMoriond2017, badChargedHadronAna:
+for M in badMuonAna, badMuonAnaMoriond2017, badCloneMuonAnaMoriond2017, badChargedHadronAna:#isoTrackAna,
     susyCoreSequence.remove(M)
 
 from CMGTools.TTHAnalysis.analyzers.treeProducerTTH import * 
+
+#add LHE ana for HT info
+from PhysicsTools.Heppy.analyzers.gen.LHEAnalyzer import LHEAnalyzer
+LHEAna = LHEAnalyzer.defaultConfig
+## Insert the FatJet, SV, HeavyFlavour analyzers in the sequence
+susyCoreSequence.insert(susyCoreSequence.index(ttHCoreEventAna),
+      ttHFatJetAna)
+
+# Add anyLepSkimmer
+from CMGTools.TTHAnalysis.analyzers.anyLepSkimmer import anyLepSkimmer
+anyLepSkim = cfg.Analyzer(
+    anyLepSkimmer, name='anyLepSkimmer',
+    minLeptons = 0,
+    maxLeptons = 999,
+)
+
+## Single lepton + ST skim
+from CMGTools.TTHAnalysis.analyzers.ttHSTSkimmer import ttHSTSkimmer
+ttHSTSkimmer = cfg.Analyzer(
+  ttHSTSkimmer, name='ttHSTSkimmer',
+  minST = 150,
+  )
+
+from CMGTools.TTHAnalysis.analyzers.nIsrAnalyzer import NIsrAnalyzer
+NIsrAnalyzer = cfg.Analyzer(
+  NIsrAnalyzer, name='NIsrAnalyzer')
+  
+## HT skim
+from CMGTools.TTHAnalysis.analyzers.ttHHTSkimmer import ttHHTSkimmer
+ttHHTSkimmer = cfg.Analyzer(
+  ttHHTSkimmer, name='ttHHTSkimmer',
+  minHT = 350,
+  )
+
 
 if not removeJecUncertainty:
     ttH_globalObjects.update({
@@ -132,15 +173,16 @@ if not removeJecUncertainty:
             })
 
 ## Tree Producer
+from CMGTools.TTHAnalysis.analyzers.treeProducerSusySingleLepton import *
 treeProducer = cfg.Analyzer(
-     AutoFillTreeProducer, name='treeProducerSusyMultilepton',
+     AutoFillTreeProducer, name='treeProducerSusySinglelepton',
      vectorTree = True,
      saveTLorentzVectors = False,  # can set to True to get also the TLorentzVectors, but trees will be bigger
      defaultFloatType = 'F', # use Float_t for floating point
      PDFWeights = PDFWeights,
-     globalVariables = ttH_globalVariables,
-     globalObjects = ttH_globalObjects,
-     collections = ttH_collections,
+     globalVariables = susySingleLepton_globalVariables,
+     globalObjects =susySingleLepton_globalObjects,
+     collections = susySingleLepton_collections,
 )
 if getHeppyOption("reduceMantissa",False) in (True,"True","true","yes","1"):
     print 'Activating reduceMantissa!'
@@ -304,7 +346,6 @@ if runData and not isTest: # For running on data
 
 #printSummary(selectedComponents)
 
-
 if runFRMC: 
     QCD_Mu5 = [ QCD_Pt20to30_Mu5, QCD_Pt30to50_Mu5, QCD_Pt50to80_Mu5, QCD_Pt80to120_Mu5, QCD_Pt120to170_Mu5, QCD_Pt170to300_Mu5 ]
     #autoAAA(QCDPtEMEnriched+QCDPtbcToE)
@@ -464,11 +505,14 @@ if selectedEvents!="":
     susyCoreSequence.insert(0, eventSelector)
 
 #-------- SEQUENCE -----------
-
+susyCoreSequence.insert(susyCoreSequence.index(lepAna)+1, anyLepSkim)
 sequence = cfg.Sequence(susyCoreSequence+[
-        ttHJetTauAna,
-        ttHEventAna,
-        treeProducer,
+    LHEAna,
+    NIsrAnalyzer,
+    ttHEventAna,
+    ttHHTSkimmer,
+    ttHSTSkimmer,
+    treeProducer,
     ])
 preprocessor = None
 
@@ -662,7 +706,7 @@ output_service = cfg.Service(
     TFileService,
     'outputfile',
     name="outputfile",
-    fname='treeProducerSusyMultilepton/tree.root',
+    fname='treeProducerSusySinglelepton/tree.root',
     option='recreate'
     )    
 outputService.append(output_service)

@@ -55,6 +55,28 @@ triggers_FR_1e_iso   = [ "HLT_Ele%d_CaloIdL_TrackIdL_IsoVL_PFJet30_v*" % pt for 
 
 # HT:
 triggers_pfht1050 = ['HLT_PFHT1050_v*']
+triggers_pfht450 = ['HLT_PFHT450_v*']
+triggers_MET110MHT110 = ['HLT_PFMET110_PFMHT110_IDTight_*', 'HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_*']
+triggers_MET120MHT120 = ['HLT_PFMET120_PFMHT120_IDTight_*', 'HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_*']
+triggers_highMHTMET = ["HLT_PFMET110_PFMHT110_IDTight_v*", "HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v*", "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v*", "HLT_PFMET120_PFMHT120_IDTight_v*"]
+triggers_pfjet450 = ["HLT_PFJet450_v*","HLT_AK8PFJet450_v*"]
+triggers_ak4pfjet450 = ["HLT_PFJet450_v*"]
+triggers_ak8pfjet450 = ["HLT_AK8PFJet450_v*"]
+triggers_calojet500 = ["HLT_CaloJet500_NoJetID_v*"]
+
+
+## muons
+triggers_mu_ht600 = ["HLT_Mu15_IsoVVVL_PFHT600_v*"]
+triggers_mu_ht450_met50 = ["HLT_Mu15_IsoVVVL_PFHT450_PFMET50_v*"]
+triggers_mu_ht450 = ["HLT_Mu15_IsoVVVL_PFHT450_v*"]
+triggers_mu50_ht450 = ["HLT_Mu50_IsoVVVL_PFHT450_v*"]
+
+## electrons
+triggers_el_ht600       = ["HLT_Ele15_IsoVVVL_PFHT600_v*"]
+triggers_el_ht450_met50 = ["HLT_Ele15_IsoVVVL_PFHT450_PFMET50_v*"]
+triggers_el_ht450       = ["HLT_Ele15_IsoVVVL_PFHT450_v*"]
+triggers_el50_ht450     = ["HLT_Ele50_IsoVVVL_PFHT450_v*"]
+
 
 # AK8 HT: not in 2017B, lower thresholds are prescaled
 triggers_ak8pfht_mass50 = ['HLT_AK8PFHT%d_TrimMass50_v*' % ht for ht in (750, 800)]

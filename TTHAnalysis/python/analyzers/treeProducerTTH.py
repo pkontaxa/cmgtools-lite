@@ -31,6 +31,7 @@ ttH_globalVariables = [
             ##-------- custom jets ------------------------------------------
             NTupleVariable("htJet25", lambda ev : ev.htJet25, help="H_{T} computed from leptons and jets (with |eta|<2.4, pt > 25 GeV)"),
             NTupleVariable("mhtJet25", lambda ev : ev.mhtJet25, help="H_{T}^{miss} computed from leptons and jets (with |eta|<2.4, pt > 25 GeV)"),
+            NTupleVariable("htJet30j", lambda ev : ev.htJet30j, help="H_{T} computed from only jets (with |eta|<2.4, pt > 30 GeV)"),
             NTupleVariable("htJet40j", lambda ev : ev.htJet40j, help="H_{T} computed from only jets (with |eta|<2.4, pt > 40 GeV)"),
             NTupleVariable("htJet40ja", lambda ev : ev.htJet40ja, help="H_{T} computed from only jets (with |eta|<4.7, pt > 40 GeV)"),
             NTupleVariable("htJet40", lambda ev : ev.htJet40, help="H_{T} computed from leptons and jets (with |eta|<2.4, pt > 40 GeV)"),
@@ -82,6 +83,7 @@ ttH_collections = {
             "genleps"         : NTupleCollection("genLep",     genParticleWithAncestryType, 10, help="Generated leptons (e/mu) from W/Z decays"),
             "gentauleps"      : NTupleCollection("genLepFromTau", genParticleWithAncestryType, 10, help="Generated leptons (e/mu) from decays of taus from W/Z/h decays"),
             "gentaus"         : NTupleCollection("genTau",     genParticleWithAncestryType, 10, help="Generated leptons (tau) from W/Z decays"),
+            "selectedIsoTrack"    : NTupleCollection("isoTrack", isoTrackType, 50, help="isoTrack, sorted by pt"),
             "gentopquarks"    : NTupleCollection("GenTop",     genParticleType, 2, help="Generated top quarks from hard scattering (needed separately for top pt reweighting)"),
             ##--------------------------------------------------
             "selectedTaus"    : NTupleCollection("TauGood",  tauTypeSusy, 8, help="Taus after the preselection"),

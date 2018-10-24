@@ -37,9 +37,9 @@ jetAna.recalibrateJets = True
 jetAna.applyL2L3Residual = "Data"
 metAna.recalibrate = True
 metAna.storePuppiExtra = False
-metAnaEGClean.storePuppiExtra = False
-metAnaMuEGClean.storePuppiExtra = False
-metAnaUncorr.storePuppiExtra = False
+#metAnaEGClean.storePuppiExtra = False
+#metAnaMuEGClean.storePuppiExtra = False
+#metAnaUncorr.storePuppiExtra = False
 
 
 
@@ -53,7 +53,7 @@ multib = False
 zerob = True
 
 #-------- Preprocessor yes/no
-cmssw = True
+cmssw = False
 
 isData = False # default, but will be overwritten below
 isSignal = False # default, but will be overwritten below
@@ -268,7 +268,7 @@ if sample == "MC":
 
   if test==1:
     # test a single component, using a single thread.
-    comp = WJetsToLNuHT[0]
+    comp = WJetsToLNuHT[10]
     comp.files = comp.files[:1]
     selectedComponents = [comp]
     comp.splitFactor = 1
@@ -476,17 +476,17 @@ output_service = cfg.Service(
 outputService.append(output_service)
 
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
-preprocessor = None
+'''preprocessor = None
 if cmssw:
     fname = "$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/runBTaggingSlimPreprocessor_cfg.py"
     jetAna.jetCol = 'selectedUpdatedPatJets'
 #    fname = "$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/MetType1_jec_Spring16_25nsV6_MC.py"
     preprocessor = CmsswPreprocessor(fname)#, addOrigAsSecondary=False)
-
+'''
 print "running"
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 config = cfg.Config( components = selectedComponents,
          sequence = sequence,
          services = outputService,
-         preprocessor=preprocessor,
+   #      preprocessor=preprocessor,
          events_class = Events)
