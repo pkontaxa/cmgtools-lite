@@ -156,7 +156,7 @@ class CMSDataset( BaseDataset ):
             query += "  status=VALID" # status doesn't interact well with run range
         if self.dbsInstance != None:
             query += "  instance=prod/%s" % self.dbsInstance
-        dbs='dasgoclient --query="file %s=%s"'%(qwhat,query) # files must be valid
+        dbs='dasgoclient -dasmaps=/nfs/dust/cms/user/$USER/ --query="file %s=%s"'%(qwhat,query) # files must be valid
         if begin >= 0:
             dbs += ' --index %d' % begin
         if end >= 0:
@@ -245,7 +245,7 @@ class CMSDataset( BaseDataset ):
                 query = "%s run between [%d, %d]" % (query,runmin if runmin > 0 else 1, runmax if runmax > 0 else 999999)
         if dbsInstance != None:
             query += "  instance=prod/%s" % dbsInstance
-        dbs='dasgoclient --query="summary %s=%s" --format=json'%(qwhat,query)
+        dbs='dasgoclient -dasmaps=/nfs/dust/cms/user/$USER/ --query="summary %s=%s" --format=json'%(qwhat,query)
         try:
             jdata = json.load(_dasPopen(dbs))['data']
         except ValueError as err:
@@ -404,7 +404,7 @@ class PrivateDataset ( BaseDataset ):
     def buildListOfFilesDBS(self, name, dbsInstance):
         entries = self.findPrimaryDatasetNumFiles(name, dbsInstance, -1, -1)
         files = []
-        dbs = 'dasgoclient --query="file dataset=%s instance=prod/%s" --limit=%s' % (name, dbsInstance, entries)
+        dbs = 'dasgoclient -dasmaps=/nfs/dust/cms/user/$USER/ --query="file dataset=%s instance=prod/%s" --limit=%s' % (name, dbsInstance, entries)
         dbsOut = _dasPopen(dbs)
         for line in dbsOut:
             if line.find('/store')==-1:
@@ -430,7 +430,7 @@ class PrivateDataset ( BaseDataset ):
             else:
                 print "WARNING: queries with run ranges are slow in DAS"
                 query = "%s run between [%d, %d]" % (query,runmin if runmin > 0 else 1, runmax if runmax > 0 else 999999)
-        dbs='dasgoclient --query="summary %s=%s instance=prod/%s"'%(qwhat, query, dbsInstance)
+        dbs='dasgoclient -dasmaps=/nfs/dust/cms/user/$USER/ --query="summary %s=%s instance=prod/%s"'%(qwhat, query, dbsInstance)
         dbsOut = _dasPopen(dbs).readlines()
         entries = []
         for line in dbsOut:
@@ -453,7 +453,7 @@ class PrivateDataset ( BaseDataset ):
             else:
                 print "WARNING: queries with run ranges are slow in DAS"
                 query = "%s run between [%d, %d]" % (query,runmin if runmin > 0 else 1, runmax if runmax > 0 else 999999)
-        dbs='dasgoclient --query="summary %s=%s instance=prod/%s"'%(qwhat, query, dbsInstance)
+        dbs='dasgoclient -dasmaps=/nfs/dust/cms/user/$USER/ --query="summary %s=%s instance=prod/%s"'%(qwhat, query, dbsInstance)
         dbsOut = _dasPopen(dbs).readlines()
         
         entries = []
@@ -475,13 +475,13 @@ class PrivateDataset ( BaseDataset ):
 ### MM
 
 def getDatasetFromCache( cachename ) :
-    cachedir =  '/'.join( [os.environ['HOME'],'.cmgdataset'])
+    cachedir =  '/'.join( ['/nfs/dust/cms/user/'+os.environ['USER'],'.cmgdataset'])
     pckfile = open( cachedir + "/" + cachename )
     dataset = pickle.load(pckfile)      
     return dataset
 
 def writeDatasetToCache( cachename, dataset ):
-    cachedir =  '/'.join( [os.environ['HOME'],'.cmgdataset'])
+    cachedir =  '/'.join( ['/nfs/dust/cms/user/'+os.environ['USER'],'.cmgdataset'])
     if not os.path.exists(cachedir):
         os.mkdir(cachedir)
     pckfile = open( cachedir + "/" + cachename, 'w')
@@ -524,7 +524,7 @@ def createDataset( user, dataset, pattern, readcache=False,
 ### MM
 def createMyDataset( user, dataset, pattern, dbsInstance, readcache=False):
 
-    cachedir =  '/'.join( [os.environ['HOME'],'.cmgdataset'])
+    cachedir =  '/'.join( ['/nfs/dust/cms/user/'+os.environ['USER'],'.cmgdataset'])
 
     def cacheFileName(data, user, dbsInstance, pattern):
         cf =  data.replace('/','_')

@@ -29,8 +29,6 @@ selectedEvents=getHeppyOption("selectEvents","")
 keepGenPart=getHeppyOption("keepGenPart",False)
 
 sample = "main"
-#if runDataQCD or runFRMC: sample="qcd1l"
-#sample = "z3l"
 test = 1
 multib = True
 zerob = False
@@ -70,6 +68,7 @@ jetAna.doQG = True
 isoTrackAna.setOff = False
 isoTrackAna.doRelIsolation = True
 genAna.allGenTaus = True
+jetAna.applyL2L3Residual = "Data"
 if not removeJecUncertainty:
     jetAna.addJECShifts = True
     jetAna.jetPtOrUpOrDnSelection = True
@@ -193,7 +192,7 @@ if getHeppyOption("reduceMantissa",False) in (True,"True","true","yes","1"):
 
 ## histo counter
 susyCoreSequence.insert(susyCoreSequence.index(skimAnalyzer), susyCounter)
-susyCoreSequence.remove(susyScanAna)
+
 
 if not skipT1METCorr:
     if doMETpreprocessor: 
@@ -316,7 +315,7 @@ else :
 		'EleHTMET' : triggers_el_ht450_met50,
 		'EleHT450B': triggers_el_ht450_btag
 	}
-triggerFlagsAna.unrollbits = True
+triggerFlagsAna.unrollbits = False
 triggerFlagsAna.saveIsUnprescaled = True
 triggerFlagsAna.checkL1Prescale = True
 
@@ -369,14 +368,15 @@ if runMC:
     for comp in selectedComponents:
       comp.fineSplitFactor = 1
       comp.splitFactor = len(comp.files)
+  susyCoreSequence.remove(susyScanAna)
 
 elif runSig:
 
   print 'Going to process Signal, assuming it is FastSim'
-
+  
   # Set FastSim JEC
   jetAna.mcGT = "Spring16_FastSimV1_MC"
-
+  #jetAna.mcGT = "Spring16_25nsFastSimV1_MC"
   #### REMOVE JET ID FOR FASTSIM
   jetAna.relaxJetId = True
 
@@ -428,6 +428,7 @@ elif runSig:
   sequence.remove(ttHHTSkimmer)
   sequence.remove(ttHSTSkimmer)
   sequence.remove(eventFlagsAna)
+  
 
 
 if runData : # For running on data
@@ -472,6 +473,7 @@ if runData : # For running on data
   sequence.remove(anyLepSkim)
   sequence.remove(NIsrAnalyzer)
   sequence.remove(ttHSTSkimmer)
+  susyCoreSequence.remove(susyScanAna)
 
 
 if removeJetReCalibration:
