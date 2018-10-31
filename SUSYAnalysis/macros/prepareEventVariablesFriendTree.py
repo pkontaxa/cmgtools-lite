@@ -239,20 +239,54 @@ if options.naf:
         else:
             #print "{base} -d {data} {post}".format(base=basecmd, data=name, chunk=chunk, post=friendPost)
             jobList.write("{base} -d {data} {post}".format(base=basecmd, data=name, chunk=chunk, post=friendPost)+'\n')
-
+    jobList.close()
     # check log dir
     logdir = 'logs'
     if not os.path.exists(logdir): os.system("mkdir -p "+logdir)
+    if  os.path.exists('submit_Friends.sh'):
+		os.remove('submit_Friends.sh')
 
+    print "batch Mode is on NAF is selected"
+    print jobListName
+    listtxt = open(str(jobListName),"r")
+    for line in listtxt: 
+        print line 
+        line = line.strip()
+        if line.startswith('#') : 
+            print "commented line continue!"
+            continue 
+        if len(line.strip()) == 0 :
+            print "empty line continue!"
+            continue 
+        exten = line.split("-d ")[-1]
+        condsub = outdir+"/submit"+exten+".condor"
+        wrapsub = outdir+"/wrapnanoPost_"+exten+".sh"
+        os.system("cp templates/submit.condor "+condsub)
+        os.system("cp templates/wrapnanoPost.sh "+wrapsub)
+        temp = open(condsub).read()
+        temp = temp.replace('@EXESH',str(os.getcwd())+"/"+wrapsub).replace('@LOGS',str(logdir)).replace('@time','60*60*2')
+        temp_toRun =  open(condsub, 'w')
+        temp_toRun.write(temp)
+        tempW = open(wrapsub).read()
+        tempW = tempW.replace('@WORKDIR',os.environ['CMSSW_BASE']+"/src").replace('@EXEDIR',str(os.getcwd())).replace('@CMDBINS',line)
+        tempW_roRun = open(wrapsub, 'w')
+        tempW_roRun.write(tempW)
+        subCmd = 'condor_submit -name s02 '+condsub
+        print 'Going to submit', line.split("-d ")[-1] , 'jobs with', subCmd
+        file = open('submit_Friends.sh','a')
+        file.write("\n") 
+        file.write(subCmd)
+    file.close() 
+    os.system('chmod a+x submit_Friends.sh')
+    listtxt.close()
+    print " ===== the script submit_Friends.sh os now created for your job list please use ./submit_Friends.sh to have them running now ======"
     # submit job array on list
-    subCmd = 'condor_qsub -t 1-%s -o logs nafbatch_runner.sh %s' %(len(jobs),jobListName)
-    print 'Going to submit', len(jobs), 'jobs with', subCmd
-    args=subCmd.split()
+#    subCmd = 'condor_qsub -t 1-%s -o logs nafbatch_runner.sh %s' %(len(jobs),jobListName)
+#    print 'Going to submit', len(jobs), 'jobs with', subCmd
+    #args=subCmd.split()
 
     #subprocess.Popen(args)
-    subprocess.call(args) #will run immediately
-
-    jobList.close()
+    #subprocess.call(args) #will run immediately
     exit()
 
 def getSampName(name, tname):
