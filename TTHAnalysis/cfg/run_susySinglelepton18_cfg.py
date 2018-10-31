@@ -177,7 +177,7 @@ if not removeJecUncertainty:
 ## Tree Producer
 from CMGTools.TTHAnalysis.analyzers.treeProducerSusySingleLepton import *
 treeProducer = cfg.Analyzer(
-     AutoFillTreeProducer, name='treeProducerSusySinglelepton',
+     AutoFillTreeProducer, name='treeProducerSusySingleLepton',
      vectorTree = True,
      saveTLorentzVectors = False,  # can set to True to get also the TLorentzVectors, but trees will be bigger
      defaultFloatType = 'F', # use Float_t for floating point
@@ -528,7 +528,7 @@ output_service = cfg.Service(
     TFileService,
     'outputfile',
     name="outputfile",
-    fname='treeProducerSusySinglelepton/tree.root',
+    fname='treeProducerSusySingleLepton/tree.root',
     option='recreate'
     )    
 outputService.append(output_service)
