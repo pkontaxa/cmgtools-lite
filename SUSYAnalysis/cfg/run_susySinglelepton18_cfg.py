@@ -14,7 +14,7 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 
 run80X = getHeppyOption("run80X",False)
 
-runData = getHeppyOption("runData",False)
+runData = getHeppyOption("runData",True)
 runMC = getHeppyOption("runMC",False)
 runSig = getHeppyOption("runSig",False)
 
@@ -468,12 +468,12 @@ if runData : # For running on data
   from CMGTools.RootTools.samples.samples_13TeV_DATA2017 import *
   
   
-  selectedComponents = dataSamples_17Nov2017
+  selectedComponents = dataSamples_31Mar2018_1l
   
   if test!=0 and jsonAna in susyCoreSequence: susyCoreSequence.remove(jsonAna)
   if test==1:
     # test one component (2 thread)
-    comp = JetHT_Run2017E_17Nov2017
+    comp = JetHT_Run2017E_31Mar2018
 #    comp.files = comp.files[:1]
     comp.files = comp.files[10:11]
     selectedComponents = [comp]
