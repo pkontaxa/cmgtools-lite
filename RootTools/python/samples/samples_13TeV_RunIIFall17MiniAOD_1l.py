@@ -90,7 +90,7 @@ TTJets_SingleLeptonFromTbar     = kreator.makeMCComponent("TTJets_SingleLeptonFr
 TTJets_SingleLeptonFromT        = kreator.makeMCComponent("TTJets_SingleLeptonFromT"       , "/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM", "CMS", ".*root", 831.76*(3*0.108)*(1-3*0.108))
 TTJets_DiLepton                 = kreator.makeMCComponent("TTJets_DiLepton"                , "/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM"     , "CMS", ".*root", 831.76*((3*0.108)**2) )
 # Xsec from XsecDB (not available YET)
-#TTJets_SingleLeptonFromTbar_genMET     = kreator.makeMCComponent("TTJets_SingleLeptonFromTbar_genMET"    , "/TTJets_SingleLeptFromTbar_genMET-150_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM", "CMS", ".*root", 831.76*(3*0.108)*(1-3*0.108) )
+TTJets_SingleLeptonFromTbar_genMET     = kreator.makeMCComponent("TTJets_SingleLeptonFromTbar_genMET"    , "/TTJets_SingleLeptFromTbar_genMET-150_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM", "CMS", ".*root", 831.76*(3*0.108)*(1-3*0.108) )
 #TTJets_SingleLeptonFromTbar_genMET_ext = kreator.makeMCComponent("TTJets_SingleLeptonFromTbar_genMET_ext", "/TTJets_SingleLeptFromTbar_genMET-150_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM", "CMS", ".*root", 831.76*(3*0.108)*(1-3*0.108))
 #TTJets_SingleLeptonFromT_genMET        = kreator.makeMCComponent("TTJets_SingleLeptonFromT_genMET"       , "/TTJets_SingleLeptFromT_genMET-150_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM", "CMS", ".*root", 831.76*(3*0.108)*(1-3*0.108))
 #TTJets_DiLepton_genMET                 = kreator.makeMCComponent("TTJets_DiLepton_genMET"                 , "/TTJets_DiLept_genMET-150_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM"     , "CMS", ".*root", 831.76*((3*0.108)**2) )
@@ -98,7 +98,7 @@ TTJets_DiLepton                 = kreator.makeMCComponent("TTJets_DiLepton"     
 #TTJets_LO_HT600to800       = kreator.makeMCComponent("TTJets_LO_HT600to800",  "/TTJets_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM", "CMS", ".*root", 1.610*831.76/502.2)
 #TTJets_LO_HT800to1200      = kreator.makeMCComponent("TTJets_LO_HT800to1200", "/TTJets_HT-800to1200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM", "CMS", ".*root", 0.663*831.76/502.2)
 #TTJets_LO_HT1200to2500     = kreator.makeMCComponent("TTJets_LO_HT1200to2500","/TTJets_HT-1200to2500_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM", "CMS", ".*root", 0.12*831.76/502.2)
-#TTJets_LO_HT2500toInf      = kreator.makeMCComponent("TTJets_LO_HT2500toInf", "/TTJets_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM", "CMS", ".*root", 0.001430*831.76/502.2)
+TTJets_LO_HT2500toInf      = kreator.makeMCComponent("TTJets_LO_HT2500toInf", "/TTJets_HT-2500toInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM", "CMS", ".*root", 0.001430*831.76/502.2)
 
 
 TTs = [
@@ -110,8 +110,8 @@ TTJets_DiLepton,
 # NOTAVAILYET # TTJets_LO_HT600to800,
 # NOTAVAILYET # TTJets_LO_HT800to1200,
 # NOTAVAILYET # TTJets_LO_HT1200to2500,
-# NOTAVAILYET # TTJets_LO_HT2500toInf,
-#TTJets_SingleLeptonFromTbar_genMET,  
+TTJets_LO_HT2500toInf,
+TTJets_SingleLeptonFromTbar_genMET,  
 #TTJets_SingleLeptonFromTbar_genMET_ext,
 #TTJets_SingleLeptonFromT_genMET,
 #TTJets_DiLepton_genMET,       
