@@ -165,7 +165,7 @@ class ComponentCreator(object):
         component.splitFactor = 100
         return component
 
-    def makeDataComponent(self,name,dataset,user,pattern,json=None,run_range=None,triggers=[],vetoTriggers=[],useAAA=False,jsonFilter=False):
+    def makeDataComponent(self,name,dataset,user,pattern,json=None,run_range=None,triggers=[],vetoTriggers=[],useAAA=True,jsonFilter=False):
         component = cfg.DataComponent(
             #dataset = dataset,
             name = name,
