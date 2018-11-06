@@ -363,49 +363,26 @@ def submitJobs(args, nchunks,options):
         runcmd = " ".join(str(arg) for arg in chargs )
         jobList.write(runcmd + '\n')
         lxbatchJobList.append(runcmd)
-    jobList.close()
+
     # check log dir
     logdir = 'logs'
     if not os.path.exists(logdir): os.system("mkdir -p "+logdir)
-    if  os.path.exists('submit_Bins.sh'):
-		os.remove('submit_Bins.sh')
 
     if options.batch:
-		print "batch Mode is on NAF is selected"
-		print jobListName
-		listtxt = open(str(jobListName),"r")
-		for line in listtxt: 
-			print line 
-			line = line.strip()
-			if line.startswith('#') : 
-				print "commented line continue!"
-				continue 
-			if len(line.strip()) == 0 :
-				print "empty line continue!"
-				continue 
-			exten = line.split("-c ")[-1]
-			condsub = outdir+"/submit"+exten+".condor"
-			wrapsub = outdir+"/wrapnanoPost_"+exten+".sh"
-			os.system("cp templates/submit.condor "+condsub)
-			os.system("cp templates/wrapnanoPost.sh "+wrapsub)
-			temp = open(condsub).read()
-			temp = temp.replace('@EXESH',str(os.getcwd())+"/"+wrapsub).replace('@LOGS',str(logdir)).replace('@time','60*60*2')
-			temp_toRun =  open(condsub, 'w')
-			temp_toRun.write(temp)
-			tempW = open(wrapsub).read()
-			tempW = tempW.replace('@WORKDIR',os.environ['CMSSW_BASE']+"/src").replace('@EXEDIR',str(os.getcwd())).replace('@CMDBINS',line)
-			tempW_roRun = open(wrapsub, 'w')
-			tempW_roRun.write(tempW)
-			subCmd = 'condor_submit -name s02 '+condsub
-			print 'Going to submit', line.split("-c")[-1] , 'jobs with', subCmd
-			file = open('submit_Bins.sh','a')
-			file.write("\n") 
-			file.write(subCmd)
-		file.close() 
-		os.system('chmod a+x submit_Bins.sh')
-		#
-    return 1
+        # submit job array on list
+        subCmd = 'qsub -t 1-%s -o logs nafbatch_runner.sh %s' %(nchunks,jobListName)
+        print 'Going to submit', nchunks, 'jobs with', subCmd
+        os.system(subCmd)
+    elif options.lxbatch:
+        for job in lxbatchJobList:
+            basecmd = "bsub -q 8nh -o logs {cmssw}/src/CMGTools/SUSYAnalysis/macros/lxbatch_runner.sh {dir} {cmssw} {jobcmd}".format(
+                dir = os.getcwd(), cmssw = os.environ['CMSSW_BASE'], jobcmd=job
+            )
+            os.system(basecmd)
+            time.sleep(0.1)
 
+    jobList.close()
+    return 1
 
 if __name__ == "__main__":
 
@@ -535,7 +512,6 @@ if __name__ == "__main__":
         print "Going to prepare batch jobs..."
         subargs =  sys.argv
         submitJobs(subargs, len(binList),options)
-        os.system("./submit_Bins.sh")
         exit(0)
 
     print "Beginning processing locally..."

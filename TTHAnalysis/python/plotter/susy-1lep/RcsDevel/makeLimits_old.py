@@ -35,51 +35,6 @@ def submitJobs(jobList, nchunks):
     os.system(subCmd)
 
     return 1
-    
-def submitJobsHTC(jobList, nchunks):
-	print 'Reading joblist'
-	listtxt = open(jobList,"r")
-	logdir = 'logs'
-	if not os.path.exists(logdir): os.system("mkdir -p "+logdir)
-	if  os.path.exists('submit_Bins.sh'):
-		os.remove('submit_Bins.sh')
-		
-	for line in listtxt: 
-		print "line is ",line 
-		line = line.strip()
-		if line.startswith('#') : 
-			print "commented line continue!"
-			continue 
-		if len(line.strip()) == 0 :
-			print "empty line continue!"
-			continue 
-		exten = line.split("-n ")[-1]
-		condsub = "./submit"+exten+".condor"
-		wrapsub = "./wrapnanoPost_"+exten+".sh"
-		os.system("cp ../../templates/submit.condor "+condsub)
-		os.system("cp ../../templates/wrapnanoPost.sh "+wrapsub)
-		temp = open(condsub).read()
-		temp = temp.replace('@EXESH',str(os.getcwd())+"/"+wrapsub).replace('@LOGS',str(logdir)).replace('@time','60*60*1')
-		temp_toRun =  open(condsub, 'w')
-		temp_toRun.write(temp)
-		tempW = open(wrapsub).read()
-		# for instance point to old CMSSW_BASE for excuting the combin command but i will update it to the currtent CMSSW_BASE
-		#tempW = tempW.replace('@WORKDIR',os.environ['CMSSW_BASE']+"/src").replace('@EXEDIR',str(os.getcwd())).replace('@CMDBINS',line)
-		tempW = tempW.replace('@WORKDIR',os.environ['CMSSW_BASE']+"/src").replace('@EXEDIR',str(os.getcwd())).replace('@CMDBINS',line)
-		tempW_roRun = open(wrapsub, 'w')
-		tempW_roRun.write(tempW)
-		subCmd = 'condor_submit -name s02 '+condsub
-		print 'Going to submit', line.split("-n ")[-1] , 'jobs with', subCmd
-		file = open('submit_Bins.sh','a')
-		file.write("\n") 
-		file.write(subCmd)
-	file.close() 
-	os.system('chmod a+x submit_Bins.sh')
-	
-	return 1    
-
-
-
 if __name__ == "__main__":
 
     ## remove '-b' option
@@ -125,7 +80,6 @@ if __name__ == "__main__":
             chunks = chunks+1
 #            runCards(f,s)
         submitJobs(jobList, chunks)
-        os.system("./submit_Bins.sh")
         jobs.close()
         
 

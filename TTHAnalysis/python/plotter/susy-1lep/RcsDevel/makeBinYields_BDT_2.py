@@ -406,7 +406,6 @@ def submitJobs(args, nchunks,options):
 		#
     return 1
 
-
 if __name__ == "__main__":
 
 
@@ -470,7 +469,7 @@ if __name__ == "__main__":
 
     print options.conference
     if options.conference == "Moriond17":
-        from searchBinsMoriond17 import *
+        from searchBinsMoriond17_BDT_2 import *
     else:
         from searchBins import *
 
@@ -478,28 +477,31 @@ if __name__ == "__main__":
     cDict = {}
 
     doDLCR = False
+    
+    cDict.update(cutDictCR)
+    cDict.update(cutDictSR)
 
-    doNjet6 = True
+    doNjet6 = False
     if doNjet6:
         cDict.update(cutDictCR)
         cDict.update(cutDictSR)
         if doDLCR: cDict.update(cutDictDLCR)
 
 
-    doNjet9 = True
+    doNjet9 = False
     if doNjet9:
         cDict.update(cutDictSRf9)
         cDict.update(cutDictCRf9)
         if doDLCR: cDict.update(cutDictDLCRf9)
 
 
-    doNjet5 = True
+    doNjet5 = False
     if doNjet5:
         cDict.update(cutDictSRf5)
         cDict.update(cutDictCRf5)
 
         
-    doFew = True
+    doFew = False
     if doFew and options.conference == "Moriond17":
         cDict.update(cutDictSRfFew)
         cDict.update(cutDictCRfFew)
@@ -537,7 +539,7 @@ if __name__ == "__main__":
         submitJobs(subargs, len(binList),options)
         os.system("./submit_Bins.sh")
         exit(0)
-
+        
     print "Beginning processing locally..."
     if options.chunk == None:
         # execute all bins locally

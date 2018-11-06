@@ -10,7 +10,7 @@ def combineCards(f , s ):
     except:
         os.mkdir('combinedCards')
 
-    cmd = 'combineCards.py ' + f + '/LT*txt > ' + f.replace(s,'combinedCards') +'/' + s + '.txt'
+    cmd = 'combineCards.py ' + f + '/BDT*txt > ' + f.replace(s,'combinedCards') +'/' + s + '.txt'
     print cmd
     os.system(cmd)
 
@@ -35,7 +35,7 @@ def submitJobs(jobList, nchunks):
     os.system(subCmd)
 
     return 1
-    
+
 def submitJobsHTC(jobList, nchunks):
 	print 'Reading joblist'
 	listtxt = open(jobList,"r")
@@ -77,8 +77,6 @@ def submitJobsHTC(jobList, nchunks):
 	os.system('chmod a+x submit_Bins.sh')
 	
 	return 1    
-
-
 
 if __name__ == "__main__":
 
@@ -124,9 +122,9 @@ if __name__ == "__main__":
             createJobs(f,s,jobs)
             chunks = chunks+1
 #            runCards(f,s)
-        submitJobs(jobList, chunks)
-        os.system("./submit_Bins.sh")
         jobs.close()
+        submitJobsHTC(jobList, chunks)
+        os.system("./submit_Bins.sh")
         
 
 
