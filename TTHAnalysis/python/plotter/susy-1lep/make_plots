@@ -7,7 +7,7 @@
 
 lumi=35.9
 
-mca=susy-1lep/mca/mca-Summer16_Moriond17.txt
+mca=susy-1lep/mca/mca-Summer16_Moriond17_pant.txt
 cuts=susy-1lep/1l_basicCutsFullCutFlow.txt
 trees=trees/
 friends=friends/evVarFriend_{cname}.root

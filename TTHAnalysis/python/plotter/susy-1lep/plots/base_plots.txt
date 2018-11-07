@@ -1,3 +1,5 @@
+BDTC_log: b_BDTC : 60,-0.5,1; XTitle = "Comp BDT Responce", Logy 
+
 HT: HT : 30, 0, 3000; XTitle="H_{T} [GeV]"
 HT_log: HT : 30, 0, 3000; XTitle="H_{T} [GeV]", Logy
 
