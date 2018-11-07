@@ -3,7 +3,7 @@ from CMGTools.TTHAnalysis.treeReAnalyzer import *
 from glob import glob
 import os.path, re
 import time
-
+import shutil
 MODULES = []
 
 from CMGTools.SUSYAnalysis.tools.eventVars_1l_base import EventVars1L_base
@@ -102,7 +102,11 @@ parser.add_option("--FMC", "--add-friend-mc",    dest="friendTreesMC",  action="
 parser.add_option("--FD", "--add-friend-data",    dest="friendTreesData",  action="append", default=[], nargs=2, help="Add a friend tree (treename, filename) to data trees only. Can use {name}, {cname} patterns in the treename")
 parser.add_option("-L", "--list-modules",  dest="listModules", action="store_true", default=False, help="just list the configured modules");
 parser.add_option("-n", "--new",  dest="newOnly", action="store_true", default=False, help="Make only missing trees");
+parser.add_option("-B", "--bulk", action="store_true", dest="bulk", default=False,help="Do bulk submission (works only for NAF HTC at the moment).")
 (options, args) = parser.parse_args()
+
+if options.bulk and not options.naf:
+  raise RuntimeError("Bulk submission currently implemented only for NAF HTC only")
 
 if options.listModules:
     print "List of modules"
@@ -206,6 +210,7 @@ if options.queue:
     exit()
 
 if options.naf:
+	
     import os, sys
     import subprocess
 
@@ -244,13 +249,15 @@ if options.naf:
     logdir = 'logs'
     if not os.path.exists(logdir): os.system("mkdir -p "+logdir)
     if  os.path.exists('submit_Friends.sh'):
-		os.remove('submit_Friends.sh')
+        os.remove('submit_Friends.sh')
+	
+    if  os.path.exists('condor.sub_all'):
+        os.remove('condor.sub_all')
 
     print "batch Mode is on NAF is selected"
     print jobListName
     listtxt = open(str(jobListName),"r")
     for line in listtxt: 
-        print line 
         line = line.strip()
         if line.startswith('#') : 
             print "commented line continue!"
@@ -259,27 +266,43 @@ if options.naf:
             print "empty line continue!"
             continue 
         exten = line.split("-d ")[-1]
-        condsub = outdir+"/submit"+exten+".condor"
-        wrapsub = outdir+"/wrapnanoPost_"+exten+".sh"
-        os.system("cp templates/submit.condor "+condsub)
+        if os.path.exists(outdir+'/'+exten):
+            shutil.rmtree(outdir+'/'+exten)
+        os.mkdir(outdir+'/'+exten)
+        condsub = outdir+'/'+exten+"/submit.condor"
+        wrapsub = outdir+'/'+exten+"/wrapnanoPost.sh"
         os.system("cp templates/wrapnanoPost.sh "+wrapsub)
-        temp = open(condsub).read()
-        temp = temp.replace('@EXESH',str(os.getcwd())+"/"+wrapsub).replace('@LOGS',str(logdir)).replace('@time','60*60*2')
-        temp_toRun =  open(condsub, 'w')
-        temp_toRun.write(temp)
         tempW = open(wrapsub).read()
         tempW = tempW.replace('@WORKDIR',os.environ['CMSSW_BASE']+"/src").replace('@EXEDIR',str(os.getcwd())).replace('@CMDBINS',line)
         tempW_roRun = open(wrapsub, 'w')
         tempW_roRun.write(tempW)
-        subCmd = 'condor_submit -name s02 '+condsub
-        print 'Going to submit', line.split("-d ")[-1] , 'jobs with', subCmd
-        file = open('submit_Friends.sh','a')
-        file.write("\n") 
-        file.write(subCmd)
-    file.close() 
-    os.system('chmod a+x submit_Friends.sh')
+        tempW_roRun.close()
+        if not options.bulk : 
+            os.system("cp templates/submit.condor "+condsub)
+            temp = open(condsub).read()
+            temp = temp.replace('@EXESH',str(os.getcwd())+"/"+wrapsub).replace('@LOGS',str(logdir)).replace('@time','60*60*2')
+            temp_toRun =  open(condsub, 'w')
+            temp_toRun.write(temp)
+            subCmd = 'condor_submit -name s02 '+condsub
+            print 'Going to submit', line.split("-d ")[-1] , 'jobs with', subCmd
+            file = open('submit_Friends.sh','a')
+            file.write("\n") 
+            file.write(subCmd)
+            file.close() 
+    if options.bulk : 
+        os.system("cp templates/submit.condor ./condor.sub_all")
+        temp = open('condor.sub_all').read()
+        temp = temp.replace('@EXESH',str(os.getcwd())+'/$(Chunk)/wrapnanoPost.sh').replace('@LOGS',str(logdir)).replace('@time','60*60*3').replace('Queue 1','queue Chunk matching dirs '+outdir+'*')
+        temp_toRun =  open('condor.sub_all', 'w')
+        temp_toRun.write(temp)
+        temp_toRun.close()
+    if  os.path.exists('condor.sub_all'):
+        os.system('condor_submit -name s02 condor.sub_all')
+    if  os.path.exists('submit_Friends.sh'):
+        os.system('chmod a+x submit_Friends.sh')
+        print " ===== the script submit_Friends.sh os now created for your job list please use ./submit_Friends.sh to have them running now ======"
+
     listtxt.close()
-    print " ===== the script submit_Friends.sh os now created for your job list please use ./submit_Friends.sh to have them running now ======"
     # submit job array on list
 #    subCmd = 'condor_qsub -t 1-%s -o logs nafbatch_runner.sh %s' %(len(jobs),jobListName)
 #    print 'Going to submit', len(jobs), 'jobs with', subCmd
