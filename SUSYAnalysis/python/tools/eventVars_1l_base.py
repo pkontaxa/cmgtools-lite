@@ -8,7 +8,7 @@ import operator
 from CMGTools.TTHAnalysis.treeReAnalyzer import *
 from ROOT import TLorentzVector, TVector2, std
 
-from math import sqrt, pi
+from math import sqrt, pi, acos, cos
 
 #################
 ### Cuts and WP
@@ -130,11 +130,17 @@ btag_DeepLooseWP = 0.2219
 btag_DeepMediumWP = 0.6324
 btag_DeepTightWP = 0.8958
 
+#DeepAK8 (brand new Deep Multiclass Tagger)
+topTag_DeepAK8_LooseWP = 0.18
+topTag_DeepAK8_MediumWP = 0.6
+topTag_DeepAK8_TightWP = 0.89
+
+
 ###########
 # MUONS
 ###########
 
-muID = 'ICHEPmediumMuonId' # 'medium'(2015) or 'ICHEPmediumMuonId' (2016)
+muID = 'medium' # 'medium'(2015) or 'ICHEPmediumMuonId' (2016)
 
 
 
@@ -278,6 +284,10 @@ class EventVars1L_base:
             'nJets40','nBJets40',
             "htJet30j", "htJet30ja","htJet40j",
             'Jet1_pt','Jet2_pt',
+############################## For DeepAK8 #########################################################
+            #FatJets
+            'nFatJets','FatJet1_pt','FatJet2_pt','FatJet1_eta','FatJet2_eta','FatJet1_phi','FatJet2_phi','FatJet1_mass','FatJet2_mass',("nDeepTop_loose","I"),("nDeepTop_medium","I"),("nDeepTop_tight","I"), ("nBJet_Excl_LooseTop_08","I"),("nBJet_Excl_MediumTop_08","I"),("nBJet_Excl_TightTop_08","I"), ("nBJetDeep_Excl_LooseTop_08","I"),("nBJetDeep_Excl_MediumTop_08","I"),("nBJetDeep_Excl_TightTop_08","I"),
+#################################################################################################
             ## top tags
             "nHighPtTopTag", "nHighPtTopTagPlusTau23",
             ## special Vars
@@ -527,6 +537,7 @@ class EventVars1L_base:
                 if eleID == 'CB':
                     # ELE CutBased ID
                     eidCB = lep.eleCBID_SPRING15_25ns_ConvVetoDxyDz
+
                     passMediumID = (eidCB >= 3)
                     passVetoID = (eidCB >= 1)
                 else:
@@ -689,6 +700,50 @@ class EventVars1L_base:
         nJet40C = len(centralJet40)
         ret['nJets40']   = nJet40C
 
+########################### FatJet #########################################################
+        FatJets =[l for l in Collection(event,"FatJet","nFatJet")]
+        nfatjet=len(FatJets)
+        fatJets=[]
+        
+        nFatJetLoose = 0
+        nFatJetMedium = 0       
+        nFatJetTight = 0
+
+        for i,j in enumerate(FatJets):
+              fatJets.append(j)
+
+              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_LooseWP):
+                    nFatJetLoose+=1
+
+              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_MediumWP):
+                   nFatJetMedium+=1
+
+              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_TightWP):
+                   nFatJetTight+=1
+
+        ret['nDeepTop_loose'] = nFatJetLoose
+        ret['nDeepTop_medium'] = nFatJetMedium
+        ret['nDeepTop_tight'] = nFatJetTight
+
+        
+        if nfatjet>=1:
+              ret['FatJet1_pt'] = fatJets[0].pt
+              ret['FatJet1_eta'] = fatJets[0].eta
+              ret['FatJet1_phi'] = fatJets[0].phi
+              ret['FatJet1_mass'] = fatJets[0].mass
+
+
+
+        if nfatjet>=2:
+              ret['FatJet2_pt'] = fatJets[1].pt
+              ret['FatJet2_eta'] = fatJets[1].eta
+              ret['FatJet2_phi'] = fatJets[1].phi
+              ret['FatJet2_mass'] = fatJets[1].mass
+
+
+        
+#####################################################################################################
+
         ##############################
         ## Local cleaning from leptons
         ##############################
@@ -750,11 +805,145 @@ class EventVars1L_base:
 
         nBJetDeep = 0
 
+        _nBTag_out_Loose=0
+        _nBTag_out_Medium=0
+        _nBTag_out_Tight=0
+
+        _nBTagDeep_out_Loose=0
+        _nBTagDeep_out_Medium=0
+        _nBTagDeep_out_Tight=0
+     
+
         for i,j in enumerate(cJet30Clean):
             if j.btagCSV > btagWP:
                 BJetMedium30.append(j)
-            if (j.DFprobb +  j.DFprobbb) > btag_DeepMediumWP:
-                nBJetDeep += 1
+###########################################################################
+         
+                _BTag_phi=j.phi
+                _BTag_eta=j.eta
+                
+                flag_leq_08_Loose=0
+                flag_leq_08_Medium=0
+                flag_leq_08_Tight=0
+
+                for k,l in enumerate(FatJets):
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_LooseWP):
+                             _TopTag_Phi_Loose=l.phi
+                             _TopTag_Eta_Loose=l.eta
+
+                             _delta_phi_Loose=fabs(acos(cos(_TopTag_Phi_Loose-_BTag_phi)))
+                             _delta_eta_Loose=fabs(_TopTag_Eta_Loose-_BTag_eta)                           
+                             _delta_R_Loose=sqrt(pow(_delta_eta_Loose,2)+pow(_delta_phi_Loose,2))
+
+                             if(_delta_R_Loose<0.8):
+                                    flag_leq_08_Loose+=1  
+
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_MediumWP):
+                             _TopTag_Phi_Medium=l.phi
+                             _TopTag_Eta_Medium=l.eta
+
+                             _delta_phi_Medium=fabs(acos(cos(_TopTag_Phi_Medium-_BTag_phi)))
+                             _delta_eta_Medium=fabs(_TopTag_Eta_Medium-_BTag_eta)             
+                             _delta_R_Medium=sqrt(pow(_delta_eta_Medium,2)+pow(_delta_phi_Medium,2))
+
+                             if(_delta_R_Medium<0.8):
+                                    flag_leq_08_Medium+=1
+
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_TightWP):
+                             _TopTag_Phi_Tight=l.phi
+                             _TopTag_Eta_Tight=l.eta
+
+                             _delta_phi_Tight=fabs(acos(cos(_TopTag_Phi_Tight-_BTag_phi)))
+                             _delta_eta_Tight=fabs(_TopTag_Eta_Tight-_BTag_eta)                          
+                             _delta_R_Tight=sqrt(pow(_delta_eta_Tight,2)+pow(_delta_phi_Tight,2))
+
+                             if(_delta_R_Tight<0.8):
+                                    flag_leq_08_Tight+=1
+
+
+                         
+
+                if(flag_leq_08_Loose==0):
+                       _nBTag_out_Loose+=1
+
+                if(flag_leq_08_Medium==0):
+                       _nBTag_out_Medium+=1
+
+                if(flag_leq_08_Tight==0):
+                       _nBTag_out_Tight+=1
+
+            if (j.DFprobb + j.DFprobbb + j.DFproblepb) > 0.66:
+                 nBJetDeep += 1
+                 
+                 _BTagDeep_phi=j.phi
+                 _BTagDeep_eta=j.eta
+
+                 flagDeep_leq_08_Loose=0
+                 flagDeep_leq_08_Medium=0
+                 flagDeep_leq_08_Tight=0
+                 
+                 for k,l in enumerate(FatJets):
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_LooseWP):
+                             _TopTag_Phi_Loose=l.phi
+                             _TopTag_Eta_Loose=l.eta
+
+                             _delta_phi_Loose=fabs(acos(cos(_TopTag_Phi_Loose-_BTagDeep_phi)))
+                             _delta_eta_Loose=fabs(_TopTag_Eta_Loose-_BTagDeep_eta)
+                             _delta_R_Loose=sqrt(pow(_delta_eta_Loose,2)+pow(_delta_phi_Loose,2))
+
+                             if(_delta_R_Loose<0.8):
+                                    flagDeep_leq_08_Loose+=1
+
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_MediumWP):
+                             _TopTag_Phi_Medium=l.phi
+                             _TopTag_Eta_Medium=l.eta
+
+                             _delta_phi_Medium=fabs(acos(cos(_TopTag_Phi_Medium-_BTagDeep_phi)))
+                             _delta_eta_Medium=fabs(_TopTag_Eta_Medium-_BTagDeep_eta)
+                             _delta_R_Medium=sqrt(pow(_delta_eta_Medium,2)+pow(_delta_phi_Medium,2))
+
+                             if(_delta_R_Medium<0.8):
+                                    flagDeep_leq_08_Medium+=1
+
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_TightWP):
+                             _TopTag_Phi_Tight=l.phi
+                             _TopTag_Eta_Tight=l.eta
+
+                             _delta_phi_Tight=fabs(acos(cos(_TopTag_Phi_Tight-_BTagDeep_phi)))
+                             _delta_eta_Tight=fabs(_TopTag_Eta_Tight-_BTagDeep_eta)
+                             _delta_R_Tight=sqrt(pow(_delta_eta_Tight,2)+pow(_delta_phi_Tight,2))
+
+                             if(_delta_R_Tight<0.8):
+                                    flagDeep_leq_08_Tight+=1
+
+
+
+
+                 if(flagDeep_leq_08_Loose==0):
+                       _nBTagDeep_out_Loose+=1
+
+                 if(flagDeep_leq_08_Medium==0):
+                       _nBTagDeep_out_Medium+=1
+
+                 if(flagDeep_leq_08_Tight==0):
+                       _nBTagDeep_out_Tight+=1
+
+
+        ret['nBJetDeep'] = nBJetDeep           
+
+        ret['nBJet_Excl_LooseTop_08'] = _nBTag_out_Loose  
+        ret['nBJet_Excl_MediumTop_08'] = _nBTag_out_Medium
+        ret['nBJet_Excl_TightTop_08'] = _nBTag_out_Tight 
+
+        ret['nBJetDeep_Excl_LooseTop_08'] = _nBTagDeep_out_Loose
+        ret['nBJetDeep_Excl_MediumTop_08'] = _nBTagDeep_out_Medium
+        ret['nBJetDeep_Excl_TightTop_08'] = _nBTagDeep_out_Tight
+
+             
+#####################################################################################
+
+       # if (j.DFprobb + j.DFprobbb) >  0.0574 :
+       #         nBJetDeep += 1
 
         for i,j in enumerate(centralJet40):
             if j.btagCSV > btagWP:
@@ -764,7 +953,7 @@ class EventVars1L_base:
         ret['nBJet']   = len(BJetMedium30)
         ret['nBJets30']   = len(BJetMedium30)
 
-        ret['nBJetDeep'] = nBJetDeep
+      #  ret['nBJetDeep'] = nBJetDeep
 
         # using normal collection
         ret['nBJets40']   = len(BJetMedium40)
