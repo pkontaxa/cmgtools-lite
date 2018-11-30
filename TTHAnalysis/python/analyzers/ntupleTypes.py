@@ -233,16 +233,33 @@ jetTypeSusyExtra = NTupleObjectType("jetSusyExtra",  baseObjectTypes = [ jetType
 ])
 
 fatJetType = NTupleObjectType("fatJet",  baseObjectTypes = [ jetType ], variables = [
-    NTupleVariable("prunedMass",  lambda x : x.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSPrunedMass"),  float, help="pruned mass"),
-    NTupleVariable("softDropMass", lambda x : x.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass"), float, help="trimmed mass"),
-    NTupleVariable("tau1", lambda x : x.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau1"), float, help="1-subjettiness"),
-    NTupleVariable("tau2", lambda x : x.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau2"), float, help="2-subjettiness"),
-    NTupleVariable("tau3", lambda x : x.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau1"), float, help="3-subjettiness"),
-    NTupleVariable("topMass", lambda x : (x.tagInfo("caTop").properties().topMass if x.tagInfo("caTop") else -99), float, help="CA8 jet topMass"),
-    NTupleVariable("minMass", lambda x : (x.tagInfo("caTop").properties().minMass if x.tagInfo("caTop") else -99), float, help="CA8 jet minMass"),
-    NTupleVariable("nSubJets", lambda x : (x.tagInfo("caTop").properties().nSubJets if x.tagInfo("caTop") else -99), float, help="CA8 jet nSubJets"),
+    #NTupleVariable("prunedMass",  lambda x : x.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSPrunedMass"),  float, help="pruned mass"),
+    #NTupleVariable("softDropMass", lambda x : x.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass"), float, help="trimmed mass"),
+    #NTupleVariable("tau1", lambda x : x.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau1"), float, help="1-subjettiness"),
+    #NTupleVariable("tau2", lambda x : x.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau2"), float, help="2-subjettiness"),
+    #NTupleVariable("tau3", lambda x : x.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau1"), float, help="3-subjettiness"),
+    #NTupleVariable("topMass", lambda x : (x.tagInfo("caTop").properties().topMass if x.tagInfo("caTop") else -99), float, help="CA8 jet topMass"),
+    #NTupleVariable("minMass", lambda x : (x.tagInfo("caTop").properties().minMass if x.tagInfo("caTop") else -99), float, help="CA8 jet minMass"),
+    #NTupleVariable("nSubJets", lambda x : (x.tagInfo("caTop").properties().nSubJets if x.tagInfo("caTop") else -99), float, help="CA8 jet nSubJets"),
+   NTupleVariable("softDropMass", lambda x : x.userFloat("ak8PFJetsPuppiSoftDropMass"), float, help="trimmed mass PUPPI"),
+   NTupleVariable("tau1", lambda x : x.userFloat("NjettinessAK8Puppi:tau1"), float, help="1-subjettiness PUPPI"),
+   NTupleVariable("tau2", lambda x : x.userFloat("NjettinessAK8Puppi:tau2"), float, help="2-subjettiness PUPPI"),
+   NTupleVariable("tau3", lambda x : x.userFloat("NjettinessAK8Puppi:tau3"), float, help="3-subjettiness PUPPI"),
+    
 ])
-      
+  
+
+######################## DeepAK8 #################################
+deepFatJetType =  NTupleObjectType("deepFatJet", baseObjectTypes = [ fatJetType ], variables = [
+    NTupleVariable("Binarized_score_deep_Top_PUPPI", lambda x : x.userFloat("binarized_score_top_PUPPI"), float, help="Binarized score for Top (DeepAK8)"),
+    NTupleVariable("raw_score_deep_Top_PUPPI", lambda x : x.userFloat("raw_score_top_PUPPI"), float, help="raw score for Top (DeepAK8)"),
+    NTupleVariable("Binarized_score_deep_W_PUPPI", lambda x : x.userFloat("binarized_score_w_PUPPI"), float, help="Binarized score for W (DeepAK8)"),
+    NTupleVariable("raw_score_deep_W_PUPPI", lambda x : x.userFloat("raw_score_w_PUPPI"), float, help="raw score for W (DeepAK8)"),
+
+])
+##################################################################
+
+    
 ##------------------------------------------  
 ## MET
 ##------------------------------------------  
