@@ -608,9 +608,9 @@ outputService.append(output_service)
 ################### Preprocessing (DeepAK8) ##########################################
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 if run80X:
-     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/testFatJetNN_80X.py"
+     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_80X.py"
 else:
-     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/testFatJetNN_94X.py"
+     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_94X.py"
     
 preprocessor1 = CmsswPreprocessor(fname1)
 
