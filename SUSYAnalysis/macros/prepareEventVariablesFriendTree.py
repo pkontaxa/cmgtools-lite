@@ -27,7 +27,7 @@ from CMGTools.SUSYAnalysis.tools.eventVars_1l_leptonSF import EventVars1L_lepton
 MODULES.append( ('1l_LeptonSF', EventVars1L_leptonSF()) )
 # for BtagSF
 from CMGTools.SUSYAnalysis.tools.eventVars_1l_btagSF import EventVars1L_btagSF
-MODULES.append( ('1l_LeptonSF', EventVars1L_btagSF()) )
+MODULES.append( ('1l_btagSF', EventVars1L_btagSF()) )
 # Top pt reweighting
 from CMGTools.SUSYAnalysis.tools.eventVars_1l_WeightsForSystematics import EventVars1LWeightsForSystematics
 MODULES.append( ('1l_SysWeights', EventVars1LWeightsForSystematics()) )
@@ -266,6 +266,8 @@ if options.naf:
             print "empty line continue!"
             continue 
         exten = line.split("-d ")[-1]
+        if "-c " in exten : 
+			exten = exten.split(" ")[0]+"_"+exten.split(" ")[-1]
         if os.path.exists(outdir+'/'+exten):
             shutil.rmtree(outdir+'/'+exten)
         os.mkdir(outdir+'/'+exten)

@@ -31,7 +31,7 @@ selectedEvents=getHeppyOption("selectEvents","")
 keepGenPart=getHeppyOption("keepGenPart",False)
 #test = getHeppyOption("test")
 sample = "main"
-test = 1
+test = 0
 multib = True
 zerob = False
 
@@ -54,29 +54,51 @@ lepAna.doIsolationScan = False
 lepAna.doMiniIsolation = True if run80X else "precomputed"
 lepAna.mu_isoCorr = "deltaBeta"
 
+## MUONS
+lepAna.loose_muon_pt  = 10
+lepAna.inclusive_muon_pt  = 10
+lepAna.loose_muon_id     = "POG_ID_Loose" #same as in core
+lepAna.inclusive_muon_id     = "POG_ID_Loose" #same as in core
+
+lepAna.loose_electron_eta = 2.4
+lepAna.loose_electron_pt  = 10
+lepAna.inclusive_electron_pt  = 10
+
 # Lepton Preselection
 if run80X:
       lepAna.loose_electron_id  = "POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto"
       lepAna.loose_electron_lostHits = 999. # no cut since embedded in ID
       lepAna.loose_electron_dxy    = 999. # no cut since embedded in ID
       lepAna.loose_electron_dz     = 999. # no cut since embedded in ID
-
+      lepAna.mu_effectiveAreas = 'Spring15_25ns_v1'
       lepAna.inclusive_electron_id  = "POG_Cuts_ID_SPRING15_25ns_v1_Veto"
       lepAna.inclusive_electron_lostHits = 999. # no cut since embedded in ID
       lepAna.inclusive_electron_dxy    = 999. # no cut since embedded in ID
       lepAna.inclusive_electron_dz     = 999. # no cut since embedded in ID
-
-      ## MUONS
-      lepAna.loose_muon_pt  = 10
-      lepAna.inclusive_muon_pt  = 10
-      lepAna.loose_muon_id     = "POG_ID_Loose" #same as in core
-      lepAna.inclusive_muon_id     = "POG_ID_Loose" #same as in core
+      lepAna.ele_effectiveAreas = 'Spring15_25ns_v1'
 
 else:
-      lepAna.loose_electron_id = "MVA_ID_nonIso_Fall17_Loose"
+      lepAna.loose_electron_id = "POG_Cuts_ID_FALL17_94X_v1_ConvVetoDxyDz_Veto"
+      lepAna.loose_electron_lostHits = 999. # no cut since embedded in ID
+      lepAna.loose_electron_dxy    = 999. # no cut since embedded in ID
+      lepAna.loose_electron_dz     = 999. # no cut since embedded in ID
+      
+      lepAna.inclusive_electron_id  = "POG_Cuts_ID_FALL17_94X_v1_Veto"
+      lepAna.inclusive_electron_lostHits = 999. # no cut since embedded in I
+      lepAna.inclusive_electron_dxy    = 999. # no cut since embedded in ID
+      lepAna.inclusive_electron_dz     = 999. # no cut since embedded in ID
+
 
 isolation = "miniIso"
 
+
+if run80X : 
+	jetAna.mcGT     = "Summer16_07Aug2017_V11_MC"
+	jetAna.dataGT   = [(1,"Summer16_07Aug2017BCD_V11_DATA"),([276831,"Summer16_07Aug2017EF_V10_DATA"),(278802,"Summer16_07Aug2017GH_V10_DATA")],
+else : 
+	jetAna.mcGT     = "Fall17_17Nov2017_V32_MC"
+	jetAna.dataGT   = [(1,"Fall17_17Nov2017B_V32_DATA"),(299337,"Fall17_17Nov2017C_V32_DATA"),(302030,"Fall17_17Nov2017DE_V32_DATA"),(304911,"Fall17_17Nov2017F_V32_DATA")],
+	
 jetAna.lepSelCut = lambda lep : False # no cleaning of jets with leptons
 jetAnaScaleDown.lepSelCut = lambda lep : False # no cleaning of jets with leptons
 jetAnaScaleUp.lepSelCut = lambda lep : False # no cleaning of jets with leptons
@@ -345,8 +367,8 @@ else :
 		'EleHT450B': triggers_el_ht450_btag
 	}
 triggerFlagsAna.unrollbits = False
-triggerFlagsAna.saveIsUnprescaled = True
-triggerFlagsAna.checkL1Prescale = True
+triggerFlagsAna.saveIsUnprescaled = False
+triggerFlagsAna.checkL1Prescale = False
 
 from CMGTools.RootTools.samples.configTools import printSummary, configureSplittingFromTime, cropToLumi, prescaleComponents, insertEventSelector, mergeExtensions
 from CMGTools.RootTools.samples.autoAAAconfig import *
@@ -371,7 +393,7 @@ if runMC:
   anyLepSkim.minLeptons = 1
 
   if run80X:
-         from CMGTools.RootTools.samples.samples_13TeV_RunIISummer16MiniAODv2 import *
+         from CMGTools.RootTools.samples.samples_13TeV_RunIISummer16MiniAODv3_1l import *
   else: 
          from CMGTools.RootTools.samples.samples_13TeV_RunIIFall17MiniAOD_1l import *
 
@@ -380,7 +402,7 @@ if runMC:
 #  [TTJets_SingleLeptonFromTbar,TTJets_SingleLeptonFromTbar_ext,TTJets_SingleLeptonFromT,TTJets_DiLepton,TTJets_DiLepton_ext,
   if test==1:
     # test a single component, using a single thread.
-    comp = WJetsToLNuHT[3]
+    comp = WJetsToLNuHT[5]
     comp.files = comp.files[:1]
     selectedComponents = [comp]
     comp.splitFactor = 1
@@ -398,7 +420,7 @@ if runMC:
   elif test==0:
     #selectedComponents = mcSamples
     #selectedComponents = [WJetsToLNuHT[9]]
-    selectedComponents = DYJetsM50HT + QCDHT + SingleTop + TTs + WJetsToLNuHT
+    selectedComponents = mcSamples
     for comp in selectedComponents:
       comp.fineSplitFactor = 1
       comp.splitFactor = len(comp.files)
@@ -497,15 +519,17 @@ if runData : # For running on data
   anyLepSkim.minLeptons = 1
 
   # central samples
-  from CMGTools.RootTools.samples.samples_13TeV_DATA2017 import *
-  
-  
-  selectedComponents = dataSamples_31Mar2018_1l
+  if run80X:
+      from CMGTools.RootTools.samples.samples_13TeV_DATA2016_17Jul2018_1l import *
+      selectedComponents = dataSamples_17Jul2018
+  else : 
+      from CMGTools.RootTools.samples.samples_13TeV_DATA2017 import *
+      selectedComponents = dataSamples_31Mar2018_1l
   
   if test!=0 and jsonAna in susyCoreSequence: susyCoreSequence.remove(jsonAna)
   if test==1:
     # test one component (2 thread)
-    comp = JetHT_Run2017E_31Mar2018
+    comp = selectedComponents[0]
 #    comp.files = comp.files[:1]
     comp.files = comp.files[10:11]
     selectedComponents = [comp]
@@ -607,10 +631,9 @@ outputService.append(output_service)
 
 ################### Preprocessing (DeepAK8) ##########################################
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
-if run80X:
-     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_80X.py"
-else:
-     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_94X.py"
+#if run80X:
+#     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_80X.py"
+fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_94X.py"
     
 preprocessor1 = CmsswPreprocessor(fname1)
 
