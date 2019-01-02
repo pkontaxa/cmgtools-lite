@@ -15,7 +15,7 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 run80X = getHeppyOption("run80X",False)
 
 runData = getHeppyOption("runData",False)
-runMC = getHeppyOption("runMC",True)
+runMC = getHeppyOption("runMC",False)
 runSig = getHeppyOption("runSig",False)
 
 
@@ -31,7 +31,7 @@ selectedEvents=getHeppyOption("selectEvents","")
 keepGenPart=getHeppyOption("keepGenPart",False)
 #test = getHeppyOption("test")
 sample = "main"
-test = 0
+test = 1
 multib = True
 zerob = False
 
@@ -94,10 +94,14 @@ isolation = "miniIso"
 
 if run80X : 
 	jetAna.mcGT     = "Summer16_07Aug2017_V11_MC"
-	jetAna.dataGT   = [(1,"Summer16_07Aug2017BCD_V11_DATA"),([276831,"Summer16_07Aug2017EF_V10_DATA"),(278802,"Summer16_07Aug2017GH_V10_DATA")],
+	jetAna.dataGT   = [(1,"Summer16_07Aug2017BCD_V11_DATA"),(276831,"Summer16_07Aug2017EF_V11_DATA"),(278802,"Summer16_07Aug2017GH_V11_DATA")],
+	
 else : 
 	jetAna.mcGT     = "Fall17_17Nov2017_V32_MC"
 	jetAna.dataGT   = [(1,"Fall17_17Nov2017B_V32_DATA"),(299337,"Fall17_17Nov2017C_V32_DATA"),(302030,"Fall17_17Nov2017DE_V32_DATA"),(304911,"Fall17_17Nov2017F_V32_DATA")],
+	# to activate the EE noise mitigation
+	#metAna.metCollection     = "slimmedMETsModifiedMET"
+	#metAna.noPUMetCollection = "slimmedMETsModifiedMET"
 	
 jetAna.lepSelCut = lambda lep : False # no cleaning of jets with leptons
 jetAnaScaleDown.lepSelCut = lambda lep : False # no cleaning of jets with leptons
