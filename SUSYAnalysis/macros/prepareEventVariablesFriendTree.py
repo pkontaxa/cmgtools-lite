@@ -282,7 +282,7 @@ if options.naf:
         if not options.bulk : 
             os.system("cp templates/submit.condor "+condsub)
             temp = open(condsub).read()
-            temp = temp.replace('@EXESH',str(os.getcwd())+"/"+wrapsub).replace('@LOGS',str(logdir)).replace('@time','60*60*2')
+            temp = temp.replace('@EXESH',str(os.getcwd())+"/"+wrapsub).replace('@LOGS',str(logdir)).replace('@time','60*60*6')
             temp_toRun =  open(condsub, 'w')
             temp_toRun.write(temp)
             subCmd = 'condor_submit -name s02 '+condsub
@@ -294,7 +294,7 @@ if options.naf:
     if options.bulk : 
         os.system("cp templates/submit.condor ./condor.sub_all")
         temp = open('condor.sub_all').read()
-        temp = temp.replace('@EXESH',str(os.getcwd())+'/$(Chunk)/wrapnanoPost.sh').replace('@LOGS',str(logdir)).replace('@time','60*60*3').replace('Queue 1','queue Chunk matching dirs '+outdir+'/*')
+        temp = temp.replace('@EXESH',str(os.getcwd())+'/$(Chunk)/wrapnanoPost.sh').replace('@LOGS',str(logdir)).replace('@time','60*60*6').replace('Queue 1','queue Chunk matching dirs '+outdir+'/*')
         temp_toRun =  open('condor.sub_all', 'w')
         temp_toRun.write(temp)
         temp_toRun.close()
