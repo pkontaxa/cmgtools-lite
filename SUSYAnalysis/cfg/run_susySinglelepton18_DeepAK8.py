@@ -637,10 +637,12 @@ outputService.append(output_service)
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 #if run80X:
 #     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_80X.py"
-if runMC : 
+if runMC and not run80X: 
     fname1="./FatJetNN_94X_MC.py"
-else : 
+elif runData and not run80X : 
     fname1="./FatJetNN_94X_data.py"
+else : 
+    fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_94X.py"
     
 preprocessor1 = CmsswPreprocessor(fname1)
 
