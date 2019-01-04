@@ -100,8 +100,8 @@ else :
 	jetAna.mcGT     = "Fall17_17Nov2017_V32_MC"
 	jetAna.dataGT   = [(1,"Fall17_17Nov2017B_V32_DATA"),(299337,"Fall17_17Nov2017C_V32_DATA"),(302030,"Fall17_17Nov2017DE_V32_DATA"),(304911,"Fall17_17Nov2017F_V32_DATA")],
 	# to activate the EE noise mitigation
-	#metAna.metCollection     = "slimmedMETsModifiedMET"
-	#metAna.noPUMetCollection = "slimmedMETsModifiedMET"
+	metAna.metCollection     = "slimmedMETsModifiedMET"
+	metAna.noPUMetCollection = "slimmedMETsModifiedMET"
 	
 jetAna.lepSelCut = lambda lep : False # no cleaning of jets with leptons
 jetAnaScaleDown.lepSelCut = lambda lep : False # no cleaning of jets with leptons
@@ -637,7 +637,10 @@ outputService.append(output_service)
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 #if run80X:
 #     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_80X.py"
-fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_94X.py"
+if runMC : 
+    fname1="./FatJetNN_94X_MC.py"
+else : 
+    fname1="./FatJetNN_94X_data.py"
     
 preprocessor1 = CmsswPreprocessor(fname1)
 
