@@ -14,7 +14,7 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 
 run80X = getHeppyOption("run80X",False)
 
-runData = getHeppyOption("runData",True)
+runData = getHeppyOption("runData",False)
 runMC = getHeppyOption("runMC",False)
 runSig = getHeppyOption("runSig",False)
 
@@ -78,12 +78,12 @@ if run80X:
       lepAna.ele_effectiveAreas = 'Spring15_25ns_v1'
 
 else:
-      lepAna.loose_electron_id = "POG_Cuts_ID_FALL17_94X_v1_ConvVetoDxyDz_Veto"
+      lepAna.loose_electron_id = "POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Veto"
       lepAna.loose_electron_lostHits = 999. # no cut since embedded in ID
       lepAna.loose_electron_dxy    = 999. # no cut since embedded in ID
       lepAna.loose_electron_dz     = 999. # no cut since embedded in ID
       
-      lepAna.inclusive_electron_id  = "POG_Cuts_ID_FALL17_94X_v1_Veto"
+      lepAna.inclusive_electron_id  = "POG_Cuts_ID_FALL17_94X_v2_Veto"
       lepAna.inclusive_electron_lostHits = 999. # no cut since embedded in I
       lepAna.inclusive_electron_dxy    = 999. # no cut since embedded in ID
       lepAna.inclusive_electron_dz     = 999. # no cut since embedded in ID
@@ -533,7 +533,7 @@ if runData : # For running on data
   if test!=0 and jsonAna in susyCoreSequence: susyCoreSequence.remove(jsonAna)
   if test==1:
     # test one component (2 thread)
-    comp = selectedComponents[0]
+    comp = selectedComponents[3]
 #    comp.files = comp.files[:1]
     comp.files = comp.files[10:11]
     selectedComponents = [comp]
