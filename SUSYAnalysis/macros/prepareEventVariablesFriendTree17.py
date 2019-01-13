@@ -286,7 +286,7 @@ if options.naf:
             temp = temp.replace('@EXESH',str(os.getcwd())+"/"+wrapsub).replace('@LOGS',str(logdir)).replace('@time','60*60*6')
             temp_toRun =  open(condsub, 'w')
             temp_toRun.write(temp)
-            subCmd = 'condor_submit -name s02 '+condsub
+            subCmd = 'condor_submit '+condsub
             print 'Going to submit', line.split("-d ")[-1] , 'jobs with', subCmd
             file = open('submit_Friends.sh','a')
             file.write("\n") 

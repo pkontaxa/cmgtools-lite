@@ -12,9 +12,9 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 
 #-------- SET OPTIONS AND REDEFINE CONFIGURATIONS -----------
 
-run80X = getHeppyOption("run80X",False)
+run80X = getHeppyOption("run80X",True)
 
-runData = getHeppyOption("runData",False)
+runData = getHeppyOption("runData",True)
 runMC = getHeppyOption("runMC",False)
 runSig = getHeppyOption("runSig",False)
 
@@ -31,7 +31,7 @@ selectedEvents=getHeppyOption("selectEvents","")
 keepGenPart=getHeppyOption("keepGenPart",False)
 #test = getHeppyOption("test")
 sample = "main"
-test = 1
+test = 0
 multib = True
 zerob = False
 
@@ -65,28 +65,28 @@ lepAna.loose_electron_pt  = 10
 lepAna.inclusive_electron_pt  = 10
 
 # Lepton Preselection
-if run80X:
+### Fall17 V2 is valid for all 2016/17/18 
+'''if run80X:
       lepAna.loose_electron_id  = "POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto"
       lepAna.loose_electron_lostHits = 999. # no cut since embedded in ID
       lepAna.loose_electron_dxy    = 999. # no cut since embedded in ID
       lepAna.loose_electron_dz     = 999. # no cut since embedded in ID
-      lepAna.mu_effectiveAreas = 'Spring15_25ns_v1'
+      #lepAna.mu_effectiveAreas = 'Spring15_25ns_v1'
       lepAna.inclusive_electron_id  = "POG_Cuts_ID_SPRING15_25ns_v1_Veto"
       lepAna.inclusive_electron_lostHits = 999. # no cut since embedded in ID
       lepAna.inclusive_electron_dxy    = 999. # no cut since embedded in ID
       lepAna.inclusive_electron_dz     = 999. # no cut since embedded in ID
       lepAna.ele_effectiveAreas = 'Spring15_25ns_v1'
+'''
+lepAna.loose_electron_id = "POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Veto"
+lepAna.loose_electron_lostHits = 999. # no cut since embedded in ID
+lepAna.loose_electron_dxy    = 999. # no cut since embedded in ID
+lepAna.loose_electron_dz     = 999. # no cut since embedded in ID
 
-else:
-      lepAna.loose_electron_id = "POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Veto"
-      lepAna.loose_electron_lostHits = 999. # no cut since embedded in ID
-      lepAna.loose_electron_dxy    = 999. # no cut since embedded in ID
-      lepAna.loose_electron_dz     = 999. # no cut since embedded in ID
-      
-      lepAna.inclusive_electron_id  = "POG_Cuts_ID_FALL17_94X_v2_Veto"
-      lepAna.inclusive_electron_lostHits = 999. # no cut since embedded in I
-      lepAna.inclusive_electron_dxy    = 999. # no cut since embedded in ID
-      lepAna.inclusive_electron_dz     = 999. # no cut since embedded in ID
+lepAna.inclusive_electron_id  = "POG_Cuts_ID_FALL17_94X_v2_Veto"
+lepAna.inclusive_electron_lostHits = 999. # no cut since embedded in I
+lepAna.inclusive_electron_dxy    = 999. # no cut since embedded in ID
+lepAna.inclusive_electron_dz     = 999. # no cut since embedded in ID
 
 
 isolation = "miniIso"
@@ -525,7 +525,7 @@ if runData : # For running on data
   # central samples
   if run80X:
       from CMGTools.RootTools.samples.samples_13TeV_DATA2016_17Jul2018_1l import *
-      selectedComponents = dataSamples_17Jul2018
+      selectedComponents = dataSamples_17Jul2018_1l
   else : 
       from CMGTools.RootTools.samples.samples_13TeV_DATA2017 import *
       selectedComponents = dataSamples_31Mar2018_1l
