@@ -300,7 +300,7 @@ if options.naf:
         temp_toRun.write(temp)
         temp_toRun.close()
     if  os.path.exists('condor.sub_all'):
-        os.system('condor_submit -name s02 condor.sub_all')
+        os.system('condor_submit condor.sub_all')
     if  os.path.exists('submit_Friends.sh'):
         os.system('chmod a+x submit_Friends.sh')
         print " ===== the script submit_Friends.sh os now created for your job list please use ./submit_Friends.sh to have them running now ======"
