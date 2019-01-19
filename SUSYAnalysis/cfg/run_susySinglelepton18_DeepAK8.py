@@ -12,10 +12,10 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 
 #-------- SET OPTIONS AND REDEFINE CONFIGURATIONS -----------
 
-run80X = getHeppyOption("run80X",True)
+run80X = getHeppyOption("run80X",False)
 
-runData = getHeppyOption("runData",True)
-runMC = getHeppyOption("runMC",False)
+runData = getHeppyOption("runData",False)
+runMC = getHeppyOption("runMC",True)
 runSig = getHeppyOption("runSig",False)
 
 
@@ -423,8 +423,8 @@ if runMC:
       comp.splitFactor = len(comp.files)
   elif test==0:
     #selectedComponents = mcSamples
-    #selectedComponents = [WJetsToLNuHT[9]]
-    selectedComponents = mcSamples
+    selectedComponents = [WJetsToLNuHT[1]]
+    #selectedComponents = mcSamples
     for comp in selectedComponents:
       comp.fineSplitFactor = 1
       comp.splitFactor = len(comp.files)
@@ -497,6 +497,7 @@ elif runSig:
   treeProducer.globalVariables+=[
        NTupleVariable("GenSusyMGluino", lambda ev : ev.genSusyMGluino, int, mcOnly=True, help="Susy Gluino mass"),
        NTupleVariable("GenSusyMNeutralino", lambda ev : ev.genSusyMNeutralino, int, mcOnly=True, help="Susy Neutralino mass"),
+       NTupleVariable("nIsr", lambda ev : ev.nIsr, mcOnly=True, help="Number of ISR jets not matched to gen particles"),
     ]
   
 
@@ -609,9 +610,9 @@ from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 #if run80X:
 #     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_80X.py"
 if runMC and not run80X: 
-    fname1="./FatJetNN_94X_MC.py"
+    fname1="$CMSSW_BASE/srcCMGTools/SUSYAnalysis/cfg/FatJetNN_94X_MC.py"
 elif runData and not run80X : 
-    fname1="./FatJetNN_94X_data.py"
+    fname1="$CMSSW_BASE/srcCMGTools/SUSYAnalysis/cfg/FatJetNN_94X_data.py"
 else : 
     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_94X.py"
     
