@@ -15,7 +15,7 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 run80X = getHeppyOption("run80X",False)
 
 runData = getHeppyOption("runData",False)
-runMC = getHeppyOption("runMC",True)
+runMC = getHeppyOption("runMC",False)
 runSig = getHeppyOption("runSig",False)
 
 
@@ -31,12 +31,12 @@ selectedEvents=getHeppyOption("selectEvents","")
 keepGenPart=getHeppyOption("keepGenPart",False)
 #test = getHeppyOption("test")
 sample = "main"
-test = 0
+test = 1
 multib = True
 zerob = False
 
 # Lepton Skimming
-ttHLepSkim.minLeptons = 1
+ttHLepSkim.minLeptons = 0
 #ttHLepSkim.minLeptons = 0
 ttHLepSkim.maxLeptons = 999
 #ttHLepSkim.idCut  = ""
@@ -422,8 +422,8 @@ if runMC:
       comp.fineSplitFactor = 1
       comp.splitFactor = len(comp.files)
   elif test==0:
-    #selectedComponents = mcSamples
-    selectedComponents = [WJetsToLNuHT[1]]
+    selectedComponents = mcSamples
+    #selectedComponents = [WJetsToLNuHT[1]]
     #selectedComponents = mcSamples
     for comp in selectedComponents:
       comp.fineSplitFactor = 1
@@ -610,9 +610,9 @@ from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 #if run80X:
 #     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_80X.py"
 if runMC and not run80X: 
-    fname1="$CMSSW_BASE/srcCMGTools/SUSYAnalysis/cfg/FatJetNN_94X_MC.py"
+    fname1="$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/FatJetNN_94X_MC.py"
 elif runData and not run80X : 
-    fname1="$CMSSW_BASE/srcCMGTools/SUSYAnalysis/cfg/FatJetNN_94X_data.py"
+    fname1="$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/FatJetNN_94X_data.py"
 else : 
     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_94X.py"
     
