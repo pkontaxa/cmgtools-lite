@@ -8,13 +8,13 @@ import time
 
 ## Trees -- skimmed with trig_base
 
-Tdir = ["SampLinks/"] #important needs this format
+Tdir = ["SampLinks17/"] #important needs this format
 # MC
-mcFTdir = "SampLinks/Friends/"
-sigFTdir = "SampLinks/Friends/"
+mcFTdir = "SampLinks17/friends_v5_BDT_1and2and3/"
+sigFTdir = "SampLinks17/friends_v5_BDT_1and2and3/"
 
 # new data
-dataFTdir = "SampLinks/Friends/"
+dataFTdir = "SampLinks17/friends_v5_BDT_1and2and3/"
 
 
 
@@ -27,7 +27,7 @@ def addOptions(options):
 
     # always overwrite in this example
     options.path = Tdir
-    
+
     options.friendTreesMC = [("sf/t",mcFTdir+"/evVarFriend_{cname}.root")]
     options.friendTreesData = [("sf/t",dataFTdir+"/evVarFriend_{cname}.root")]
     options.tree = "treeProducerSusySingleLepton"
@@ -46,7 +46,10 @@ def addOptions(options):
         #options.bins = "60,-1500,1500,30,0,1500"
         #options.bins = "34,-1700,1700,10,0,1500"
         #options.bins = "161,-2012.5,2012.5,81,-12.5,2012.5"
-        options.bins = "185,-2312.5,2312.5,93,-12.5,2312.5"
+        # old scan ranges to be used with 2016
+        #options.bins = "185,-2312.5,2312.5,93,-12.5,2312.5"
+        # new scan ranges to be used with 2017
+        options.bins = "225,-2812.5,2812.5,113,-12.5,2812.5"
 
         options.friendTreesMC = [("sf/t",sigFTdir+"/evVarFriend_{cname}.root")]
         options.cutsToAdd += [("base","Selected","Selected == 1")] # make always selected for signal
@@ -78,7 +81,7 @@ def makeLepYieldGrid(hist, options):
         yele = hist.GetBinContent(4,ybin)+hist.GetBinContent(5,ybin) #this is ok as only one of the two bins will be filled for both nLep=1/2
         yDLMix = hist.GetBinContent(3,ybin)
         #reshuffling to preserve the nEl=nMu=1 information separately for the dilepton case
-        
+
         print hist.GetBinError(1,ybin), hist.GetBinError(2,ybin), hist.GetBinError(3,ybin), hist.GetBinError(4,ybin), hist.GetBinError(5,ybin)
 
         ymuErr = hist.GetBinError(1,ybin)+hist.GetBinError(2,ybin) #this is ok as only one of the two bins will be filled for both nLep=1/2
@@ -159,7 +162,7 @@ def writeYields(options):
         cuts = CutsFile(options.cutFileDL,options)
 
     print options.bin, cuts.allCuts()
-        
+
     # make bin name and outdir names
     binname = options.bin
     if options.outdir == None:
@@ -374,15 +377,15 @@ def submitJobs(args, nchunks,options):
 		print "batch Mode is on NAF is selected"
 		print jobListName
 		listtxt = open(str(jobListName),"r")
-		for line in listtxt: 
-			print line 
+		for line in listtxt:
+			print line
 			line = line.strip()
-			if line.startswith('#') : 
+			if line.startswith('#') :
 				print "commented line continue!"
-				continue 
+				continue
 			if len(line.strip()) == 0 :
 				print "empty line continue!"
-				continue 
+				continue
 			exten = line.split("-c ")[-1]
 			condsub = outdir+"/submit"+exten+".condor"
 			wrapsub = outdir+"/wrapnanoPost_"+exten+".sh"
@@ -399,9 +402,9 @@ def submitJobs(args, nchunks,options):
 			subCmd = 'condor_submit '+condsub
 			print 'Going to submit', line.split("-c")[-1] , 'jobs with', subCmd
 			file = open('submit_Bins.sh','a')
-			file.write("\n") 
+			file.write("\n")
 			file.write(subCmd)
-		file.close() 
+		file.close()
 		os.system('chmod a+x submit_Bins.sh')
 		#
     return 1
@@ -469,7 +472,7 @@ if __name__ == "__main__":
 
     print options.conference
     if options.conference == "Moriond17":
-        from searchBinsMoriond17_BDT_2 import *
+        from searchBinsMoriond17_BDT_dyn import *
     else:
         from searchBins import *
 
@@ -477,7 +480,7 @@ if __name__ == "__main__":
     cDict = {}
 
     doDLCR = False
-    
+
     cDict.update(cutDictCR)
     cDict.update(cutDictSR)
 
@@ -500,7 +503,7 @@ if __name__ == "__main__":
         cDict.update(cutDictSRf5)
         cDict.update(cutDictCRf5)
 
-        
+
     doFew = False
     if doFew and options.conference == "Moriond17":
         cDict.update(cutDictSRfFew)
@@ -539,7 +542,7 @@ if __name__ == "__main__":
         submitJobs(subargs, len(binList),options)
         os.system("./submit_Bins.sh")
         exit(0)
-        
+
     print "Beginning processing locally..."
     if options.chunk == None:
         # execute all bins locally
