@@ -17,6 +17,13 @@ SMS_T5qqqqVV_TuneCUETP8M1 = kreator.makeMCComponent("SMS_T5qqqqVV_TuneCUETP8M1",
 mcSamplesT5qqqqVV = [SMS_T5qqqqVV_TuneCUETP8M1]
 
 
+#### FAST SIM TTJETS #### USE Them as Signals for now 
+
+TTJets_SingleLeptonFromTbar_Fast = kreator.makeMCComponent("TTJets_SingleLeptonFromTbar_Fast"    , "/TTJets_SingleLeptFromTbar_TuneCP2_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PUFall17Fast_lhe_94X_mc2017_realistic_v15-v1/MINIAODSIM", "CMS", ".*root", 831.76*(3*0.108)*(1-3*0.108) )
+TTJets_SingleLeptonFromT_Fast    = kreator.makeMCComponent("TTJets_SingleLeptonFromT_Fast"       , "/TTJets_SingleLeptFromT_TuneCP2_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PUFall17Fast_lhe_94X_mc2017_realistic_v15-v1/MINIAODSIM", "CMS", ".*root", 831.76*(3*0.108)*(1-3*0.108))
+TTJets_DiLepton_Fast             = kreator.makeMCComponent("TTJets_DiLepton_Fast"                , "/TTJets_DiLept_TuneCP2_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PUFall17Fast_lhe_94X_mc2017_realistic_v15-v1/MINIAODSIM"     , "CMS", ".*root", 831.76*((3*0.108)**2) )
+
+mcSamplesTTTJets = [TTJets_SingleLeptonFromTbar_Fast,TTJets_SingleLeptonFromT_Fast,TTJets_DiLepton_Fast]
 ### OFFICIAL SMS SIGNALS
 
 
