@@ -298,6 +298,8 @@ class EventVars1L_base:
             'ISR_HT','ISR_pT','ISR_N',
 ###################################################for PS Tune study ##############################################
             "nGenJets","nGenbJets","nGenJets30","nGenbJets30",
+###################################################for Prefire study ##############################################
+            "prefireW","prefireWup","prefireWdwn",
             ]
 
     def listBranches(self):
@@ -324,6 +326,13 @@ class EventVars1L_base:
         ret['PD_SingleMu'] = 0
         ret['PD_MET'] = 0
         ret['isDPhiSignal'] = 0
+
+        if hasattr(event, 'prefireW'):
+            ret['prefireW'] = event.prefireW
+        if hasattr(event, 'prefireWup'):
+            ret['prefireWup'] = event.prefireWup
+        if hasattr(event, 'prefireWdwn'):
+            ret['prefireWdwn'] = event.prefireWdwn
 
         if event.isData and hasattr(self,"sample"):
             if "JetHT" in self.sample: ret['PD_JetHT'] = 1
