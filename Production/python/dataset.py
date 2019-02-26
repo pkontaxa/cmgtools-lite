@@ -430,13 +430,13 @@ class PrivateDataset ( BaseDataset ):
             else:
                 print "WARNING: queries with run ranges are slow in DAS"
                 query = "%s run between [%d, %d]" % (query,runmin if runmin > 0 else 1, runmax if runmax > 0 else 999999)
-        dbs='dasgoclient -dasmaps='+os.environ['CMSSW_BASE']+'/src '+'--query="summary %s=%s instance=prod/%s"'%(qwhat, query, dbsInstance)
-        dbsOut = _dasPopen(dbs).readlines()
+        dbs='dasgoclient -dasmaps='+os.environ['CMSSW_BASE']+'/src '+'--query="summary %s=%s instance=prod/%s" --format=json'%(qwhat, query, dbsInstance)
+        #dbsOut = _dasPopen(dbs).readlines()
+        dbsOut = json.load(_dasPopen(dbs))['data']
         entries = []
         for line in dbsOut:
-            line = line.replace('\n','')
-            if "nevents" in line:
-                entries.append(int(line.split(":")[1]))
+            data = line['summary'][0]
+            entries.append(int(data["nevents"]))
         if entries:
             return sum(entries)
         return -1
@@ -444,7 +444,7 @@ class PrivateDataset ( BaseDataset ):
 
     @staticmethod
     def findPrimaryDatasetNumFiles(dataset, dbsInstance, runmin, runmax):
-
+        
         query, qwhat = dataset, "dataset"
         if "#" in dataset: qwhat = "block"
         if runmin >0 or runmax > 0:
@@ -453,14 +453,13 @@ class PrivateDataset ( BaseDataset ):
             else:
                 print "WARNING: queries with run ranges are slow in DAS"
                 query = "%s run between [%d, %d]" % (query,runmin if runmin > 0 else 1, runmax if runmax > 0 else 999999)
-        dbs='dasgoclient -dasmaps='+os.environ['CMSSW_BASE']+'/src '+'--query="summary %s=%s instance=prod/%s"'%(qwhat, query, dbsInstance)
-        dbsOut = _dasPopen(dbs).readlines()
-        
+        dbs='dasgoclient -dasmaps='+os.environ['CMSSW_BASE']+'/src '+'--query="summary %s=%s instance=prod/%s" --format=json'%(qwhat, query, dbsInstance)
+        #dbsOut = _dasPopen(dbs).readlines()
+        dbsOut = json.load(_dasPopen(dbs))['data']
         entries = []
         for line in dbsOut:
-            line = line.replace('\n','')
-            if "nfiles" in line:
-                entries.append(int(line.split(":")[1]))
+            data = line['summary'][0]
+            entries.append(int(data["nfiles"]))
         if entries:
             return sum(entries)
         return -1
