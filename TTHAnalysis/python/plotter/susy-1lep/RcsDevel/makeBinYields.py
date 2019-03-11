@@ -10,11 +10,11 @@ import time
 
 Tdir = ["SampLinks/"] #important needs this format
 # MC
-mcFTdir = "SampLinks/Friends/"
-sigFTdir = "SampLinks/Friends/"
+mcFTdir = "SampLinks/friends_v1_wBDT/"
+sigFTdir = "SampLinks/friends_v1_wBDT/"
 
 # new data
-dataFTdir = "SampLinks/Friends/"
+dataFTdir = "SampLinks/friends_v1_wBDT/"
 
 
 
@@ -27,7 +27,7 @@ def addOptions(options):
 
     # always overwrite in this example
     options.path = Tdir
-    
+
     options.friendTreesMC = [("sf/t",mcFTdir+"/evVarFriend_{cname}.root")]
     options.friendTreesData = [("sf/t",dataFTdir+"/evVarFriend_{cname}.root")]
     options.tree = "treeProducerSusySingleLepton"
@@ -78,7 +78,7 @@ def makeLepYieldGrid(hist, options):
         yele = hist.GetBinContent(4,ybin)+hist.GetBinContent(5,ybin) #this is ok as only one of the two bins will be filled for both nLep=1/2
         yDLMix = hist.GetBinContent(3,ybin)
         #reshuffling to preserve the nEl=nMu=1 information separately for the dilepton case
-        
+
         print hist.GetBinError(1,ybin), hist.GetBinError(2,ybin), hist.GetBinError(3,ybin), hist.GetBinError(4,ybin), hist.GetBinError(5,ybin)
 
         ymuErr = hist.GetBinError(1,ybin)+hist.GetBinError(2,ybin) #this is ok as only one of the two bins will be filled for both nLep=1/2
@@ -159,7 +159,7 @@ def writeYields(options):
         cuts = CutsFile(options.cutFileDL,options)
 
     print options.bin, cuts.allCuts()
-        
+
     # make bin name and outdir names
     binname = options.bin
     if options.outdir == None:
@@ -374,15 +374,15 @@ def submitJobs(args, nchunks,options):
 		print "batch Mode is on NAF is selected"
 		print jobListName
 		listtxt = open(str(jobListName),"r")
-		for line in listtxt: 
-			print line 
+		for line in listtxt:
+			print line
 			line = line.strip()
-			if line.startswith('#') : 
+			if line.startswith('#') :
 				print "commented line continue!"
-				continue 
+				continue
 			if len(line.strip()) == 0 :
 				print "empty line continue!"
-				continue 
+				continue
 			exten = line.split("-c ")[-1]
 			condsub = outdir+"/submit"+exten+".condor"
 			wrapsub = outdir+"/wrapnanoPost_"+exten+".sh"
@@ -396,12 +396,12 @@ def submitJobs(args, nchunks,options):
 			tempW = tempW.replace('@WORKDIR',os.environ['CMSSW_BASE']+"/src").replace('@EXEDIR',str(os.getcwd())).replace('@CMDBINS',line)
 			tempW_roRun = open(wrapsub, 'w')
 			tempW_roRun.write(tempW)
-			subCmd = 'condor_submit -name s02 '+condsub
+			subCmd = 'condor_submit '+condsub
 			print 'Going to submit', line.split("-c")[-1] , 'jobs with', subCmd
 			file = open('submit_Bins.sh','a')
-			file.write("\n") 
+			file.write("\n")
 			file.write(subCmd)
-		file.close() 
+		file.close()
 		os.system('chmod a+x submit_Bins.sh')
 		#
     return 1
@@ -498,7 +498,7 @@ if __name__ == "__main__":
         cDict.update(cutDictSRf5)
         cDict.update(cutDictCRf5)
 
-        
+
     doFew = True
     if doFew and options.conference == "Moriond17":
         cDict.update(cutDictSRfFew)

@@ -15,7 +15,7 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 run80X = getHeppyOption("run80X",False)
 
 runData = getHeppyOption("runData",False)
-runMC = getHeppyOption("runMC",True)
+runMC = getHeppyOption("runMC",False)
 runSig = getHeppyOption("runSig",False)
 
 
@@ -26,21 +26,18 @@ doMETpreprocessor = getHeppyOption("doMETpreprocessor",False)
 skipT1METCorr = getHeppyOption("skipT1METCorr",False)
 forcedSplitFactor = getHeppyOption("splitFactor",-1)
 forcedFineSplitFactor = getHeppyOption("fineSplitFactor",-1)
-#isTest = getHeppyOption("test",None) != None and not re.match("^\d+$",getHeppyOption("test"))
 selectedEvents=getHeppyOption("selectEvents","")
 keepGenPart=getHeppyOption("keepGenPart",False)
-#test = getHeppyOption("test")
+
 sample = "main"
 test = 1
 multib = True
 zerob = False
 
 # Lepton Skimming
-ttHLepSkim.minLeptons = 1
-#ttHLepSkim.minLeptons = 0
+ttHLepSkim.minLeptons = 0
 ttHLepSkim.maxLeptons = 999
-#ttHLepSkim.idCut  = ""
-#ttHLepSkim.ptCuts = []
+
 if not ttHLepSkim.allowLepTauComb:
     susyCoreSequence.remove(tauAna)
     susyCoreSequence.insert(susyCoreSequence.index(ttHLepSkim)+1, tauAna)
@@ -54,32 +51,46 @@ lepAna.doIsolationScan = False
 lepAna.doMiniIsolation = True if run80X else "precomputed"
 lepAna.mu_isoCorr = "deltaBeta"
 
+## MUONS
+lepAna.loose_muon_pt  = 10
+lepAna.inclusive_muon_pt  = 10
+lepAna.loose_muon_id     = "POG_ID_Loose" #same as in core
+lepAna.inclusive_muon_id     = "POG_ID_Loose" #same as in core
+
+lepAna.loose_electron_eta = 2.4
+lepAna.loose_electron_pt  = 10
+lepAna.inclusive_electron_pt  = 10
+
 # Lepton Preselection
-if run80X:
-      lepAna.loose_electron_id  = "POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto"
-      lepAna.loose_electron_lostHits = 999. # no cut since embedded in ID
-      lepAna.loose_electron_dxy    = 999. # no cut since embedded in ID
-      lepAna.loose_electron_dz     = 999. # no cut since embedded in ID
+### Fall17 V2 is valid for all 2016/17/18 
+lepAna.loose_electron_id = "POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Veto"
+lepAna.loose_electron_lostHits = 999. # no cut since embedded in ID
+lepAna.loose_electron_dxy    = 999. # no cut since embedded in ID
+lepAna.loose_electron_dz     = 999. # no cut since embedded in ID
 
-      lepAna.inclusive_electron_id  = "POG_Cuts_ID_SPRING15_25ns_v1_Veto"
-      lepAna.inclusive_electron_lostHits = 999. # no cut since embedded in ID
-      lepAna.inclusive_electron_dxy    = 999. # no cut since embedded in ID
-      lepAna.inclusive_electron_dz     = 999. # no cut since embedded in ID
+lepAna.inclusive_electron_id  = "POG_Cuts_ID_FALL17_94X_v2_Veto"
+lepAna.inclusive_electron_lostHits = 999. # no cut since embedded in I
+lepAna.inclusive_electron_dxy    = 999. # no cut since embedded in ID
+lepAna.inclusive_electron_dz     = 999. # no cut since embedded in ID
 
-      ## MUONS
-      lepAna.loose_muon_pt  = 10
-      lepAna.inclusive_muon_pt  = 10
-      lepAna.loose_muon_id     = "POG_ID_Loose" #same as in core
-      lepAna.inclusive_muon_id     = "POG_ID_Loose" #same as in core
-
-else:
-      lepAna.loose_electron_id = "MVA_ID_nonIso_Fall17_Loose"
 
 isolation = "miniIso"
 
-jetAna.lepSelCut = lambda lep : False # no cleaning of jets with leptons
-jetAnaScaleDown.lepSelCut = lambda lep : False # no cleaning of jets with leptons
-jetAnaScaleUp.lepSelCut = lambda lep : False # no cleaning of jets with leptons
+
+if run80X : 
+	jetAna.mcGT     = "Summer16_07Aug2017_V11_MC"
+	jetAna.dataGT   = [(1,"Summer16_07Aug2017BCD_V11_DATA"),(276831,"Summer16_07Aug2017EF_V11_DATA"),(278802,"Summer16_07Aug2017GH_V11_DATA")]
+	
+else : 
+	jetAna.mcGT     = "Fall17_17Nov2017_V32_MC"
+	jetAna.dataGT   = [(1,"Fall17_17Nov2017B_V32_DATA"),(299337,"Fall17_17Nov2017C_V32_DATA"),(302030,"Fall17_17Nov2017DE_V32_DATA"),(304911,"Fall17_17Nov2017F_V32_DATA")]
+	# to activate the EE noise mitigation
+	metAna.metCollection     = "slimmedMETsModifiedMET"
+	metAna.noPUMetCollection = "slimmedMETsModifiedMET"
+	
+#jetAna.lepSelCut = lambda lep : False # no cleaning of jets with leptons
+#jetAnaScaleDown.lepSelCut = lambda lep : False # no cleaning of jets with leptons
+#jetAnaScaleUp.lepSelCut = lambda lep : False # no cleaning of jets with leptons
 jetAna.copyJetsByValue = True # do not remove this
 metAna.copyMETsByValue = True # do not remove this
 jetAna.doQG = True
@@ -129,7 +140,8 @@ else:
 # Switch off slow photon MC matching
 photonAna.do_mc_match = False
 
-# Loose Tau configuration
+# Loose Tau configuration # we don't have taus so we don't need it 
+#susyCoreSequence.remove(tauAna)
 tauAna.loose_ptMin = 20
 tauAna.loose_etaMax = 2.3
 tauAna.loose_decayModeID = "decayModeFindingNewDMs"
@@ -182,18 +194,33 @@ anyLepSkim = cfg.Analyzer(
 from CMGTools.TTHAnalysis.analyzers.ttHSTSkimmer import ttHSTSkimmer
 ttHSTSkimmer = cfg.Analyzer(
   ttHSTSkimmer, name='ttHSTSkimmer',
-  minST = 150,
+  minST = 0,
   )
 
 from CMGTools.TTHAnalysis.analyzers.nIsrAnalyzer import NIsrAnalyzer
 NIsrAnalyzer = cfg.Analyzer(
   NIsrAnalyzer, name='NIsrAnalyzer')
   
+if run80X : DataEra = '2016BtoH'
+else : DataEra = '2017BtoF'
+
+from CMGTools.TTHAnalysis.analyzers.PrefiringAnalyzer import PrefiringAnalyzer
+PrefiringAnalyzer = cfg.Analyzer(
+  PrefiringAnalyzer, name='PrefiringAnalyzer',
+  #class_object= PrefiringAnalyzer,
+  L1Maps = '$CMSSW_BASE/src/CMGTools/RootTools/data/L1PrefiringMaps_new.root',
+  DataEra = DataEra,
+  UseJetEMPt = False ,
+  PrefiringRateSystematicUncty =  0.2 , 
+  SkipWarnings= True,
+  )
+  
+
 ## HT skim
 from CMGTools.TTHAnalysis.analyzers.ttHHTSkimmer import ttHHTSkimmer
 ttHHTSkimmer = cfg.Analyzer(
   ttHHTSkimmer, name='ttHHTSkimmer',
-  minHT = 350,
+  minHT = 0,
   )
 
 
@@ -345,8 +372,8 @@ else :
 		'EleHT450B': triggers_el_ht450_btag
 	}
 triggerFlagsAna.unrollbits = False
-triggerFlagsAna.saveIsUnprescaled = True
-triggerFlagsAna.checkL1Prescale = True
+triggerFlagsAna.saveIsUnprescaled = False
+triggerFlagsAna.checkL1Prescale = False
 
 from CMGTools.RootTools.samples.configTools import printSummary, configureSplittingFromTime, cropToLumi, prescaleComponents, insertEventSelector, mergeExtensions
 from CMGTools.RootTools.samples.autoAAAconfig import *
@@ -359,7 +386,8 @@ sequence = cfg.Sequence(susyCoreSequence+[
     ttHEventAna,
     ttHHTSkimmer,
     ttHSTSkimmer,
-    treeProducer,
+    PrefiringAnalyzer,
+    treeProducer
     ])
 
 if runMC:
@@ -371,7 +399,7 @@ if runMC:
   anyLepSkim.minLeptons = 1
 
   if run80X:
-         from CMGTools.RootTools.samples.samples_13TeV_RunIISummer16MiniAODv2 import *
+         from CMGTools.RootTools.samples.samples_13TeV_RunIISummer16MiniAODv3_1l import *
   else: 
          from CMGTools.RootTools.samples.samples_13TeV_RunIIFall17MiniAOD_1l import *
 
@@ -380,7 +408,7 @@ if runMC:
 #  [TTJets_SingleLeptonFromTbar,TTJets_SingleLeptonFromTbar_ext,TTJets_SingleLeptonFromT,TTJets_DiLepton,TTJets_DiLepton_ext,
   if test==1:
     # test a single component, using a single thread.
-    comp = WJetsToLNuHT[3]
+    comp = WJetsToLNuHT[5]
     comp.files = comp.files[:1]
     selectedComponents = [comp]
     comp.splitFactor = 1
@@ -396,16 +424,20 @@ if runMC:
       comp.fineSplitFactor = 1
       comp.splitFactor = len(comp.files)
   elif test==0:
+    selectedComponents = mcSamples
+    #selectedComponents = [WJetsToLNuHT[1]]
     #selectedComponents = mcSamples
-    #selectedComponents = [WJetsToLNuHT[9]]
-    selectedComponents = DYJetsM50HT + QCDHT + SingleTop + TTs + WJetsToLNuHT
     for comp in selectedComponents:
-      comp.fineSplitFactor = 1
+      comp.fineSplitFactor = 2
       comp.splitFactor = len(comp.files)
   susyCoreSequence.remove(susyScanAna)
   treeProducer.globalVariables+=[
        NTupleVariable("lheHT", lambda ev : ev.lheHT, help="H_{T} computed from quarks and gluons in Heppy LHEAnalyzer"),
        NTupleVariable("lheHTIncoming", lambda ev : ev.lheHTIncoming, help="H_{T} computed from quarks and gluons in Heppy LHEAnalyzer (only LHE status<0 as mothers)"),
+       NTupleVariable("nIsr", lambda ev : ev.nIsr, mcOnly=True, help="Number of ISR jets not matched to gen particles"),
+       NTupleVariable("prefireW", lambda ev : ev.prefiringweight, help="get the prefire weight in Heppy prefireanalyzer"),
+       NTupleVariable("prefireWup", lambda ev : ev.prefiringweightup, help="get the prefire weight up in Heppy prefireanalyzer"),
+       NTupleVariable("prefireWdwn", lambda ev: ev.prefiringweightdown, help="get the prefire weight down in Heppy prefireanalyzer"),
     ]
 
 
@@ -415,6 +447,9 @@ elif runSig:
   
   # Set FastSim JEC
   jetAna.mcGT = "Spring16_FastSimV1_MC"
+  # No MET correcton 
+  metAna.metCollection     = "slimmedMETs"
+  metAna.noPUMetCollection = "slimmedMETs"
   #jetAna.mcGT = "Spring16_25nsFastSimV1_MC"
   #### REMOVE JET ID FOR FASTSIM
   jetAna.relaxJetId = True
@@ -422,8 +457,13 @@ elif runSig:
   # modify skim (noe leptons skim)
   anyLepSkim.minLeptons = 0
 
-  from CMGTools.RootTools.samples.samples_80x_signal import *
-  if multib: selectedComponents = [SMS_T1tttt_TuneCUETP8M1]
+  from CMGTools.RootTools.samples.samples_94X_signal import *
+  if multib: 
+      if run80X : 
+          selectedComponents = [SMS_T1tttt_TuneCUETP8M1]
+      else : 
+          selectedComponents = mcSamplesTTTJets
+  
   if zerob: selectedComponents = [SMS_T5qqqqVV_TuneCUETP8M1]
   if multib and zerob : print "Warning ! Both zero b and multi b is set to  True, you will be running Zero b signals ;) Cheers from Ece"
   if not (multib or zerob) : print 8*"*", "Error ! Choose a signal to process", 8*"*"
@@ -450,7 +490,7 @@ elif runSig:
     # PRODUCTION
     # run on everything
     for comp in selectedComponents:
-      comp.fineSplitFactor = 1
+      comp.fineSplitFactor = 3
       comp.splitFactor = len(comp.files)
 
   susyCoreSequence.insert(susyCoreSequence.index(susyScanAna)+1,
@@ -467,27 +507,18 @@ elif runSig:
   sequence.remove(ttHHTSkimmer)
   sequence.remove(ttHSTSkimmer)
   sequence.remove(eventFlagsAna)
+  sequence.remove(triggerFlagsAna)
   treeProducer.globalVariables+=[
-       #NTupleVariable("GenSusyMScan1", lambda ev : ev.genSusyMScan1, int, mcOnly=True, help="Susy mass 1 in scan"),
-       #NTupleVariable("GenSusyMScan2", lambda ev : ev.genSusyMScan2, int, mcOnly=True, help="Susy mass 2 in scan"),
-       #NTupleVariable("GenSusyMScan3", lambda ev : ev.genSusyMScan3, int, mcOnly=True, help="Susy mass 3 in scan"),
-       #NTupleVariable("GenSusyMScan4", lambda ev : ev.genSusyMScan4, int, mcOnly=True, help="Susy mass 4 in scan"),
        NTupleVariable("GenSusyMGluino", lambda ev : ev.genSusyMGluino, int, mcOnly=True, help="Susy Gluino mass"),
-       #NTupleVariable("GenSusyMGravitino", lambda ev : ev.genSusyMGravitino, int, mcOnly=True, help="Susy Gravitino mass"),
-       #NTupleVariable("GenSusyMStop", lambda ev : ev.genSusyMStop, int, mcOnly=True, help="Susy Stop mass"),
-       #NTupleVariable("GenSusyMSbottom", lambda ev : ev.genSusyMSbottom, int, mcOnly=True, help="Susy Sbottom mass"),
-       #NTupleVariable("GenSusyMStop2", lambda ev : ev.genSusyMStop2, int, mcOnly=True, help="Susy Stop2 mass"),
-       #NTupleVariable("GenSusyMSbottom2", lambda ev : ev.genSusyMSbottom2, int, mcOnly=True, help="Susy Sbottom2 mass"),
-       #NTupleVariable("GenSusyMSquark", lambda ev : ev.genSusyMSquark, int, mcOnly=True, help="Susy Squark mass"),
        NTupleVariable("GenSusyMNeutralino", lambda ev : ev.genSusyMNeutralino, int, mcOnly=True, help="Susy Neutralino mass"),
-       #NTupleVariable("GenSusyMNeutralino2", lambda ev : ev.genSusyMNeutralino2, int, mcOnly=True, help="Susy Neutralino2 mass"),
-       #NTupleVariable("GenSusyMNeutralino3", lambda ev : ev.genSusyMNeutralino3, int, mcOnly=True, help="Susy Neutralino3 mass"),
-       #NTupleVariable("GenSusyMNeutralino4", lambda ev : ev.genSusyMNeutralino4, int, mcOnly=True, help="Susy Neutralino4 mass"),
-       #NTupleVariable("GenSusyMChargino", lambda ev : ev.genSusyMChargino, int, mcOnly=True, help="Susy Chargino mass"),
-       #NTupleVariable("GenSusyMChargino2", lambda ev : ev.genSusyMChargino2, int, mcOnly=True, help="Susy Chargino2 mass"),
-    ]
-  
+       NTupleVariable("nIsr", lambda ev : ev.nIsr, mcOnly=True, help="Number of ISR jets not matched to gen particles"),
+       NTupleVariable("lheHT", lambda ev : ev.lheHT, help="H_{T} computed from quarks and gluons in Heppy LHEAnalyzer"),
+       NTupleVariable("lheHTIncoming", lambda ev : ev.lheHTIncoming, help="H_{T} computed from quarks and gluons in Heppy LHEAnalyzer (only LHE status<0 as mothers)"),
+       NTupleVariable("prefireW", lambda ev : ev.prefiringweight, help="get the prefire weight in Heppy prefireanalyzer"),
+       NTupleVariable("prefireWup", lambda ev : ev.prefiringweightup, help="get the prefire weight up in Heppy prefireanalyzer"),
+       NTupleVariable("prefireWdwn", lambda ev: ev.prefiringweightdown, help="get the prefire weight down in Heppy prefireanalyzer"),
 
+    ]
 
 if runData : # For running on data
 
@@ -497,15 +528,17 @@ if runData : # For running on data
   anyLepSkim.minLeptons = 1
 
   # central samples
-  from CMGTools.RootTools.samples.samples_13TeV_DATA2017 import *
-  
-  
-  selectedComponents = dataSamples_31Mar2018_1l
+  if run80X:
+      from CMGTools.RootTools.samples.samples_13TeV_DATA2016_17Jul2018_1l import *
+      selectedComponents = dataSamples_17Jul2018_1l
+  else : 
+      from CMGTools.RootTools.samples.samples_13TeV_DATA2017 import *
+      selectedComponents = dataSamples_31Mar2018_1l
   
   if test!=0 and jsonAna in susyCoreSequence: susyCoreSequence.remove(jsonAna)
   if test==1:
     # test one component (2 thread)
-    comp = JetHT_Run2017E_31Mar2018
+    comp = selectedComponents[7]
 #    comp.files = comp.files[:1]
     comp.files = comp.files[10:11]
     selectedComponents = [comp]
@@ -526,27 +559,13 @@ if runData : # For running on data
     # PRODUCTION
     # run on everything
     for comp in selectedComponents:
-      comp.fineSplitFactor = 1
+      comp.fineSplitFactor = 2
       comp.splitFactor = len(comp.files)
   sequence.remove(anyLepSkim)
   sequence.remove(NIsrAnalyzer)
   sequence.remove(ttHSTSkimmer)
+  sequence.remove(PrefiringAnalyzer)
   susyCoreSequence.remove(susyScanAna)
-
-#### hard coded inside file (due to DeepAK8) #####################
-#if run80X : 
-#	fatJetType.removeVariable("prunedMass")
-#	fatJetType.removeVariable("softDropMass")
-#	fatJetType.removeVariable("tau1")
-#	fatJetType.removeVariable("tau2")
-#	fatJetType.removeVariable("tau3")
-#	fatJetType.addVariables([
-#        NTupleVariable("prunedMass",  lambda x : x.userFloat("ak8PFJetsCHSPrunedMass"),  float, help="pruned mass"),
-#        NTupleVariable("softDropMass", lambda x : x.userFloat("ak8PFJetsCHSSoftDropMass"), float, help="trimmed mass"),
-#        NTupleVariable("tau1", lambda x : x.userFloat("NjettinessAK8:tau1"), float, help="1-subjettiness"),
-#        NTupleVariable("tau2", lambda x : x.userFloat("NjettinessAK8:tau2"), float, help="2-subjettiness"),
-#        NTupleVariable("tau3", lambda x : x.userFloat("NjettinessAK8:tau3"), float, help="3-subjettiness"),
-#     ])
 
 if removeJetReCalibration:
     jetAna.recalibrateJets = False
@@ -568,25 +587,6 @@ if selectedEvents!="":
         )
     susyCoreSequence.insert(0, eventSelector)
 
-#preprocessor = None
-
-#-------- HOW TO RUN -----------
-
-if test == '80X-Data':
-    json = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions16/13TeV/Final/Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON.txt'
-    DoubleMuon = kreator.makeDataComponent("DoubleMuon_Run2016H_run283885", "/DoubleMuon/Run2016H-PromptReco-v2/MINIAOD", "CMS", ".*root", run_range = (283885,283885), triggers = triggers_mumu)
-    DoubleEG = kreator.makeDataComponent("DoubleEG_Run2016H_run283885", "/DoubleEG/Run2016H-PromptReco-v2/MINIAOD", "CMS", ".*root", run_range = (283885,283885), triggers = triggers_ee)
-    DoubleMuon.files = [ 'root://eoscms//eos/cms/store/data/Run2016H/DoubleMuon/MINIAOD/PromptReco-v2/000/283/885/00000/5A21CC75-D09D-E611-BFDC-FA163E163D77.root' ]
-    DoubleEG.files = [ 'root://eoscms//eos/cms/store/data/Run2016H/DoubleEG/MINIAOD/PromptReco-v2/000/283/885/00000/743981FC-949D-E611-836E-FA163EC09DF2.root' ]
-    selectedComponents = [ DoubleMuon, DoubleEG ]
-    for comp in selectedComponents:
-        comp.json = json
-        tmpfil = os.path.expandvars("/tmp/$USER/%s" % os.path.basename(comp.files[0]))
-        if not os.path.exists(tmpfil): os.system("xrdcp %s %s" % (comp.files[0],tmpfil)) 
-        comp.files = [tmpfil]
-        comp.splitFactor = 1
-        comp.fineSplitFactor = 4
-
 if not getHeppyOption("keepLHEweights",False):
     if "LHE_weights" in treeProducer.collections: treeProducer.collections.pop("LHE_weights")
     if lheWeightAna in sequence: sequence.remove(lheWeightAna)
@@ -607,10 +607,14 @@ outputService.append(output_service)
 
 ################### Preprocessing (DeepAK8) ##########################################
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
-if run80X:
-     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_80X.py"
-else:
-     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_94X.py"
+#if run80X:
+#     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_80X.py"
+if runMC and not run80X: 
+    fname1="$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/FatJetNN_94X_MC.py"
+elif runData and not run80X : 
+    fname1="$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/FatJetNN_94X_data.py"
+else : 
+    fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_94X.py"
     
 preprocessor1 = CmsswPreprocessor(fname1)
 
