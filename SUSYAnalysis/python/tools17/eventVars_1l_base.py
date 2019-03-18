@@ -273,14 +273,21 @@ class EventVars1L_base:
             # no HF stuff
 #            'METNoHF', 'LTNoHF', 'dPhiNoHF',
             ## jets
-            'HT','nJets','nBJet', 'nBJetDeep',
+            'HT','nJets',('nBJet','I'), 'nBJetDeep',
             ("nJets30","I"),("Jets30Idx","I",50,"nJets30"),'nBJets30','nJets30Clean',
             'nJets40','nBJets40',
             "htJet30j", "htJet30ja","htJet40j",
             'Jet1_pt','Jet2_pt', 'Jet1_eta','Jet2_eta','Jet1_phi','Jet2_phi',
-############################## For DeepAK8 #########################################################
+############################## FatJets, DeepAK8, additional BTag variables #########################################################
             #FatJets
             'nFatJets','FatJet1_pt','FatJet2_pt','FatJet1_eta','FatJet2_eta','FatJet1_phi','FatJet2_phi','FatJet1_mass','FatJet2_mass',("nDeepTop_loose","I"),("nDeepTop_medium","I"),("nDeepTop_tight","I"), ("nBJet_Excl_LooseTop_08","I"),("nBJet_Excl_MediumTop_08","I"),("nBJet_Excl_TightTop_08","I"), ("nBJetDeep_Excl_LooseTop_08","I"),("nBJetDeep_Excl_MediumTop_08","I"),("nBJetDeep_Excl_TightTop_08","I"),
+            ('DeepAK8Top_Loose_pt_Array','F',15,'nDeepTop_loose'),
+            ('DeepAK8Top_Loose_eta_Array','F',15,'nDeepTop_loose'),
+            ('DeepAK8Top_Loose_phi_Array','F',15,'nDeepTop_loose'),
+            ('Flag_Btag_leq_08_from_Loose_DeepAK8','I',15,'nBJet'),
+            ('BTag_phi_Array','F',15,'nBJet'),
+            ('BTag_eta_Array','F',15,'nBJet'),
+            ('BTag_pt_Array','F',15,'nBJet'),
 #################################################################################################
             ## top tags
             "nHighPtTopTag", "nHighPtTopTagPlusTau23",
@@ -725,6 +732,10 @@ class EventVars1L_base:
         ret['nJets40']   = nJet40C
 
 ########################### FatJet #########################################################
+        _DeepAK8Top_Loose_pt_Array  = []
+        _DeepAK8Top_Loose_eta_Array = []
+        _DeepAK8Top_Loose_phi_Array = []
+
         FatJets =[l for l in Collection(event,"FatJet","nFatJet")]
         nfatjet=len(FatJets)
         fatJets=[]
@@ -736,18 +747,24 @@ class EventVars1L_base:
         for i,j in enumerate(FatJets):
               fatJets.append(j)
 
-              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_LooseWP):
+              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_LooseWP and j.pt>=400.):
                     nFatJetLoose+=1
+                    _DeepAK8Top_Loose_pt_Array.append(j.pt)
+                    _DeepAK8Top_Loose_eta_Array.append(j.eta)
+                    _DeepAK8Top_Loose_phi_Array.append(j.phi)
 
-              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_MediumWP):
+              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_MediumWP and j.pt>=400.):
                    nFatJetMedium+=1
 
-              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_TightWP):
+              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_TightWP and j.pt>=400.):
                    nFatJetTight+=1
 
         ret['nDeepTop_loose'] = nFatJetLoose
         ret['nDeepTop_medium'] = nFatJetMedium
         ret['nDeepTop_tight'] = nFatJetTight
+        ret['DeepAK8Top_Loose_pt_Array'] = _DeepAK8Top_Loose_pt_Array
+        ret['DeepAK8Top_Loose_eta_Array'] = _DeepAK8Top_Loose_eta_Array
+        ret['DeepAK8Top_Loose_phi_Array'] = _DeepAK8Top_Loose_phi_Array
 
 
         if nfatjet>=1:
@@ -842,11 +859,20 @@ class EventVars1L_base:
         _nBTagDeep_out_Medium=0
         _nBTagDeep_out_Tight=0
 
+        flag_leq_08_Loose_array = []
+        BJet_pt_Array = []
+        BJet_phi_Array = []
+        BJet_eta_Array = []
+
 ############################################################################
         for i,j in enumerate(cJet30Clean):
             if j.btagCSV > btagWP:
                 BJetMedium30.append(j)
 ###########################################################################
+
+                BJet_pt_Array.append(j.pt)
+                BJet_phi_Array.append(j.phi)
+                BJet_eta_Array.append(j.eta)
 
                 _BTag_phi=j.phi
                 _BTag_eta=j.eta
@@ -856,7 +882,7 @@ class EventVars1L_base:
                 flag_leq_08_Tight=0
 
                 for k,l in enumerate(FatJets):
-                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_LooseWP):
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_LooseWP and l.pt>=400.):
                              _TopTag_Phi_Loose=l.phi
                              _TopTag_Eta_Loose=l.eta
 
@@ -867,7 +893,7 @@ class EventVars1L_base:
                              if(_delta_R_Loose<0.8):
                                     flag_leq_08_Loose+=1
 
-                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_MediumWP):
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_MediumWP and l.pt>=400.):
                              _TopTag_Phi_Medium=l.phi
                              _TopTag_Eta_Medium=l.eta
 
@@ -878,7 +904,7 @@ class EventVars1L_base:
                              if(_delta_R_Medium<0.8):
                                     flag_leq_08_Medium+=1
 
-                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_TightWP):
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_TightWP and l.pt>=400.):
                              _TopTag_Phi_Tight=l.phi
                              _TopTag_Eta_Tight=l.eta
 
@@ -890,8 +916,8 @@ class EventVars1L_base:
                                     flag_leq_08_Tight+=1
 
 
-
-
+                #print flag_leq_08_Loose                        
+                flag_leq_08_Loose_array.append(flag_leq_08_Loose)
                 if(flag_leq_08_Loose==0):
                        _nBTag_out_Loose+=1
 
@@ -912,7 +938,7 @@ class EventVars1L_base:
                  flagDeep_leq_08_Tight=0
 
                  for k,l in enumerate(FatJets):
-                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_LooseWP):
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_LooseWP and l.pt>=400.):
                              _TopTag_Phi_Loose=l.phi
                              _TopTag_Eta_Loose=l.eta
 
@@ -923,7 +949,7 @@ class EventVars1L_base:
                              if(_delta_R_Loose<0.8):
                                     flagDeep_leq_08_Loose+=1
 
-                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_MediumWP):
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_MediumWP and l.pt>=400.):
                              _TopTag_Phi_Medium=l.phi
                              _TopTag_Eta_Medium=l.eta
 
@@ -934,7 +960,7 @@ class EventVars1L_base:
                              if(_delta_R_Medium<0.8):
                                     flagDeep_leq_08_Medium+=1
 
-                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_TightWP):
+                       if(l.raw_score_deep_Top_PUPPI>topTag_DeepAK8_TightWP and l.pt>=400.):
                              _TopTag_Phi_Tight=l.phi
                              _TopTag_Eta_Tight=l.eta
 
@@ -944,7 +970,6 @@ class EventVars1L_base:
 
                              if(_delta_R_Tight<0.8):
                                     flagDeep_leq_08_Tight+=1
-
 
 
 
@@ -967,6 +992,12 @@ class EventVars1L_base:
         ret['nBJetDeep_Excl_LooseTop_08'] = _nBTagDeep_out_Loose
         ret['nBJetDeep_Excl_MediumTop_08'] = _nBTagDeep_out_Medium
         ret['nBJetDeep_Excl_TightTop_08'] = _nBTagDeep_out_Tight
+
+        ret['Flag_Btag_leq_08_from_Loose_DeepAK8'] = flag_leq_08_Loose_array
+
+        ret['BTag_pt_Array'] = BJet_pt_Array
+        ret['BTag_phi_Array'] = BJet_phi_Array
+        ret['BTag_eta_Array'] = BJet_eta_Array
 
         ######### for ISR ###################
 ###########################################################################
