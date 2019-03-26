@@ -6,7 +6,7 @@ import time
 import shutil
 MODULES = []
 
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_base_Pantelis_V3 import EventVars1L_base
+from CMGTools.SUSYAnalysis.tools.eventVars_1l_base import EventVars1L_base
 MODULES.append( ('1l_Basics', EventVars1L_base()) )
 # triggers
 from CMGTools.SUSYAnalysis.tools.eventVars_1l_triggers import EventVars1L_triggers
@@ -50,7 +50,7 @@ from CMGTools.SUSYAnalysis.tools.eventVars_1l_genLevel import EventVars1LGenLeve
 MODULES.append( ('1l_BasicsGen', EventVars1LGenLevel()) )
 '''
 
-from CMGTools.TTHAnalysis.tools.BDT_resolvedTopTagger_cpp_V10 import BDT_resolvedTopTagger
+from CMGTools.TTHAnalysis.tools.BDT_resolvedTopTagger_cpp_V10_1lep_dPhi import BDT_resolvedTopTagger
 MODULES.append( ('BDT_rTT',  BDT_resolvedTopTagger(os.environ["CMSSW_BASE"]+"/src/CMGTools/TTHAnalysis/data/kinMVA/tth/resTop_xGBoost_v0.weights.xml")) )
 
 #BDT for Limits

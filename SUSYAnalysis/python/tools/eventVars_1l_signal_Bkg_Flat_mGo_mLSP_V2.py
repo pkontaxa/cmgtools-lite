@@ -153,7 +153,7 @@ class EventVars1L_signal:
  
             _dM_Go_LSP = 0;
             
-            file1 = TFile("../../TMVA/Parametric_Training_1lep/Files_For_dM_Flattening/Check_HT500_LT250_nj5_dphi075_nb2_Parametrized_V4_mass_difference.root")
+            file1 = TFile("../TMVA/Parametric_Training_1lep/Files_For_dM_Flattening/Check_HT500_LT250_nj5_dphi075_nb2_Parametrized_V4_mass_difference.root")
 
             hist_mGo_M_mLSP = file1.Get("/dataset/Method_BDT/BDT/mGo_M_mLSP__Signal")
  
