@@ -89,7 +89,7 @@ class EventVars1L_signal:
     def __init__(self):
         self.branches = [
             ### Masses and Xsec
-            'mGo','mLSP','susyXsec',
+            'mGo','mLSP','dM_Go_LSP','susyXsec',
             'susyNgen','totalNgen','susyWgen',
             'nISR','nISRweight','nISRweightsyst_up', 'nISRweightsyst_down',
             ## LHE Scale Weights
@@ -127,6 +127,7 @@ class EventVars1L_signal:
 
             # save masses
             ret['mGo'] = mGo; ret['mLSP'] = mLSP
+            ret['dM_Go_LSP'] = mGo-mLSP
 
             # SUSY Xsec
             if mGo in xsecGlu:
