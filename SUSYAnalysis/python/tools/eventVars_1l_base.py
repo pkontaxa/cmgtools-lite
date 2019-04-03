@@ -274,7 +274,7 @@ class EventVars1L_base:
             ## MET
             'MET','LT','ST',
             'MT',
-            "DeltaPhiLepW", 'dPhi','Lp',
+            "DeltaPhiLepW", 'dPhi',"dPhiLepMet",'Lp',
             "GendPhi","GenLT","GenMET",
             # no HF stuff
 #            'METNoHF', 'LTNoHF', 'dPhiNoHF',
@@ -1051,6 +1051,7 @@ class EventVars1L_base:
         dPhiLepW = -999 # set default value to -999 to spot "empty" entries
         GendPhiLepW = -999 # set default value to -999 to spot "empty" entries
 #        dPhiLepWNoHF = -999 # set default value to -999 to spot "empty" entries
+        dPhiLepMet = -999
         # LT of lepton and MET
         LT = -999
         GenLT = -999
@@ -1064,11 +1065,13 @@ class EventVars1L_base:
             GendPhiLepW = tightLeps[0].p4().DeltaPhi(GenrecoWp4)
             GenLT = tightLeps[0].pt + Genmetp4.Pt()
             dPhiLepW = tightLeps[0].p4().DeltaPhi(recoWp4)
+            dPhiLepMet = tightLeps[0].p4().DeltaPhi(metp4)
             LT = tightLeps[0].pt + metp4.Pt()
             Lp = tightLeps[0].pt / recoWp4.Pt() * cos(dPhiLepW)
 
             #MT = recoWp4.Mt() # doesn't work
-            MT = sqrt(2*metp4.Pt()*tightLeps[0].pt * (1-cos(dPhiLepW)))
+            # Previous definition MT = sqrt(2*metp4.Pt()*tightLeps[0].pt * (1-cos(dPhiLepW)))
+            MT = sqrt(2*metp4.Pt()*tightLeps[0].pt * (1-cos(dPhiLepMet))) 
 
             ## no HF
 #            recoWNoHFp4 =  tightLeps[0].p4() + metNoHFp4
@@ -1078,6 +1081,7 @@ class EventVars1L_base:
         ret["DeltaPhiLepW"] = dPhiLepW
         dPhi = abs(dPhiLepW) # nickname for absolute dPhiLepW
         ret['dPhi'] = dPhi
+        ret['dPhiLepMet'] = dPhiLepMet
         ret['ST'] = LT
         ret['LT'] = LT
         ret['Lp'] = Lp
