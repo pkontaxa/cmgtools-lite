@@ -14,7 +14,7 @@ from CMGTools.TTHAnalysis.tools.functionsRAX import _susy2lss_idEmu_cuts_obj,_su
 ##------------------------------------------  
 
 leptonTypeSusy = NTupleObjectType("leptonSusy", baseObjectTypes = [ leptonType ], variables = [
-    NTupleVariable("mvaIdSpring15",   lambda lepton : lepton.mvaRun2("NonTrigSpring15MiniAOD") if abs(lepton.pdgId()) == 11 else 1, help="EGamma POG MVA ID for non-triggering electrons, Spring15 re-training; 1 for muons"),
+    #NTupleVariable("mvaIdSpring15",   lambda lepton : lepton.mvaRun2("NonTrigSpring15MiniAOD") if abs(lepton.pdgId()) == 11 else 1, help="EGamma POG MVA ID for non-triggering electrons, Spring15 re-training; 1 for muons"),
     # Lepton MVA-id related variables
     NTupleVariable("mvaTTH",    lambda lepton : getattr(lepton, 'mvaValueTTH', -1), help="Lepton MVA (TTH version)"),
     NTupleVariable("mvaSUSY",    lambda lepton : getattr(lepton, 'mvaValueSUSY', -1), help="Lepton MVA (SUSY version)"),
@@ -24,11 +24,24 @@ leptonTypeSusy = NTupleObjectType("leptonSusy", baseObjectTypes = [ leptonType ]
     NTupleVariable("jetPtRelv2", lambda lepton : ptRelv2(lepton) if hasattr(lepton,'jet') else -1, help="pt of the lepton transverse to the jet axis (subtracting the lepton) - v2"),
     NTupleVariable("jetBTagCSV", lambda lepton : lepton.jet.btag('pfCombinedInclusiveSecondaryVertexV2BJetTags') if hasattr(lepton,'jet') and hasattr(lepton.jet, 'btag') else -99, help="CSV btag of nearest jet"),
     NTupleVariable("jetBTagCMVA", lambda lepton : lepton.jet.btag('pfCombinedMVABJetTags') if hasattr(lepton,'jet') and hasattr(lepton.jet, 'btag') else -99, help="CMA btag of nearest jet"),
-    NTupleVariable("jetBTagDeepCSV", lambda lepton : (lambda x: -99 if isnan(x) else x)(lepton.jet.btag('pfDeepCSVJetTags:probb')+lepton.jet.btag('pfDeepCSVJetTags:probbb') if hasattr(lepton,'jet') and hasattr(lepton.jet, 'btag') else -99), help="DeepCSV btag of nearest jet, BvsAll = b+bb"),
-    NTupleVariable("jetBTagDeepCSVCvsB", lambda lepton : (lambda x: -99 if isnan(x) else x)((lepton.jet.btag('pfDeepCSVJetTags:probc')/(lepton.jet.btag('pfDeepCSVJetTags:probc')+lepton.jet.btag('pfDeepCSVJetTags:probb')+lepton.jet.btag('pfDeepCSVJetTags:probbb'))) if hasattr(lepton,'jet') and hasattr(lepton.jet, 'btag') else -99), help="DeepCSV btag of nearest jet, CvsB = c/(c+b+bb)"),
-    NTupleVariable("jetBTagDeepCSVCvsL", lambda lepton : (lambda x: -99 if isnan(x) else x)((lepton.jet.btag('pfDeepCSVJetTags:probc')/(lepton.jet.btag('pfDeepCSVJetTags:probc')+lepton.jet.btag('pfDeepCSVJetTags:probudsg'))) if hasattr(lepton,'jet') and hasattr(lepton.jet, 'btag') else -99), help="DeepCSV btag of nearest jet, CvsL = c/(c+udsg)"),
     NTupleVariable("jetDR",      lambda lepton : deltaR(lepton.eta(),lepton.phi(),lepton.jet.eta(),lepton.jet.phi()) if hasattr(lepton,'jet') else -1, help="deltaR(lepton, nearest jet)"),
     NTupleVariable("r9",      lambda lepton : lepton.full5x5_r9() if abs(lepton.pdgId()) == 11 else -99, help="SuperCluster 5x5 r9 variable, only for electrons; -99 for muons"),
+
+ # ID variables
+    NTupleVariable("SPRING15_25ns_v1", lambda x : (1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto") + 1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Loose") + 1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Medium") + 1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Tight")) if abs(x.pdgId()) == 11 else -1, int, help="Electron cut-based id (POG_SPRING15_25ns_v1_ConvVetoDxyDy): 0=none, 1=veto, 2=loose, 3=medium, 4=tight"),
+    NTupleVariable("eleCBID_SPRING15_25ns_ConvVetoDxyDz", lambda x : (1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto") + 1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Loose") + 1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Medium") + 1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Tight")) if abs(x.pdgId()) == 11 else -1, int, help="Electron cut-based id (POG_SPRING15_25ns_v1_ConvVetoDxyDy): 0=none, 1=veto, 2=loose, 3=medium, 4=tight"),
+    NTupleVariable("eleCBID_SPRING15_25ns", lambda x : (1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_Veto") + 1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_Loose") + 1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_Medium") + 1*x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_Tight")) if abs(x.pdgId()) == 11 else -1, int, help="Electron cut-based id (POG_SPRING15_25ns_v1_ConvVetoDxyDy): 0=none, 1=veto, 2=loose, 3=medium, 4=tight"),
+    NTupleVariable("eleCBID_SPRING16_25ns_ConvVetoDxyDz", lambda x : (1*x.electronID("POG_Cuts_ID_SPRING16_25ns_v1_ConvVetoDxyDz_Veto") + 1*x.electronID("POG_Cuts_ID_SPRING16_25ns_v1_ConvVetoDxyDz_Loose") + 1*x.electronID("POG_Cuts_ID_SPRING16_25ns_v1_ConvVetoDxyDz_Medium") + 1*x.electronID("POG_Cuts_ID_SPRING16_25ns_v1_ConvVetoDxyDz_Tight")) if abs(x.pdgId()) == 11 else -1, int, help="Electron cut-based id (POG_SPRING16_25ns_v1_ConvVetoDxyDy): 0=none, 1=veto, 2=loose, 3=medium, 4=tight"),
+    NTupleVariable("eleCBID_SPRING16_25ns", lambda x : (1*x.electronID("POG_Cuts_ID_SPRING16_25ns_v1_Veto") + 1*x.electronID("POG_Cuts_ID_SPRING16_25ns_v1_Loose") + 1*x.electronID("POG_Cuts_ID_SPRING16_25ns_v1_Medium") + 1*x.electronID("POG_Cuts_ID_SPRING16_25ns_v1_Tight")) if abs(x.pdgId()) == 11 else -1, int, help="Electron cut-based id (POG_SPRING16_25ns_v1_ConvVetoDxyDy): 0=none, 1=veto, 2=loose, 3=medium, 4=tight"),
+    # Fall17 V2 ID variables
+    NTupleVariable("FALL17_94X_v2", lambda x : (1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Veto") + 1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Loose") + 1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Medium") + 1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Tight")) if abs(x.pdgId()) == 11 else -1, int, help="Electron cut-based id (POG_FALL17_94X_v2_ConvVetoDxyDy): 0=none, 1=veto, 2=loose, 3=medium, 4=tight"),
+    NTupleVariable("eleCBID_FALL17_94X_ConvVetoDxyDz", lambda x : (1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Veto") + 1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Loose") + 1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Medium") + 1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_ConvVetoDxyDz_Tight")) if abs(x.pdgId()) == 11 else -1, int, help="Electron cut-based id (POG_FALL17_94X_v2_ConvVetoDxyDy): 0=none, 1=veto, 2=loose, 3=medium, 4=tight"),
+    NTupleVariable("eleCBID_FALL17_94X", lambda x : (1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_Veto") + 1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_Loose") + 1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_Medium") + 1*x.electronID("POG_Cuts_ID_FALL17_94X_v2_Tight")) if abs(x.pdgId()) == 11 else -1, int, help="Electron cut-based id (POG_FALL17_94X_v2_ConvVetoDxyDy): 0=none, 1=veto, 2=loose, 3=medium, 4=tight"),
+
+    # Low level vars -- duplicates of leptonSusyExtra
+    NTupleVariable("hOverE", lambda x : x.hadronicOverEm() if abs(x.pdgId())==11 else 0, help="Electron hadronicOverEm"),
+    NTupleVariable("ooEmooP",  lambda x : ((1.0/x.ecalEnergy() - x.eSuperClusterOverP()/x.ecalEnergy()) if x.ecalEnergy()>0. else 9e9) if abs(x.pdgId())==11 else 0, help="Electron 1/E - 1/p  (without absolute value!)"),
+
     #2016 muon Id
     NTupleVariable("softMuonId2016", lambda lepton: _soft_MuonId_2016ICHEP(lepton), help="Soft muon ID retuned for ICHEP 2016"),
     NTupleVariable("mediumMuonID2016", lambda lepton: _medium_MuonId_2016ICHEP(lepton), help="Medium muon ID retuned for ICHEP 2016"),
@@ -43,7 +56,7 @@ leptonTypeSusy = NTupleObjectType("leptonSusy", baseObjectTypes = [ leptonType ]
 leptonTypeSusyExtraLight = NTupleObjectType("leptonSusyExtraLight", baseObjectTypes = [ leptonTypeSusy, leptonTypeExtra ], variables = [
     NTupleVariable("miniRelIsoCharged",   lambda x : getattr(x,'miniAbsIsoCharged',-99)/x.pt()),
     NTupleVariable("miniRelIsoNeutral",   lambda x : getattr(x,'miniAbsIsoNeutral',-99)/x.pt()),
-    NTupleVariable("jetNDauChargedMVASel",    lambda lepton : sum((deltaR(x.eta(),x.phi(),lepton.eta(),lepton.phi())<=0.4 and x.charge()!=0 and x.fromPV()>1 and x.hasTrackDetails() and qualityTrk(x.pseudoTrack(),lepton.associatedVertex)) for x in lepton.jet.daughterPtrVector()) if hasattr(lepton,'jet') and lepton.jet != lepton else 0, help="n charged daughters (with selection for ttH lepMVA) of nearest jet"),
+    NTupleVariable("jetNDauChargedMVASel",    lambda lepton : sum((deltaR(x.eta(),x.phi(),lepton.jet.eta(),lepton.jet.phi())<=0.4 and x.charge()!=0 and x.fromPV()>1 and qualityTrk(x.pseudoTrack(),lepton.associatedVertex)) for x in lepton.jet.daughterPtrVector()) if hasattr(lepton,'jet') and lepton.jet != lepton else 0, help="n charged daughters (with selection for ttH lepMVA) of nearest jet"),
     NTupleVariable("jetCorrFactor_L1", lambda x: x.jet.CorrFactor_L1 if hasattr(x.jet,'CorrFactor_L1') else 1, help="matched jet L1 correction factor"),
     NTupleVariable("jetCorrFactor_L1L2", lambda x: x.jet.CorrFactor_L1L2 if hasattr(x.jet,'CorrFactor_L1L2') else 1, help="matched jet L1L2 correction factor"),
     NTupleVariable("jetCorrFactor_L1L2L3", lambda x: x.jet.CorrFactor_L1L2L3 if hasattr(x.jet,'CorrFactor_L1L2L3') else 1, help="matched jet L1L2L3 correction factor"),
@@ -56,7 +69,6 @@ leptonTypeSusyExtraLight = NTupleObjectType("leptonSusyExtraLight", baseObjectTy
     NTupleVariable("idEmuTTH", lambda lepton: _ttH_idEmu_cuts_E2_obj(lepton), help="Electron pass trigger ID emulation cuts (TTH, E2)"),
     NTupleVariable("idEmuRA5", lambda lepton: _susy2lss_idEmu_cuts_obj(lepton), help="Electron pass trigger ID emulation cuts (RA5)"),
     NTupleVariable("idIsoEmuRA5", lambda lepton: _susy2lss_idIsoEmu_cuts_obj(lepton), help="Electron pass trigger ID+ISO emulation cuts (RA5)"),
-    NTupleVariable("SOSTightID2017", lambda lepton: (lepton.electronID("MVA_ID_nonIso_Fall17_wp90") if lepton.pt()<10 else lepton.electronID("MVA_ID_nonIso_Fall17_SUSYTight")) if abs(lepton.pdgId())==11 else 0, int, help="SOS tight electron MVA noIso ID 2017 (WP: POG wp90 below 10 GeV, SUSYTight above)"),
     NTupleVariable("mcPrompt",    lambda x : x.mcMatchAny_gp.isPromptFinalState() if getattr(x,"mcMatchAny_gp",None) else 0, int, mcOnly=True, help="isPromptFinalState"),
     NTupleVariable("mcPromptTau", lambda x : x.mcMatchAny_gp.isDirectPromptTauDecayProductFinalState() if getattr(x,"mcMatchAny_gp",None) else 0, int, mcOnly=True, help="isDirectPromptTauDecayProductFinalState"),
     NTupleVariable("mcPromptGamma", lambda x : x.mcPho.isPromptFinalState() if getattr(x,"mcPho",None) else 0, int, mcOnly=True, help="Photon isPromptFinalState"),
@@ -212,19 +224,42 @@ jetTypeSusyExtra = NTupleObjectType("jetSusyExtra",  baseObjectTypes = [ jetType
     NTupleVariable("muMult", lambda x : x.muonMultiplicity(), int, mcOnly = False,help="muonMultiplicity from PFJet.h"),
     NTupleVariable("HFHMult", lambda x : x.HFHadronMultiplicity(), int, mcOnly = False,help="HFHadronMultiplicity from PFJet.h"),
     NTupleVariable("HFEMMult", lambda x : x.HFEMMultiplicity(), int, mcOnly = False,help="HFEMMultiplicity from PFJet.h"),
+    NTupleVariable("DFprobb", lambda x : x.btag('pfDeepFlavourJetTags:probb'   ), float, help="Deep flavor discriminator: probb"),
+    NTupleVariable("DFprobbb", lambda x : x.btag('pfDeepFlavourJetTags:probbb'  ), float, help="Deep flavor discriminator: probb"),
+    NTupleVariable("DFproblepb", lambda x : x.btag('pfDeepFlavourJetTags:problepb'), float, help="Deep flavor discriminator: probl"),
+    NTupleVariable("DFprobcg", lambda x : x.btag('pfDeepFlavourJetTags:probc'   ), float, help="Deep flavor discriminator: probc"),
+    NTupleVariable("DFprobuds", lambda x : x.btag('pfDeepFlavourJetTags:probuds' ), float, help="Deep flavor discriminator: probu"),
+    NTupleVariable("DFprobg", lambda x : x.btag('pfDeepFlavourJetTags:probg'   ), float, help="Deep flavor discriminator: probg"),
 ])
 
 fatJetType = NTupleObjectType("fatJet",  baseObjectTypes = [ jetType ], variables = [
-    NTupleVariable("prunedMass",  lambda x : x.userFloat("ak8PFJetsCHSPrunedMass"),  float, help="pruned mass"),
-    NTupleVariable("softDropMass", lambda x : x.userFloat("ak8PFJetsCHSSoftDropMass"), float, help="trimmed mass"),
-    NTupleVariable("tau1", lambda x : x.userFloat("NjettinessAK8:tau1"), float, help="1-subjettiness"),
-    NTupleVariable("tau2", lambda x : x.userFloat("NjettinessAK8:tau2"), float, help="2-subjettiness"),
-    NTupleVariable("tau3", lambda x : x.userFloat("NjettinessAK8:tau3"), float, help="3-subjettiness"),
-    NTupleVariable("topMass", lambda x : (x.tagInfo("caTop").properties().topMass if x.tagInfo("caTop") else -99), float, help="CA8 jet topMass"),
-    NTupleVariable("minMass", lambda x : (x.tagInfo("caTop").properties().minMass if x.tagInfo("caTop") else -99), float, help="CA8 jet minMass"),
-    NTupleVariable("nSubJets", lambda x : (x.tagInfo("caTop").properties().nSubJets if x.tagInfo("caTop") else -99), float, help="CA8 jet nSubJets"),
+    #NTupleVariable("prunedMass",  lambda x : x.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSPrunedMass"),  float, help="pruned mass"),
+    #NTupleVariable("softDropMass", lambda x : x.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass"), float, help="trimmed mass"),
+    #NTupleVariable("tau1", lambda x : x.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau1"), float, help="1-subjettiness"),
+    #NTupleVariable("tau2", lambda x : x.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau2"), float, help="2-subjettiness"),
+    #NTupleVariable("tau3", lambda x : x.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau1"), float, help="3-subjettiness"),
+    #NTupleVariable("topMass", lambda x : (x.tagInfo("caTop").properties().topMass if x.tagInfo("caTop") else -99), float, help="CA8 jet topMass"),
+    #NTupleVariable("minMass", lambda x : (x.tagInfo("caTop").properties().minMass if x.tagInfo("caTop") else -99), float, help="CA8 jet minMass"),
+    #NTupleVariable("nSubJets", lambda x : (x.tagInfo("caTop").properties().nSubJets if x.tagInfo("caTop") else -99), float, help="CA8 jet nSubJets"),
+   NTupleVariable("softDropMass", lambda x : x.userFloat("ak8PFJetsPuppiSoftDropMass"), float, help="trimmed mass PUPPI"),
+   NTupleVariable("tau1", lambda x : x.userFloat("NjettinessAK8Puppi:tau1"), float, help="1-subjettiness PUPPI"),
+   NTupleVariable("tau2", lambda x : x.userFloat("NjettinessAK8Puppi:tau2"), float, help="2-subjettiness PUPPI"),
+   NTupleVariable("tau3", lambda x : x.userFloat("NjettinessAK8Puppi:tau3"), float, help="3-subjettiness PUPPI"),
+    
 ])
-      
+  
+
+######################## DeepAK8 #################################
+deepFatJetType =  NTupleObjectType("deepFatJet", baseObjectTypes = [ fatJetType ], variables = [
+    NTupleVariable("Binarized_score_deep_Top_PUPPI", lambda x : x.userFloat("binarized_score_top_PUPPI"), float, help="Binarized score for Top (DeepAK8)"),
+    NTupleVariable("raw_score_deep_Top_PUPPI", lambda x : x.userFloat("raw_score_top_PUPPI"), float, help="raw score for Top (DeepAK8)"),
+    NTupleVariable("Binarized_score_deep_W_PUPPI", lambda x : x.userFloat("binarized_score_w_PUPPI"), float, help="Binarized score for W (DeepAK8)"),
+    NTupleVariable("raw_score_deep_W_PUPPI", lambda x : x.userFloat("raw_score_w_PUPPI"), float, help="raw score for W (DeepAK8)"),
+
+])
+##################################################################
+
+    
 ##------------------------------------------  
 ## MET
 ##------------------------------------------  
@@ -257,7 +292,6 @@ svType = NTupleObjectType("sv", baseObjectTypes = [ fourVectorType ], variables 
     NTupleVariable("jetDR",  lambda x : deltaR(x.jet.eta(),x.jet.phi(),x.eta(),x.phi()) if x.jet != None else 0, help="deltaR to associated jet"),
     NTupleVariable("jetBTagCSV",   lambda x : x.jet.btag('pfCombinedInclusiveSecondaryVertexV2BJetTags') if x.jet != None else -99, help="CSV b-tag of associated jet"),
     NTupleVariable("jetBTagCMVA",  lambda x : x.jet.btag('pfCombinedMVABJetTags') if x.jet != None else -99, help="CMVA b-tag of associated jet"),
-    NTupleVariable("jetBTagDeepCSV", lambda x : (lambda y: -99 if isnan(y) else y)(x.jet.btag('pfDeepCSVJetTags:probb')+x.jet.btag('pfDeepCSVJetTags:probbb') if x.jet != None else -99), help="DeepCSV b-tag of associated jet, BvsAll = b+bb"),
     NTupleVariable("mcMatchNTracks", lambda x : getattr(x, 'mcMatchNTracks', -1), int, mcOnly=True, help="Number of mc-matched tracks in SV"),
     NTupleVariable("mcMatchNTracksHF", lambda x : getattr(x, 'mcMatchNTracksHF', -1), int, mcOnly=True, help="Number of mc-matched tracks from b/c in SV"),
     NTupleVariable("mcMatchFraction", lambda x : getattr(x, 'mcMatchFraction', -1), mcOnly=True, help="Fraction of mc-matched tracks from b/c matched to a single hadron (or -1 if mcMatchNTracksHF < 2)"),
@@ -306,7 +340,6 @@ heavyFlavourHadronType = NTupleObjectType("heavyFlavourHadron", baseObjectTypes 
     NTupleVariable("jetPt",  lambda x : x.jet.pt() if x.jet != None else 0, help="Jet: pT"),
     NTupleVariable("jetBTagCSV",  lambda x : x.jet.btag('pfCombinedInclusiveSecondaryVertexV2BJetTags') if x.jet != None else -99, help="CSV b-tag of associated jet"),
     NTupleVariable("jetBTagCMVA",  lambda x : x.jet.btag('pfCombinedMVABJetTags') if x.jet != None else -99, help="CMVA b-tag of associated jet"),
-    NTupleVariable("jetBTagDeepCSV", lambda x : (lambda y: -99 if isnan(y) else y)(x.jet.btag('pfDeepCSVJetTags:probb')+x.jet.btag('pfDeepCSVJetTags:probbb') if x.jet != None else -99), help="DeepCSV b-tag of associated jet, BvsAll = b+bb"),
     
 ])
 

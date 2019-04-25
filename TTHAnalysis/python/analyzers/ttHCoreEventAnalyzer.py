@@ -9,7 +9,6 @@ import os
 class ttHCoreEventAnalyzer( Analyzer ):
     def __init__(self, cfg_ana, cfg_comp, looperName ):
         super(ttHCoreEventAnalyzer,self).__init__(cfg_ana,cfg_comp,looperName)
-        self.btagAlgo = getattr(cfg_ana, 'btagAlgo', 'CSVv2IVF')
         self.maxLeps = cfg_ana.maxLeps
         self.mhtForBiasedDPhi = cfg_ana.mhtForBiasedDPhi
         self.jetForBiasedDPhi = cfg_ana.jetForBiasedDPhi
@@ -166,8 +165,8 @@ class ttHCoreEventAnalyzer( Analyzer ):
         self.readCollections( event.input )
         self.counters.counter('events').inc('all events')
 
-        event.bjetsLoose  = [ j for j in event.cleanJets if j.btagWP(self.btagAlgo+"L") ]
-        event.bjetsMedium = [ j for j in event.cleanJets if j.btagWP(self.btagAlgo+"M") ]
+        event.bjetsLoose  = [ j for j in event.cleanJets if j.btagWP("CSVv2IVFL") ]
+        event.bjetsMedium = [ j for j in event.cleanJets if j.btagWP("CSVv2IVFM") ]
 
         import ROOT
 
@@ -177,6 +176,7 @@ class ttHCoreEventAnalyzer( Analyzer ):
         objects40 = [ j for j in event.cleanJets if j.pt() > 40 ] + event.selectedLeptons
         objectsX  = [ j for j in event.cleanJets if j.pt() > self.jetPt ] + event.selectedLeptons
         objects25j = [ j for j in event.cleanJets if j.pt() > 25 ] 
+        objects30j = [ j for j in event.cleanJets if j.pt() > 30 ] 
         objects40j = [ j for j in event.cleanJets if j.pt() > 40 ] 
         objects50j = [ j for j in event.cleanJets if j.pt() > 50 ] 
         objectsXj = [ j for j in event.cleanJets if j.pt() > self.jetPt ]
@@ -216,6 +216,7 @@ class ttHCoreEventAnalyzer( Analyzer ):
         event.mhtPhiJetX = event.mhtJetXvec.phi()
 
         event.htJet25j = sum([x.pt() for x in objects25j])
+        event.htJet30j = sum([x.pt() for x in objects30j])
         event.htJet40j = sum([x.pt() for x in objects40j])
         event.mhtJet40jvec = ROOT.reco.Particle.LorentzVector(-1.*(sum([x.px() for x in objects40j])) , -1.*(sum([x.py() for x in objects40j])), 0, 0 )               
         event.mhtJet40j = event.mhtJet40jvec.pt()
