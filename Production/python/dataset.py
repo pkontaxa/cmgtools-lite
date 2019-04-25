@@ -156,26 +156,21 @@ class CMSDataset( BaseDataset ):
             query += "  status=VALID" # status doesn't interact well with run range
         if self.dbsInstance != None:
             query += "  instance=prod/%s" % self.dbsInstance
-        dbs='dasgoclient --json --query="file %s=%s"'%(qwhat,query) # files must be valid
+        dbs='dasgoclient -dasmaps='+os.environ['CMSSW_BASE']+'/src '+'--query="file %s=%s"'%(qwhat,query) # files must be valid
         if begin >= 0:
             dbs += ' --index %d' % begin
         if end >= 0:
             dbs += ' --limit %d' % (end-begin+1)
         else:
-            dbs += ' --limit 0'
-        dbsOut = json.load(_dasPopen(dbs))
+            dbs += ' --limit 0' 
+        dbsOut = _dasPopen(dbs)
         files = []
-        if dbsOut:
-            for dbsEntry in dbsOut:
-                if 'file' not in dbsEntry:
-                    continue
-                dbsFiles = dbsEntry['file']
-                for fileDict in dbsFiles:
-                    if 'name' not in fileDict:
-                        continue
-                    files.append(fileDict['name'])
-        if not files:
-            raise RuntimeError("No files for query \'%s\'" % query)
+        for line in dbsOut:
+            if line.find('/store')==-1:
+                continue
+            line = line.rstrip()
+            # print 'line',line
+            files.append(line)
         return files
 
     def buildListOfFiles(self, pattern='.*root'):
@@ -250,7 +245,7 @@ class CMSDataset( BaseDataset ):
                 query = "%s run between [%d, %d]" % (query,runmin if runmin > 0 else 1, runmax if runmax > 0 else 999999)
         if dbsInstance != None:
             query += "  instance=prod/%s" % dbsInstance
-        dbs='dasgoclient --query="summary %s=%s" --format=json'%(qwhat,query)
+        dbs='dasgoclient -dasmaps='+os.environ['CMSSW_BASE']+'/src '+'--query="summary %s=%s" --format=json'%(qwhat,query)
         try:
             jdata = json.load(_dasPopen(dbs))['data']
         except ValueError as err:
@@ -409,21 +404,17 @@ class PrivateDataset ( BaseDataset ):
     def buildListOfFilesDBS(self, name, dbsInstance):
         entries = self.findPrimaryDatasetNumFiles(name, dbsInstance, -1, -1)
         files = []
-        dbs = 'dasgoclient --json --query="file dataset=%s instance=prod/%s" --limit=%s' % (name, dbsInstance, entries)
-        dbsOut = json.load(_dasPopen(dbs))
-        if dbsOut:
-            for dbsEntry in dbsOut:
-                if 'file' not in dbsEntry:
-                    continue
-                dbsFiles = dbsEntry['file']
-                for fileDict in dbsFiles:
-                    if 'name' not in fileDict:
-                        continue
-                    files.append(fileDict['name'])
-        if not files:
-            raise RuntimeError("Dataset %s is empty!" % name)
+        dbs = 'dasgoclient -dasmaps='+os.environ['CMSSW_BASE']+'/src '+'--query="file dataset=%s instance=prod/%s" --limit=%s' % (name, dbsInstance, entries)
+        dbsOut = _dasPopen(dbs)
+        for line in dbsOut:
+            if line.find('/store')==-1:
+                continue
+            line = line.rstrip()
+            # print 'line',line
+            files.append(line)
+        #return ['root://eoscms//eos/cms%s' % f for f in files]
         return files
-
+    
     def buildListOfFiles(self, pattern='.*root'):
         self.files = self.buildListOfFilesDBS(self.name, self.dbsInstance)
 
@@ -439,22 +430,21 @@ class PrivateDataset ( BaseDataset ):
             else:
                 print "WARNING: queries with run ranges are slow in DAS"
                 query = "%s run between [%d, %d]" % (query,runmin if runmin > 0 else 1, runmax if runmax > 0 else 999999)
-        dbs='dasgoclient --json --query="summary %s=%s instance=prod/%s"'%(qwhat, query, dbsInstance)
-        dbsOut = json.load(_dasPopen(dbs))
+        dbs='dasgoclient -dasmaps='+os.environ['CMSSW_BASE']+'/src '+'--query="summary %s=%s instance=prod/%s" --format=json'%(qwhat, query, dbsInstance)
+        #dbsOut = _dasPopen(dbs).readlines()
+        dbsOut = json.load(_dasPopen(dbs))['data']
         entries = []
-        if dbsOut:
-            dbsSummary = dbsOut[0]['summary']
-            for summaryDict in dbsSummary:
-                if "nevents" in summaryDict:
-                    entries.append(int(summaryDict["nevents"]))
+        for line in dbsOut:
+            data = line['summary'][0]
+            entries.append(int(data["nevents"]))
         if entries:
             return sum(entries)
         return -1
-
+        
 
     @staticmethod
     def findPrimaryDatasetNumFiles(dataset, dbsInstance, runmin, runmax):
-
+        
         query, qwhat = dataset, "dataset"
         if "#" in dataset: qwhat = "block"
         if runmin >0 or runmax > 0:
@@ -463,12 +453,13 @@ class PrivateDataset ( BaseDataset ):
             else:
                 print "WARNING: queries with run ranges are slow in DAS"
                 query = "%s run between [%d, %d]" % (query,runmin if runmin > 0 else 1, runmax if runmax > 0 else 999999)
-        dbs='dasgoclient --json --query="summary %s=%s instance=prod/%s"'%(qwhat, query, dbsInstance)
-        dbsOut = json.load(_dasPopen(dbs))[0]['summary']
+        dbs='dasgoclient -dasmaps='+os.environ['CMSSW_BASE']+'/src '+'--query="summary %s=%s instance=prod/%s" --format=json'%(qwhat, query, dbsInstance)
+        #dbsOut = _dasPopen(dbs).readlines()
+        dbsOut = json.load(_dasPopen(dbs))['data']
         entries = []
-        for summaryDict in dbsOut:
-            if "nfiles" in summaryDict:
-                entries.append(int(summaryDict["nfiles"]))
+        for line in dbsOut:
+            data = line['summary'][0]
+            entries.append(int(data["nfiles"]))
         if entries:
             return sum(entries)
         return -1
@@ -483,13 +474,13 @@ class PrivateDataset ( BaseDataset ):
 ### MM
 
 def getDatasetFromCache( cachename ) :
-    cachedir =  '/'.join( [os.environ['HOME'],'.cmgdataset'])
+    cachedir =  '/'.join( [os.environ['CMSSW_BASE']+'/src','.cmgdataset'])
     pckfile = open( cachedir + "/" + cachename )
     dataset = pickle.load(pckfile)      
     return dataset
 
 def writeDatasetToCache( cachename, dataset ):
-    cachedir =  '/'.join( [os.environ['HOME'],'.cmgdataset'])
+    cachedir =  '/'.join( [os.environ['CMSSW_BASE']+'/src','.cmgdataset'])
     if not os.path.exists(cachedir):
         os.mkdir(cachedir)
     pckfile = open( cachedir + "/" + cachename, 'w')
@@ -532,7 +523,7 @@ def createDataset( user, dataset, pattern, readcache=False,
 ### MM
 def createMyDataset( user, dataset, pattern, dbsInstance, readcache=False):
 
-    cachedir =  '/'.join( [os.environ['HOME'],'.cmgdataset'])
+    cachedir =  '/'.join( [os.environ['CMSSW_BASE']+'/src','.cmgdataset'])
 
     def cacheFileName(data, user, dbsInstance, pattern):
         cf =  data.replace('/','_')
