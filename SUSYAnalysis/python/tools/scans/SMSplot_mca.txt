@@ -1,0 +1,29 @@
+# Signal
+T1tttt_Scan+   : SMS_T1tttt_TuneCUETP8M1_1 : 1*susyXsec*4956730/susyNgen ; FillColor=ROOT.kBlack
+T1tttt_Scan+   : SMS_T1tttt_TuneCUETP8M1_2 : 1*susyXsec*5158369/susyNgen ; FillColor=ROOT.kBlack
+T1tttt_Scan+   : SMS_T1tttt_TuneCUETP8M1_3 : 1*susyXsec*5042767/susyNgen ; FillColor=ROOT.kBlack
+T1tttt_Scan+   : SMS_T1tttt_TuneCUETP8M1_4 : 1*susyXsec*5175227/susyNgen ; FillColor=ROOT.kBlack
+T1tttt_Scan+   : SMS_T1tttt_TuneCUETP8M1_5 : 1*susyXsec*5270679/susyNgen ; FillColor=ROOT.kBlack
+T1tttt_Scan+   : SMS_T1tttt_TuneCUETP8M1_6 : 1*susyXsec*6758946/susyNgen ; FillColor=ROOT.kBlack
+
+T1tttt_Scan_nISRweight+   : SMS_T1tttt_TuneCUETP8M1_1 : 1*susyXsec*4956730/susyNgen*nISRweight; FillColor=ROOT.kMagenta
+T1tttt_Scan_nISRweight+   : SMS_T1tttt_TuneCUETP8M1_2 : 1*susyXsec*5158369/susyNgen*nISRweight; FillColor=ROOT.kMagenta
+T1tttt_Scan_nISRweight+   : SMS_T1tttt_TuneCUETP8M1_3 : 1*susyXsec*5042767/susyNgen*nISRweight; FillColor=ROOT.kMagenta
+T1tttt_Scan_nISRweight+   : SMS_T1tttt_TuneCUETP8M1_4 : 1*susyXsec*5175227/susyNgen*nISRweight; FillColor=ROOT.kMagenta
+T1tttt_Scan_nISRweight+   : SMS_T1tttt_TuneCUETP8M1_5 : 1*susyXsec*5270679/susyNgen*nISRweight; FillColor=ROOT.kMagenta
+T1tttt_Scan_nISRweight+   : SMS_T1tttt_TuneCUETP8M1_6 : 1*susyXsec*6758946/susyNgen*nISRweight; FillColor=ROOT.kMagenta
+
+T1tttt_Scan_nISRweight_up+   : SMS_T1tttt_TuneCUETP8M1_1 : 1*susyXsec*4956730/susyNgen*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+T1tttt_Scan_nISRweight_up+   : SMS_T1tttt_TuneCUETP8M1_2 : 1*susyXsec*5158369/susyNgen*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+T1tttt_Scan_nISRweight_up+   : SMS_T1tttt_TuneCUETP8M1_3 : 1*susyXsec*5042767/susyNgen*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+T1tttt_Scan_nISRweight_up+   : SMS_T1tttt_TuneCUETP8M1_4 : 1*susyXsec*5175227/susyNgen*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+T1tttt_Scan_nISRweight_up+   : SMS_T1tttt_TuneCUETP8M1_5 : 1*susyXsec*5270679/susyNgen*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+T1tttt_Scan_nISRweight_up+   : SMS_T1tttt_TuneCUETP8M1_6 : 1*susyXsec*6758946/susyNgen*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+
+
+T1tttt_Scan_nISRweight_down+   : SMS_T1tttt_TuneCUETP8M1_1 : 1*susyXsec*4956730/susyNgen*nISRweightsyst_down; FillColor=ROOT.kRed
+T1tttt_Scan_nISRweight_down+   : SMS_T1tttt_TuneCUETP8M1_2 : 1*susyXsec*5158369/susyNgen*nISRweightsyst_down; FillColor=ROOT.kRed
+T1tttt_Scan_nISRweight_down+   : SMS_T1tttt_TuneCUETP8M1_3 : 1*susyXsec*5042767/susyNgen*nISRweightsyst_down; FillColor=ROOT.kRed
+T1tttt_Scan_nISRweight_down+   : SMS_T1tttt_TuneCUETP8M1_4 : 1*susyXsec*5175227/susyNgen*nISRweightsyst_down; FillColor=ROOT.kRed
+T1tttt_Scan_nISRweight_down+   : SMS_T1tttt_TuneCUETP8M1_5 : 1*susyXsec*5270679/susyNgen*nISRweightsyst_down; FillColor=ROOT.kRed
+T1tttt_Scan_nISRweight_down+   : SMS_T1tttt_TuneCUETP8M1_6 : 1*susyXsec*6758946/susyNgen*nISRweightsyst_down; FillColor=ROOT.kRed
