@@ -37,7 +37,7 @@ process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v13', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data', '')
 print 'Using global tag', process.GlobalTag.globaltag
 # ---------------------------------------------------------
 # set up TransientTrackBuilder
@@ -63,7 +63,7 @@ process.deepntuplizer = cms.EDProducer('MyStuffProducer_94X',
 from PhysicsTools.PatUtils.tools.runMETCorrectionsAndUncertainties import runMetCorAndUncFromMiniAOD
 runMetCorAndUncFromMiniAOD (
             process,
-            isData = False, # false for MC
+            isData = True, # false for MC
             fixEE2017 = True,
             fixEE2017Params = {'userawPt': True, 'ptThreshold': 50.0, 'minEtaThreshold': 2.65, 'maxEtaThreshold': 3.139},
             postfix = "ModifiedMET",
@@ -71,7 +71,7 @@ runMetCorAndUncFromMiniAOD (
 
 
 
-process.p = cms.Path( process.deepntuplizer * process.fullPatMetSequenceModifiedMET )
+process.p = cms.Path( process.deepntuplizer * process.fullPatMetSequenceModifiedMET)
 
 
 process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
@@ -96,7 +96,6 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
 
  #   overrideInputFileSplitLevels = cms.untracked.bool(True)
 )
-
 
 process.endpath = cms.EndPath(process.MINIAODSIMoutput)
 

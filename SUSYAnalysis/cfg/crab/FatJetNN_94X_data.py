@@ -69,8 +69,9 @@ runMetCorAndUncFromMiniAOD (
             postfix = "ModifiedMET",
            )
 
-                                
-process.p = cms.Path(process.deepntuplizer * process.fullPatMetSequenceModifiedMET)
+
+
+process.p = cms.Path( process.deepntuplizer * process.fullPatMetSequenceModifiedMET)
 
 
 process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
@@ -87,7 +88,7 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
 
     outputCommands = cms.untracked.vstring(#'keep *',
                                            #'drop *_deepNNTagInfos*_*_*',
-                                           'drop *',
+                                           #'drop *',
                                            'keep *_deepntuplizer_*_*',
                                            'keep *_slimmedMETsModifiedMET_*_*',
                                            #'keep *_selectedUpdatedPatJets*_*_*',         

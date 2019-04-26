@@ -12,7 +12,7 @@ config.JobType.scriptExe = 'heppy_crab_script.sh'
 config.JobType.disableAutomaticOutputCollection = True
 # config.JobType.sendPythonFolder = True  #doesn't work, not supported yet? do it by hand
 
-config.JobType.inputFiles = ['FrameworkJobReport.xml','heppy_crab_script.py','cmgdataset.tar.gz', 'python.tar.gz', 'cafpython.tar.gz','options.json','FatJetNN_94X_data.py','FatJetNN_94X_MC.py','FatJetNN_94X.py']
+config.JobType.inputFiles = ['FrameworkJobReport.xml', 'heppy_crab_script.py', 'cmgdataset.tar.gz', 'python.tar.gz','cafpython.tar.gz', 'options.json', 'FatJetNN_94X_data.py', 'FatJetNN_94X_MC.py', 'FatJetNN_104X_MC.py', 'FatJetNN_104X_MC.py','FatJetNN_104X_data.py']
 config.JobType.outputFiles = []
 
 config.section_("Data")
