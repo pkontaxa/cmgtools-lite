@@ -495,8 +495,8 @@ elif runSig:
   # Set FastSim JEC
   jetAna.mcGT = "Spring16_FastSimV1_MC"
   # No MET correcton 
-  metAna.metCollection     = "slimmedMETs"
-  metAna.noPUMetCollection = "slimmedMETs"
+  #metAna.metCollection     = "slimmedMETs"
+  #metAna.noPUMetCollection = "slimmedMETs"
   #jetAna.mcGT = "Spring16_25nsFastSimV1_MC"
   #### REMOVE JET ID FOR FASTSIM
   jetAna.relaxJetId = True
@@ -669,11 +669,11 @@ outputService.append(output_service)
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 #if run80X:
 #     fname1="$CMSSW_BASE/src/NNKit/FatJetNN/test/FatJetNN_80X.py"
-if runMC and not run104X: 
+if runMC  or runSig and not run104X: 
     fname1="$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/FatJetNN_94X_MC.py"
 elif runData and not run104X : 
     fname1="$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/FatJetNN_94X_data.py"
-elif runMC and run104X:
+elif runMC  or runSig and run104X:
     fname1="$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/FatJetNN_104X_MC.py"
 elif runData and run104X:
     fname1="$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/FatJetNN_104X_data.py"
