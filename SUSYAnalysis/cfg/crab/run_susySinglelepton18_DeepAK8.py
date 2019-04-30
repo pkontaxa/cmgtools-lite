@@ -16,8 +16,8 @@ run80X = getHeppyOption("run80X",False)
 run94X = getHeppyOption("run94X",False)
 run104X = getHeppyOption("run104X",True)
 
-runData = getHeppyOption("runData",True)
-runMC = getHeppyOption("runMC",False)
+runData = getHeppyOption("runData", False)
+runMC = getHeppyOption("runMC", True)
 runSig = getHeppyOption("runSig",False)
 
 runFastsim = getHeppyOption("runFastS",False)
@@ -449,7 +449,7 @@ if runMC:
       # apply a loose lepton skim to MC
       anyLepSkim.minLeptons = 1
       #pick the file you want to run on
-      selectedComponents = [TTJets_LO_HT800to1200]
+      selectedComponents = mcSamples
       
 #  [TTJets_SingleLeptonFromTbar,TTJets_SingleLeptonFromTbar_ext,TTJets_SingleLeptonFromT,TTJets_DiLepton,TTJets_DiLepton_ext,
   if test==1:
@@ -470,7 +470,7 @@ if runMC:
       comp.fineSplitFactor = 1
       comp.splitFactor = len(comp.files)
   elif test==0:
-    selectedComponents = [TTJets_LO_HT800to1200]
+    #selectedComponents = [TTJets_LO_HT800to1200]
     #selectedComponents = [WJetsToLNuHT[1]]
     #selectedComponents = mcSamples
     for comp in selectedComponents:

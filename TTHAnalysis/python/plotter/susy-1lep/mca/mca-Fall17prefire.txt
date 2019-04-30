@@ -1,0 +1,176 @@
+
+############ without prefire
+
+T1tttt_1900_100_TuneCP2non+   : SMS_T1tttt_TuneCP2_1 : susyXsec*5298348/susyNgen*btagSF*lepSF : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.9/0.1 "
+T1tttt_1900_100_TuneCP2non+   : SMS_T1tttt_TuneCP2_2 : susyXsec*4919836/susyNgen*btagSF*lepSF : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.9/0.1 "
+T1tttt_1900_100_TuneCP2non+   : SMS_T1tttt_TuneCP2_3 : susyXsec*4921290/susyNgen*btagSF*lepSF : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.9/0.1 "
+T1tttt_1900_100_TuneCP2non+   : SMS_T1tttt_TuneCP2_4 : susyXsec*6360687/susyNgen*btagSF*lepSF : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.9/0.1 "
+T1tttt_1900_100_TuneCP2non+   : SMS_T1tttt_TuneCP2_5 : susyXsec*4086010/susyNgen*btagSF*lepSF : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.9/0.1 "
+T1tttt_1900_100_TuneCP2non+   : SMS_T1tttt_TuneCP2_6 : susyXsec*4403145/susyNgen*btagSF*lepSF : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.9/0.1 "
+
+#T1tttt_1500_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_1 : susyXsec*5298348/susyNgen*btagSF*lepSF : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.5/1.0 "
+#T1tttt_1500_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_3 : susyXsec*4919836/susyNgen*btagSF*lepSF : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.5/1.0 "
+#T1tttt_1500_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_2 : susyXsec*4921290/susyNgen*btagSF*lepSF : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.5/1.0 "
+#T1tttt_1500_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_4 : susyXsec*6360687/susyNgen*btagSF*lepSF : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.5/1.0 "
+#T1tttt_1500_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_5 : susyXsec*4086010/susyNgen*btagSF*lepSF : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.5/1.0 "
+#T1tttt_1500_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_6 : susyXsec*4403145/susyNgen*btagSF*lepSF : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.5/1.0 "
+
+#T1tttt_1750_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_1 : susyXsec*5298348/susyNgen*btagSF*lepSF : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.75/1.0 "
+#T1tttt_1750_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_2 : susyXsec*4919836/susyNgen*btagSF*lepSF : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.75/1.0 "
+#T1tttt_1750_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_3 : susyXsec*4921290/susyNgen*btagSF*lepSF : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.75/1.0 "
+#T1tttt_1750_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_4 : susyXsec*6360687/susyNgen*btagSF*lepSF : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.75/1.0 "
+#T1tttt_1750_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_5 : susyXsec*4086010/susyNgen*btagSF*lepSF : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.75/1.0 "
+#T1tttt_1750_1000_TuneCP2non+   : SMS_T1tttt_TuneCP2_6 : susyXsec*4403145/susyNgen*btagSF*lepSF : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kRed-6, Label="T1t^{4} 1.75/1.0 "
+
+
+
+## ttbar
+bkg1           : TTJets_DiLepton             : Xsec*1*btagSF*puRatio*lepSF : lheHTIncoming <= 600; FillColor=ROOT.kBlue, Label="background "
+bkg1          : TTJets_SingleLeptonFromT    		: Xsec*1*btagSF*puRatio*lepSF : lheHTIncoming <= 600; FillColor=ROOT.kBlue, Label="background "
+bkg1          : TTJets_SingleLeptonFromTbar 		: Xsec*1*btagSF*puRatio*lepSF : lheHTIncoming <= 600; FillColor=ROOT.kBlue, Label="background "
+bkg1           : TTJets_LO_HT600to800        : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1           : TTJets_LO_HT800to1200		 : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1           : TTJets_LO_HT1200to2500	     : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1           : TTJets_LO_HT2500toInf	     : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+
+# background 
+bkg1    : WJetsToLNu_HT100to200    : Xsec*1*btagSF*puRatio*lepSF  ; Label="background ", FillColor=ROOT.kBlue
+bkg1    : WJetsToLNu_HT200to400    : Xsec*1*btagSF*puRatio*lepSF  ; Label="background ", FillColor=ROOT.kBlue
+bkg1    : WJetsToLNu_HT400to600    : Xsec*1*btagSF*puRatio*lepSF  ; Label="background ", FillColor=ROOT.kBlue
+bkg1    : WJetsToLNu_HT600to800    : Xsec*1*btagSF*puRatio*lepSF  ; Label="background ", FillColor=ROOT.kBlue
+bkg1    : WJetsToLNu_HT800to1200 	: Xsec*1*btagSF*puRatio*lepSF  ; Label="background ", FillColor=ROOT.kBlue
+bkg1    : WJetsToLNu_HT1200to2500  : Xsec*1*btagSF*puRatio*lepSF  ; Label="background ", FillColor=ROOT.kBlue
+bkg1    : WJetsToLNu_HT2500toInf   : Xsec*1*btagSF*puRatio*lepSF  ; Label="background ", FillColor=ROOT.kBlue
+
+# QCD
+bkg1      :QCD_HT200to300  : Xsec*1*btagSF*puRatio*lepSF ; Label ="background ", FillColor=ROOT.kBlue
+bkg1      :QCD_HT300to500  : Xsec*1*btagSF*puRatio*lepSF ; Label ="background ", FillColor=ROOT.kBlue
+bkg1      :QCD_HT500to700  : Xsec*1*btagSF*puRatio*lepSF ; Label ="background ", FillColor=ROOT.kBlue
+bkg1      :QCD_HT700to1000 : Xsec*1*btagSF*puRatio*lepSF ; Label ="background ", FillColor=ROOT.kBlue
+bkg1      :QCD_HT1000to1500: Xsec*1*btagSF*puRatio*lepSF ; Label ="background ", FillColor=ROOT.kBlue
+bkg1      :QCD_HT1500to2000: Xsec*1*btagSF*puRatio*lepSF ; Label ="background ", FillColor=ROOT.kBlue
+bkg1      :QCD_HT2000toInf : Xsec*1*btagSF*puRatio*lepSF ; Label ="background ", FillColor=ROOT.kBlue
+
+# Single Top
+bkg1 : TToLeptons_sch           : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label= "background "
+bkg1 : T_tch_powheg             : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label= "background "
+bkg1 : TBar_tch_powheg          : 80.95*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label= "background "
+bkg1 : TBar_tWch		           : 19.55*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label= "background "
+bkg1 : T_tWch	               : 19.55*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label= "background "
+
+# Drell-Yan
+bkg1      : DYJetsToLL_M50_HT100to200   		: Xsec*1*btagSF*puRatio*lepSF ; Label="background ", FillColor=ROOT.kBlue
+bkg1      : DYJetsToLL_M50_HT200to400   	  	: Xsec*1*btagSF*puRatio*lepSF ; Label="background ", FillColor=ROOT.kBlue
+bkg1      : DYJetsToLL_M50_HT400to600   		: Xsec*1*btagSF*puRatio*lepSF ; Label="background ", FillColor=ROOT.kBlue
+bkg1      : DYJetsToLL_M50_HT600to800   		: Xsec*1*btagSF*puRatio*lepSF ; Label="background ", FillColor=ROOT.kBlue
+bkg1      : DYJetsToLL_M50_HT800to1200  		: Xsec*1*btagSF*puRatio*lepSF ; Label="background ", FillColor=ROOT.kBlue
+bkg1      : DYJetsToLL_M50_HT1200to2500 		: Xsec*1*btagSF*puRatio*lepSF ; Label="background ", FillColor=ROOT.kBlue
+bkg1      : DYJetsToLL_M50_HT2500toInf  		: Xsec*1*btagSF*puRatio*lepSF ; Label="background ", FillColor=ROOT.kBlue
+
+# TTV
+bkg1 : TTWToLNu      : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : TTWToQQ       : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : TTZ_LO	    : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : TTZToLLNuNu   : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : TTZToQQ       : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+
+# DiBoson
+bkg1 : WWTo1L1Nu2Q    	: Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : WWTo2L2Nu      	: Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : WWToLNuQQ      	: Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : WZTo1L1Nu2Q    	: Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : WZTo1L3Nu      	: Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : WZTo3LNu_amcatnlo	: Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : ZZTo2L2Nu      	: Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : ZZTo2Q2Nu       	: Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+bkg1 : ZZTo2L2Q			: Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kBlue, Label="background "
+
+
+############ prefire wgtd
+
+
+
+T1tttt_1900_100_TuneCP2with+   : SMS_T1tttt_TuneCP2_1 : susyXsec*5298348/susyNgen*btagSF*lepSF*prefireW : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.9/0.1 "
+T1tttt_1900_100_TuneCP2with+   : SMS_T1tttt_TuneCP2_2 : susyXsec*4919836/susyNgen*btagSF*lepSF*prefireW : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.9/0.1 "
+T1tttt_1900_100_TuneCP2with+   : SMS_T1tttt_TuneCP2_3 : susyXsec*4921290/susyNgen*btagSF*lepSF*prefireW : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.9/0.1 "
+T1tttt_1900_100_TuneCP2with+   : SMS_T1tttt_TuneCP2_4 : susyXsec*6360687/susyNgen*btagSF*lepSF*prefireW : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.9/0.1 "
+T1tttt_1900_100_TuneCP2with+   : SMS_T1tttt_TuneCP2_5 : susyXsec*4086010/susyNgen*btagSF*lepSF*prefireW : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.9/0.1 "
+T1tttt_1900_100_TuneCP2with+   : SMS_T1tttt_TuneCP2_6 : susyXsec*4403145/susyNgen*btagSF*lepSF*prefireW : mGo == 1900 && mLSP == 100 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.9/0.1 "
+
+#T1tttt_1500_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_1 : susyXsec*5298348/susyNgen*btagSF*lepSF*prefireW : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.5/1.0 "
+#T1tttt_1500_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_3 : susyXsec*4919836/susyNgen*btagSF*lepSF*prefireW : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.5/1.0 "
+#T1tttt_1500_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_2 : susyXsec*4921290/susyNgen*btagSF*lepSF*prefireW : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.5/1.0 "
+#T1tttt_1500_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_4 : susyXsec*6360687/susyNgen*btagSF*lepSF*prefireW : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.5/1.0 "
+#T1tttt_1500_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_5 : susyXsec*4086010/susyNgen*btagSF*lepSF*prefireW : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.5/1.0 "
+#T1tttt_1500_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_6 : susyXsec*4403145/susyNgen*btagSF*lepSF*prefireW : mGo == 1500 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.5/1.0 "
+#																																							 
+#T1tttt_1750_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_1 : susyXsec*5298348/susyNgen*btagSF*lepSF*prefireW : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.75/1.0 "
+#T1tttt_1750_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_2 : susyXsec*4919836/susyNgen*btagSF*lepSF*prefireW : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.75/1.0 "
+#T1tttt_1750_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_3 : susyXsec*4921290/susyNgen*btagSF*lepSF*prefireW : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.75/1.0 "
+#T1tttt_1750_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_4 : susyXsec*6360687/susyNgen*btagSF*lepSF*prefireW : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.75/1.0 "
+#T1tttt_1750_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_5 : susyXsec*4086010/susyNgen*btagSF*lepSF*prefireW : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.75/1.0 "
+#T1tttt_1750_1000_TuneCP2with+   : SMS_T1tttt_TuneCP2_6 : susyXsec*4403145/susyNgen*btagSF*lepSF*prefireW : mGo == 1750 && mLSP == 1000 ; FillColor=ROOT.kCyan-6, Label="prefire wgtd 1.75/1.0 "
+
+
+## ttbar
+bkg2           : TTJets_DiLepton             : Xsec*1*btagSF*puRatio*lepSF*prefireW : lheHTIncoming <= 600; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2          : TTJets_SingleLeptonFromT    		: Xsec*1*btagSF*puRatio*lepSF*prefireW : lheHTIncoming <= 600; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2          : TTJets_SingleLeptonFromTbar 		: Xsec*1*btagSF*puRatio*lepSF*prefireW : lheHTIncoming <= 600; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2           : TTJets_LO_HT600to800        : Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2           : TTJets_LO_HT800to1200		 : Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2           : TTJets_LO_HT1200to2500	     : Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2           : TTJets_LO_HT2500toInf	     : Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+
+# background prefire wgtd
+bkg2    : WJetsToLNu_HT100to200    : Xsec*1*btagSF*puRatio*lepSF*prefireW  ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2    : WJetsToLNu_HT200to400    : Xsec*1*btagSF*puRatio*lepSF*prefireW  ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2    : WJetsToLNu_HT400to600    : Xsec*1*btagSF*puRatio*lepSF*prefireW  ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2    : WJetsToLNu_HT600to800    : Xsec*1*btagSF*puRatio*lepSF*prefireW  ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2    : WJetsToLNu_HT800to1200 	: Xsec*1*btagSF*puRatio*lepSF*prefireW  ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2    : WJetsToLNu_HT1200to2500  : Xsec*1*btagSF*puRatio*lepSF*prefireW  ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2    : WJetsToLNu_HT2500toInf   : Xsec*1*btagSF*puRatio*lepSF*prefireW  ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+
+# QCD
+bkg2      :QCD_HT200to300  : Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label ="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      :QCD_HT300to500  : Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label ="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      :QCD_HT500to700  : Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label ="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      :QCD_HT700to1000 : Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label ="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      :QCD_HT1000to1500: Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label ="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      :QCD_HT1500to2000: Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label ="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      :QCD_HT2000toInf : Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label ="background prefire wgtd", FillColor=ROOT.kGreen-2
+
+# Single Top
+bkg2 : TToLeptons_sch           : Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label= "background prefire wgtd"
+bkg2 : T_tch_powheg             : Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label= "background prefire wgtd"
+bkg2 : TBar_tch_powheg          : 80.95*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label= "background prefire wgtd"
+bkg2 : TBar_tWch		           : 19.55*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label= "background prefire wgtd"
+bkg2 : T_tWch	               : 19.55*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label= "background prefire wgtd"
+
+# Drell-Yan
+bkg2      : DYJetsToLL_M50_HT100to200   		: Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      : DYJetsToLL_M50_HT200to400   	  	: Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      : DYJetsToLL_M50_HT400to600   		: Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      : DYJetsToLL_M50_HT600to800   		: Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      : DYJetsToLL_M50_HT800to1200  		: Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      : DYJetsToLL_M50_HT1200to2500 		: Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+bkg2      : DYJetsToLL_M50_HT2500toInf  		: Xsec*1*btagSF*puRatio*lepSF*prefireW ; Label="background prefire wgtd", FillColor=ROOT.kGreen-2
+
+# TTV
+bkg2 : TTWToLNu      : Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : TTWToQQ       : Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : TTZ_LO	    : Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : TTZToLLNuNu   : Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : TTZToQQ       : Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+
+# DiBoson
+bkg2 : WWTo1L1Nu2Q    	: Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : WWTo2L2Nu      	: Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : WWToLNuQQ      	: Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : WZTo1L1Nu2Q    	: Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : WZTo1L3Nu      	: Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : WZTo3LNu_amcatnlo	: Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : ZZTo2L2Nu      	: Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : ZZTo2Q2Nu       	: Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+bkg2 : ZZTo2L2Q			: Xsec*1*btagSF*puRatio*lepSF*prefireW ; FillColor=ROOT.kGreen-2, Label="background prefire wgtd"
+
+
