@@ -20,7 +20,7 @@ SMS_T5qqqqVV_TuneCP2_ext = kreator.makeMCComponent("SMS_T5qqqqVV_TuneCP2_ext","/
 
 mcSamplesT5qqqqVV = [SMS_T5qqqqVV_TuneCUETP8M1,SMS_T5qqqqVV_TuneCP2,SMS_T5qqqqVV_TuneCP2_ext]
 
-SMS_T1ttttCP5_MVA = kreator.makeMCComponentFromLocal("SMS_T1ttttCP5_MVA","LOCAL","/pnfs/desy.de/cms/tier2/store/user/amohamed/SMS-T1tttt_mini/T1tttt_mGo1850_mLSP600_AOD/T1tttt_Mini/190405_111121/",".*root")
+SMS_T1ttttCP5_MVA = kreator.makeMCComponentFromLocal("SMS_T1ttttCP5_MVA","LOCAL","/pnfs/desy.de/cms/tier2/store/user/amohamed/SMS-T1tttt_1512-1611-1712-1813_MiniAOD/T1tttt_1512-1611-1712-1813_AOD/SMS-T1tttt_1512-1611-1712-1813_MiniAOD/190916_214932/",".*root")
 
 
 mcSamples = mcSamplesT1tttt + mcSamplesT5qqqqVV

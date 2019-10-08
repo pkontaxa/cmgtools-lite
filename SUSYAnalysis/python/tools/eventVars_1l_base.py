@@ -719,7 +719,10 @@ class EventVars1L_base:
             ret['Lep_miniIso'] = leps[0].miniRelIso
             if hasattr(leps[0],"hOverE"):
                 ret['Lep_hOverE'] = leps[0].hOverE
-
+        else : 
+            ret['Lep_pt'] = -999
+            ret['Lep_relIso'] = -999
+            ret['Lep_miniIso'] = -999
         # save second leading lepton vars
         if len(tightLeps) > 1:
             ret['Lep2_pt'] = tightLeps[1].pt
@@ -860,9 +863,10 @@ class EventVars1L_base:
 
         if nJet30C > 0:
             ret['Jet1_pt'] = cJet30Clean[0].pt
+        else: ret['Jet1_pt']  = -999
         if nJet30C > 1:
             ret['Jet2_pt'] = cJet30Clean[1].pt
-
+        else: ret['Jet2_pt']  = -999
         # imho, use Jet2_pt > 80 instead
         ret['LSLjetptGT80'] = 1 if sum([j.pt>80 for j in cJet30Clean])>=2 else 0
 

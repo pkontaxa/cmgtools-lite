@@ -1,6 +1,29 @@
 ##################
 ## Triggers for HLT_MC_SPRING15 and Run II
 ## Based on HLT_MC_SPRING15 and /frozen/2015/25ns14e33/v2.1/HLT/V1 and /frozen/2015/50ns_5e33/v2.1/HLT/V5
+triggers_mumu_iso    = [ "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v*", 
+                         "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v*",
+                         "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*",
+                         "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v*",
+                         "HLT_Mu23_TrkIsoVVL_Mu8_TrkIsoVVL_v*", 
+                         "HLT_Mu23_TrkIsoVVL_TkMu8_TrkIsoVVL_v*",
+                         "HLT_Mu23_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*",
+                         "HLT_Mu23_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v*" ]
+triggers_mumu_noniso = [ "HLT_Mu30_TkMu11_v*" ]
+triggers_mumu_ss = [ "HLT_Mu17_Mu8_SameSign_v*",
+                     "HLT_Mu17_Mu8_SameSign_DZ_v*", 
+                     "HLT_Mu20_Mu10_SameSign_v*", 
+                     "HLT_Mu20_Mu10_SameSign_DZ_v*" ]
+triggers_mumu = triggers_mumu_iso
+
+triggers_ee = [ "HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*", 
+                "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*" ] # 17/12 prescaled in column 0
+triggers_ee_noniso = ["HLT_DoubleEle33_CaloIdL_v*", 
+                      "HLT_DoubleEle37_Ele27_CaloIdL_GsfTrkIdVL_v*", 
+                      "HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v" ]
+
+# warning: ee trigger without DZ is prescaled
+triggers_ee_nodz = [ "HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_v*" ]
 
 ### ----> for the 1L dPhi analysis
 
