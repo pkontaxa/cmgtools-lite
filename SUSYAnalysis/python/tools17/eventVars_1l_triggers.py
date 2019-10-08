@@ -19,7 +19,7 @@ class EventVars1L_triggers:
             'HLT_IsoEle32','HLT_IsoEle35','HLT_IsoEle27T','HLT_Ele115','HLT_Ele50PFJet165',
             'HLT_EleHT600','HLT_EleHT450MET50','HLT_EleHT450','HLT_Ele50HT450','HLT_EleHTMET','HLT_EleHT450B',
             ## custom names
-            'HLT_EleOR', 'HLT_MuOR','HLT_LepOR','HLT_MetOR',
+            'HLT_EleOR', 'HLT_MuOR','HLT_LepOR','HLT_MetOR','HLT_EE','HLT_MuMu',
             #'HLT_IsoMu27','HLT_IsoEle32',
             #'HLT_Mu50','HLT_Ele105'
             ## Trigger efficiencies

@@ -52,9 +52,14 @@ from CMGTools.SUSYAnalysis.tools.resolvedTopTagVars_1l import resolvedTopTagVars
 MODULES.append( ('1l_resolvedTopTagVars', resolvedTopTagVars1l()) )
 
 '''
+
+
+
 from CMGTools.TTHAnalysis.tools.BDT_resolvedTopTagger_cpp_V10_1lep_dPhi import BDT_resolvedTopTagger
 MODULES.append( ('BDT_rTT',  BDT_resolvedTopTagger(os.environ["CMSSW_BASE"]+"/src/CMGTools/TTHAnalysis/data/kinMVA/tth/resTop_xGBoost_v0.weights.xml")) )
 
+#from CMGTools.SUSYAnalysis.tools.eventVars_1l_DNN import EventVars1L_dnn
+#MODULES.append( ('1l_dnn', EventVars1L_dnn()) )
 
 class VariableProducer(Module):
     def __init__(self,name,booker,modules):

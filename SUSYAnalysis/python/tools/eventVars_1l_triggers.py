@@ -24,7 +24,7 @@ class EventVars1L_triggers:
             'HLT_MET190_TypeOne_HBHE_BH',
             #'HLT_EleHT600','HLT_EleHT200', 'HLT_EleHT400B', # aux
             ## custom names
-            'HLT_EleOR', 'HLT_MuOR','HLT_LepOR','HLT_MetOR',
+            'HLT_EleOR', 'HLT_MuOR','HLT_LepOR','HLT_MetOR','HLT_EE','HLT_MuMu',
             #'HLT_IsoMu27','HLT_IsoEle32',
             #'HLT_Mu50','HLT_Ele105'
             ## Trigger efficiencies

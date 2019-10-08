@@ -71,8 +71,8 @@ if __name__ == '__main__':
 				cmd = cmd = 'tar -zxvf '+tar+' -C '+newChunk+' ; mv '+ newChunk+'/Output/* '+newChunk+'; rm -rf '+ newChunk+'/Output/ ; rm -rf '+newChunk+'/heppyOutput_*'
 				cmd_list.append(cmd)
 		if batch :
-			#cmd_list.append('heppy_hadd.py .')
-			#cmd_list.append('rm -rf '+pat+'*_Chunk*')
+			cmd_list.append('heppy_hadd.py .')
+			cmd_list.append('rm -rf '+pat+'*_Chunk*')
 			#cmd_list.append('gfal-copy '+pat+' srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/user/amohamed/heppy_final_trees/'+pat)
 			#cmd_list.append('rm -rf '+pat)
 			cmd_list.append('echo `DONE DONE DONE`')

@@ -13,12 +13,12 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 #-------- SET OPTIONS AND REDEFINE CONFIGURATIONS -----------
 
 run80X = getHeppyOption("run80X",False)
-run94X = getHeppyOption("run94X",False)
-run104X = getHeppyOption("run104X",True)
+run94X = getHeppyOption("run94X",True)
+run104X = getHeppyOption("run104X",False)
 
-runData = getHeppyOption("runData",True)
+runData = getHeppyOption("runData",False)
 runMC = getHeppyOption("runMC",False)
-runSig = getHeppyOption("runSig",False)
+runSig = getHeppyOption("runSig",True)
 
 runFastsim = getHeppyOption("runFastS",False)
 
@@ -318,11 +318,13 @@ if run80X :
 		'Ele50HT400' : triggers_el50_ht400,
 		'EleHTMET' : triggers_el_ht350_met70 + triggers_el_ht400_met70,
 		'EleHT200' :triggers_el_ht200,
-		'EleHT400B': triggers_el_ht400_btag
+		'EleHT400B': triggers_el_ht400_btag,
+        'MuMu':triggers_mumu,
+        'EE':triggers_ee
 	}
 	
 elif run94X : 
-	from CMGTools.RootTools.samples.triggers_13TeV_2018_1l import *
+	from CMGTools.RootTools.samples.triggers_13TeV_2017_1l import *
 	triggerFlagsAna.triggerBits = {
 		'HT350' : triggers_HT350,
 		'HT590' : triggers_HT590,
@@ -585,7 +587,7 @@ if runData : # For running on data
   # central samples
   if run80X:
       from CMGTools.RootTools.samples.samples_13TeV_DATA2016_17Jul2018_1l import *
-      selectedComponents = dataSamples_17Jul2018_1l
+      selectedComponents = dataSamples_17Jul2018_2l # for instance
   elif run94X : 
       from CMGTools.RootTools.samples.samples_13TeV_DATA2017 import *
       selectedComponents = dataSamples_31Mar2018_1l

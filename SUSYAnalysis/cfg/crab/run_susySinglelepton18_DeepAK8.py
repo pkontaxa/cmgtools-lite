@@ -13,8 +13,8 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 #-------- SET OPTIONS AND REDEFINE CONFIGURATIONS -----------
 
 run80X = getHeppyOption("run80X",False)
-run94X = getHeppyOption("run94X",False)
-run104X = getHeppyOption("run104X",True)
+run94X = getHeppyOption("run94X",True)
+run104X = getHeppyOption("run104X",False)
 
 runData = getHeppyOption("runData", False)
 runMC = getHeppyOption("runMC", True)
@@ -34,8 +34,8 @@ keepGenPart=getHeppyOption("keepGenPart",False)
 
 sample = "main"
 test = 0
-multib = True
-zerob = False
+multib = False
+zerob = True
 
 # Lepton Skimming
 ttHLepSkim.minLeptons = 0
@@ -470,7 +470,7 @@ if runMC:
       comp.fineSplitFactor = 1
       comp.splitFactor = len(comp.files)
   elif test==0:
-    #selectedComponents = [TTJets_LO_HT800to1200]
+    selectedComponents = [TTJets_SingleLeptonFromTbar_genMET,TTJets_SingleLeptonFromT_genMET,TTJets_DiLepton_genMET]
     #selectedComponents = [WJetsToLNuHT[1]]
     #selectedComponents = mcSamples
     for comp in selectedComponents:
