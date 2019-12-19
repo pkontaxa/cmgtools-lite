@@ -117,13 +117,6 @@ btag_DeepLooseWP = 0.1522
 btag_DeepMediumWP = 0.4941
 btag_DeepTightWP = 0.8001
 
-
-# DeepFlavour (new Deep Flavour tagger)
-btag_DeepFLooseWP = 0.0521
-btag_DeepFMediumWP = 0.3033
-btag_DeepFTightWP = 0.7489
-
-
 #DeepAK8 (brand new Deep Multiclass Tagger)
 topTag_DeepAK8_LooseWP = 0.18
 topTag_DeepAK8_MediumWP = 0.6
@@ -881,7 +874,7 @@ class EventVars1L_base:
         ## from: https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideBTagging#Preliminary_working_or_operating
 
         # WP defined on top
-        btagWP = btag_MediumWP
+        btagWP = btag_DeepMediumWP
 
         BJetMedium30 = []
         BJetMedium40 = []
@@ -903,7 +896,7 @@ class EventVars1L_base:
 
 ############################################################################
         for i,j in enumerate(cJet30Clean):
-            if j.btagCSV > btagWP:
+            if j.btagDeepCSV > btagWP:
                 BJetMedium30.append(j)
 ###########################################################################
 
@@ -1042,7 +1035,7 @@ class EventVars1L_base:
         ISR_HT = -999
         ISR_pT = -999
         ISR_N = 0
-        cISRJet30Clean =  [ j for j in cJet30Clean if j.btagCSV <= 0.5803 ] 
+        cISRJet30Clean =  [ j for j in cJet30Clean if j.btagDeepCSV <= btagWP ] 
         ret['ISR_HT']  = sum([j.pt for j in cISRJet30Clean])
         for j in cISRJet30Clean :
             ret['ISR_pT']  = j.pt
@@ -1055,7 +1048,7 @@ class EventVars1L_base:
        #         nBJetDeep += 1
 
         for i,j in enumerate(centralJet40):
-            if j.btagCSV > btagWP:
+            if j.btagDeepCSV > btagWP:
                 BJetMedium40.append(j)
 
         # using cleaned collection!

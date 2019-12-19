@@ -6,18 +6,17 @@ import math
 
 ### SF ROOT files
 ### Full SIM ###
-eleSFname = "../python/tools17/SFs/Moriond/ElectronScaleFactors_Run2017.root"
-eleHname = "Run2017_CutBasedTightNoIso94XV2"
+eleSFname = "../python/tools17/SFs/lepSFs/El_CBtight_miniIso0p1_Moriond.root"
+eleHname = "El_CBtight_miniIso0p1_Moriond"
 
-muSFname = "../python/tools17/SFs/Moriond/Mu_Medium_miniIso0p2.root"
-muHname = "TnP_MC_NUM_MiniIso02Cut_DEN_MediumID_PAR_pt_eta"
+muSFname = "../python/tools17/SFs/lepSFs/Mu_Medium_miniIso0p2_SIP3D_Moriond.root"
+muHname = "Mu_Medium_miniIso0p2_SIP3D_Moriond"
 
 ####HIP Root files
-eleHIPname = "../python/tools17/SFs/Moriond/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"
+eleHIPname = "../python/tools17/SFs/lepSFs/EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root"
 eleHIPHname = "EGamma_SF2D"
 
-# needed to be updated https://twiki.cern.ch/twiki/bin/view/CMS/SUSLeptonSF#Data_leading_order_FullSim_M_AN1
-muHIPname = "../python/tools/SFs/Moriond/Tracking_EfficienciesAndSF_BCDEFGH.root"
+muHIPname = "../python/tools17/SFs/lepSFs/Tracking_EfficienciesAndSF_BCDEFGH.root"
 muHIPHname = "ratio_eff_eta3_dr030e030_corr"
 
 hEleSF = 0
@@ -58,9 +57,9 @@ if not hEleHIP:
 
 
 ### Fast? SIM ###
-eleSFname = "../python/tools/SFs/Moriond/CBtight_miniIso0p1_FastSim_Moriond.root"
+eleSFname = "../python/tools17/SFs/lepSFs/CBtight_miniIso0p1_FastSim_Moriond.root"
 eleHname = "CBtight_miniIso0p1_FastSim_Moriond"
-muSFname = "../python/tools/SFs/Moriond/MediumMuon_miniIso0p2_SIP3D_FastSim_Moriond.root"
+muSFname = "../python/tools17/SFs/lepSFs/MediumMuon_miniIso0p2_SIP3D_FastSim_Moriond.root"
 muHname = "MediumMuon_miniIso0p2_SIP3D_FastSim_Moriond"
 
 

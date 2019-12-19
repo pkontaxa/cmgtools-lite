@@ -33,9 +33,9 @@ selectedEvents=getHeppyOption("selectEvents","")
 keepGenPart=getHeppyOption("keepGenPart",False)
 
 sample = "main"
-test = 0
-multib = True
-zerob = False
+test = 0    
+multib = False
+zerob = True
 
 # Lepton Skimming
 ttHLepSkim.minLeptons = 0
@@ -520,7 +520,7 @@ elif runSig:
           selectedComponents = [SMS_T5qqqqVV_TuneCUETP8M1]
           jetAna.mcGT = "Spring16_FastSimV1_MC"
       else : 
-          selectedComponents = [SMS_T5qqqqVV_TuneCP2,SMS_T5qqqqVV_TuneCP2_ext]
+          selectedComponents = SMS_T5qqqqVV_paper#[SMS_T5qqqqVV_TuneCP2,SMS_T5qqqqVV_TuneCP2_ext]
           jetAna.mcGT = "Fall17_FastsimV1"
   
   if multib and zerob : print "Warning ! Both zero b and multi b is set to  True, you will be running Zero b signals ;"
@@ -548,7 +548,7 @@ elif runSig:
     # run on everything
     for comp in selectedComponents:
       comp.fineSplitFactor = 1
-      comp.splitFactor = len(comp.files)
+      comp.splitFactor = len(comp.files)/3
 
   susyCoreSequence.insert(susyCoreSequence.index(susyScanAna)+1,
         susyCounter)
@@ -567,6 +567,7 @@ elif runSig:
   sequence.remove(triggerFlagsAna)
   treeProducer.globalVariables+=[
        NTupleVariable("GenSusyMGluino", lambda ev : ev.genSusyMGluino, int, mcOnly=True, help="Susy Gluino mass"),
+       NTupleVariable("GenSusyMChargino", lambda ev : ev.genSusyMChargino, int, mcOnly=True, help="Susy Chargino mass"),
        NTupleVariable("GenSusyMNeutralino", lambda ev : ev.genSusyMNeutralino, int, mcOnly=True, help="Susy Neutralino mass"),
        NTupleVariable("nIsr", lambda ev : ev.nIsr, mcOnly=True, help="Number of ISR jets not matched to gen particles"),
        NTupleVariable("lheHT", lambda ev : ev.lheHT, help="H_{T} computed from quarks and gluons in Heppy LHEAnalyzer"),
@@ -576,6 +577,9 @@ elif runSig:
        NTupleVariable("prefireWdwn", lambda ev: ev.prefiringweightdown, help="get the prefire weight down in Heppy prefireanalyzer"),
 
     ]
+  if zerob:
+      treeProducer.globalVariables+=[NTupleVariable("GenSusyMChargino", lambda ev : ev.genSusyMChargino, int, mcOnly=True, help="Susy Chargino mass")]
+
 
 if runData : # For running on data
 

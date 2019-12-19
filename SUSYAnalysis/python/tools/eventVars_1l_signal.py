@@ -14,11 +14,12 @@ xsecFile = "../python/tools/glu_xsecs_13TeV.txt"
 cntsSusy = {} # dict for signal counts
 C_ISRweightsSusy = {}
 #cntFile = "../python/tools/t1ttt_scan_counts.txt"
-cntFile = "../python/tools/t1ttt_scan_counts.txt"
+cntFileT1 = "../python/tools/t1ttt_scan_counts.txt"
 ISRweightFile = "../python/tools/ISRnormWeightsT1tttt.txt"
 
+cntFileT5 = "../python/tools/t5qqqq_scan_counts.txt"
 
-def loadSUSYparams():
+def loadSUSYparams(cntFile):
 
     global xsecGlu
     global cntsSusy
@@ -106,13 +107,13 @@ class EventVars1L_signal:
         # output dict:
         ret = {}
 
-        if not event.isData and "T1tttt" in self.sample:
-
+        if (not event.isData and ("T1tttt" in self.sample or "T5qqqq" in self.sample ) ) :
+            
             global xsecGlu
             global cntsSusy
             global C_ISRweightsSusy 
-
-            if len(xsecGlu) == 0: loadSUSYparams()
+            
+            if len(xsecGlu) == 0: loadSUSYparams(cntFileT1) if "T1tttt" in self.sample else loadSUSYparams(cntFileT5)
 
             ## MASS POINT
             mGo = 0

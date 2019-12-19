@@ -6,17 +6,17 @@ import math
 
 ### SF ROOT files
 ### Full SIM ###
-eleSFname = "../python/tools/SFs/Moriond/El_CBtight_miniIso0p1_Moriond.root"
+eleSFname = "../python/tools/SFs/lepSFs/El_CBtight_miniIso0p1_Moriond.root"
 eleHname = "El_CBtight_miniIso0p1_Moriond"
 
-muSFname = "../python/tools/SFs/Moriond/Mu_Medium_miniIso0p2_SIP3D_Moriond.root"
+muSFname = "../python/tools/SFs/lepSFs/Mu_Medium_miniIso0p2_SIP3D_Moriond.root"
 muHname = "Mu_Medium_miniIso0p2_SIP3D_Moriond"
 
 ####HIP Root files
-eleHIPname = "../python/tools/SFs/Moriond/egammaEffi.txt_EGM2D.root"
+eleHIPname = "../python/tools/SFs/lepSFs/EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root"
 eleHIPHname = "EGamma_SF2D"
 
-muHIPname = "../python/tools/SFs/Moriond/Tracking_EfficienciesAndSF_BCDEFGH.root"
+muHIPname = "../python/tools/SFs/lepSFs/Tracking_EfficienciesAndSF_BCDEFGH.root"
 muHIPHname = "ratio_eff_eta3_dr030e030_corr"
 
 hEleSF = 0
@@ -57,9 +57,9 @@ if not hEleHIP:
 
 
 ### Fast? SIM ###
-eleSFname = "../python/tools/SFs/Moriond/CBtight_miniIso0p1_FastSim_Moriond.root"
+eleSFname = "../python/tools/SFs/lepSFs/CBtight_miniIso0p1_FastSim_Moriond.root"
 eleHname = "CBtight_miniIso0p1_FastSim_Moriond"
-muSFname = "../python/tools/SFs/Moriond/MediumMuon_miniIso0p2_SIP3D_FastSim_Moriond.root"
+muSFname = "../python/tools/SFs/lepSFs/MediumMuon_miniIso0p2_SIP3D_FastSim_Moriond.root"
 muHname = "MediumMuon_miniIso0p2_SIP3D_FastSim_Moriond"
 
 

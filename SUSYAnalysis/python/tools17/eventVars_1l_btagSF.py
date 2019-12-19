@@ -5,7 +5,7 @@ import PhysicsTools.Heppy.loadlibs
 import pickle
 
 # Directory for SFs
-sfdir = "../python/tools17/SFs/"
+sfdir = "../python/tools17/SFs/btagSFs/"
 
 print 80*"#"
 print "Initializing Btag SF"
@@ -19,7 +19,7 @@ import PhysicsTools.Heppy.physicsutils.BTagSF
 # Cuts for jets
 minJpt = 30
 maxJeta = 2.4
-btagWP = 0.8838
+btagWP = 0.4941
 
 # pt, eta bins
 ptBorders = [30, 50, 70, 100, 140, 200, 300, 600, 1000]
@@ -36,14 +36,15 @@ def partonName (parton):
     if parton==4:  return 'c'
     return 'other'
 
+
 ### b tag SF
 # SF ROOT file
-sfFnameBTagSF = sfdir+"CSVv2_94XSF_V2_B_F.csv"
+sfFnameBTagSF = sfdir+"DeepCSV_94XSF_V5_B_F.csv"  # "DeepCSV_94XSF_V2_B_F.csv"
 
 sfReadersBTagSF = {}
 
 # load SFs from csv file
-calib = ROOT.BTagCalibration("csvv2", sfFnameBTagSF)
+calib = ROOT.BTagCalibration("DeepCSV", sfFnameBTagSF)
 
 # BTagCalibrationReader(wp,sys,add sys):  wp= 0,1,2;  syst= central, up, down; add sys: up,down
 # 1=med wp
@@ -61,10 +62,10 @@ for m in range(3):
 
 ### Fast-Sim correction factors
 # SF ROOT file
-sfFnameFastSim = sfdir+"fastsim_csvv2_ttbar_26_1_2017.csv"
+sfFnameFastSim = sfdir+"deepcsv_13TEV_17SL_18_3_2019.csv"
 
 # load SFs from csv file
-calibFastSim = ROOT.BTagCalibration("csvv2", sfFnameFastSim)
+calibFastSim = ROOT.BTagCalibration("DeepCSV", sfFnameFastSim)
 
 # SF readers (from CMSSW)
 sfReadersFastSim = {}
@@ -93,7 +94,7 @@ def getSF2015(parton, pt, eta):
     return {"SF":sf, "SF_down":sf_d,"SF_up":sf_u}
 
 # MC eff  -- precomputed
-bTagEffFile = sfdir+"Moriond17_v3_BU.pkl"
+bTagEffFile = sfdir+"UL_2017_BTagEFF.pkl"
 try:
   mcEffDict = pickle.load(file(bTagEffFile))
 except IOError:
@@ -161,7 +162,7 @@ def getMCEfficiencyForBTagSF(event, mcEff, onlyLightJetSystem = False, isFastSim
        if jPt <= minJpt or abs(jEta) >=maxJeta or (not jet.id): continue
 
        if onlyLightJetSystem:
-           if jet.btagCSV > btagWP: continue
+           if jet.btagDeepCSV > btagWP: continue
            jParton=1
 
        jets.append([jParton, jPt, jEta])
@@ -256,9 +257,9 @@ def getBTagWeight(event, mcEff, isFastSim = False):
        jPt     = jet.pt
        jEta    = jet.eta
        jParton = jet.hadronFlavour if hasattr(jet,"hadronFlavour") else jet.mcFlavour
-       jBTagCSV = jet.btagCSV
+       jbtagDeepCSV = jet.btagDeepCSV
 
-       if jBTagCSV > btagWP: isBtagged = True
+       if jbtagDeepCSV > btagWP: isBtagged = True
        jets.append([jParton, jPt, jEta, isBtagged])
 
     PMC = 1.
@@ -356,7 +357,7 @@ class EventVars1L_btagSF:
         if event.isData: return ret
 
         # for signal use FastSim corrections
-        if "T1tttt" in self.sample: isFastSim == True
+        if (("T1tttt" in self.sample) or ("T5qqqq" in self.sample)): isFastSim == True
 
         ################################################################
         ######### METHOD 1A ### ~SFs ###################################

@@ -126,9 +126,9 @@ btag_MediumWP = 0.8484
 btag_TightWP = 0.9535
 
 # DeepCSV (new Deep Flavour tagger)
-btag_DeepLooseWP = 0.2219
-btag_DeepMediumWP = 0.6324
-btag_DeepTightWP = 0.8958
+btag_DeepLooseWP = 0.2217
+btag_DeepMediumWP = 0.6321
+btag_DeepTightWP = 0.8953
 
 #DeepAK8 (brand new Deep Multiclass Tagger)
 topTag_DeepAK8_LooseWP = 0.18
@@ -881,7 +881,7 @@ class EventVars1L_base:
         ## from: https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideBTagging#Preliminary_working_or_operating
 
         # WP defined on top
-        btagWP = btag_MediumWP
+        btagWP = btag_DeepMediumWP
 
         BJetMedium30 = []
         BJetMedium40 = []
@@ -902,7 +902,7 @@ class EventVars1L_base:
         BJet_eta_Array = []
      
         for i,j in enumerate(cJet30Clean):
-            if j.btagCSV > btagWP:
+            if j.btagDeepCSV > btagWP:
                 BJetMedium30.append(j)
 ###########################################################################
                 BJet_pt_Array.append(j.pt)
@@ -1039,7 +1039,7 @@ class EventVars1L_base:
        #         nBJetDeep += 1
 
         for i,j in enumerate(centralJet40):
-            if j.btagCSV > btagWP:
+            if j.btagDeepCSV > btagWP:
                 BJetMedium40.append(j)
 
         # using cleaned collection!

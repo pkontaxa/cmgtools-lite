@@ -22,6 +22,11 @@ mcSamplesT5qqqqVV = [SMS_T5qqqqVV_TuneCUETP8M1,SMS_T5qqqqVV_TuneCP2,SMS_T5qqqqVV
 
 SMS_T1ttttCP5_MVA = kreator.makeMCComponentFromLocal("SMS_T1ttttCP5_MVA","LOCAL","/pnfs/desy.de/cms/tier2/store/user/amohamed/SMS-T1tttt_1512-1611-1712-1813_MiniAOD/T1tttt_1512-1611-1712-1813_AOD/SMS-T1tttt_1512-1611-1712-1813_MiniAOD/190916_214932/",".*root")
 
+SMS_T5qqqqVV_0p4 = kreator.makeMCComponentFromLocal("SMS_T5qqqqVV_0p4","LOCAL","/pnfs/desy.de/cms/tier2/store/user/amohamed/T5qqqqWW_19_22_0p4_MiniAOD/T5qqqqWW_19_22_0p4_AOD/T5qqqqWW_19_22_0p4_MiniAOD/191018_131144/",".*root")
+SMS_T5qqqqVV_0p5 = kreator.makeMCComponentFromLocal("SMS_T5qqqqVV_0p5","LOCAL","/pnfs/desy.de/cms/tier2/store/user/amohamed/T5qqqqWW_19_22_0p5_MiniAOD/T5qqqqWW_19_22_0p5_AOD/T5qqqqWW_19_22_0p5_MiniAOD/191018_131214/",".*root")
+SMS_T5qqqqVV_0p6 = kreator.makeMCComponentFromLocal("SMS_T5qqqqVV_0p6","LOCAL","/pnfs/desy.de/cms/tier2/store/user/amohamed/T5qqqqWW_19_22_0p6_MiniAOD/T5qqqqWW_19_22_0p6_AOD/T5qqqqWW_19_22_0p6_MiniAOD/191018_131239/",".*root")
+
+SMS_T5qqqqVV_paper = [SMS_T5qqqqVV_0p4 , SMS_T5qqqqVV_0p5 , SMS_T5qqqqVV_0p6]
 
 mcSamples = mcSamplesT1tttt + mcSamplesT5qqqqVV
 
