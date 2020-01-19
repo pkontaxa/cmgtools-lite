@@ -12,11 +12,11 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 
 #-------- SET OPTIONS AND REDEFINE CONFIGURATIONS -----------
 
-run80X = getHeppyOption("run80X",True)
+run80X = getHeppyOption("run80X",False)
 run94X = getHeppyOption("run94X",False)
 run104X = getHeppyOption("run104X",False)
 
-runData = getHeppyOption("runData",True)
+runData = getHeppyOption("runData",False)
 runMC = getHeppyOption("runMC",False)
 runSig = getHeppyOption("runSig",False)
 
@@ -502,7 +502,6 @@ elif runSig:
   #jetAna.mcGT = "Spring16_25nsFastSimV1_MC"
   #### REMOVE JET ID FOR FASTSIM
   jetAna.relaxJetId = True
-
   # modify skim (noe leptons skim)
   anyLepSkim.minLeptons = 0
 
@@ -511,17 +510,22 @@ elif runSig:
       if run80X : 
           selectedComponents = [SMS_T1tttt_TuneCUETP8M1]
           jetAna.mcGT = "Summer16_FastSimV1_MC"
-      else : 
-          selectedComponents = [SMS_T1ttttCP5_MVA]
+      elif run94X : 
+          selectedComponents = [SMS_T1tttt_TuneCP2]
           jetAna.mcGT = "Fall17_FastsimV1"
-  
+      else : 
+          selectedComponents = [SMS_T1tttt_TuneCP2_102]
+          jetAna.mcGT = "Autumn18_FastSimV1_MC"
   if zerob:
       if run80X : 
           selectedComponents = [SMS_T5qqqqVV_TuneCUETP8M1]
           jetAna.mcGT = "Summer16_FastSimV1_MC"
-      else : 
-          selectedComponents = SMS_T5qqqqVV_paper#[SMS_T5qqqqVV_TuneCP2,SMS_T5qqqqVV_TuneCP2_ext]
+      elif run94X: 
+          selectedComponents = [SMS_T5qqqqVV_TuneCP2,SMS_T5qqqqVV_TuneCP2_ext]
           jetAna.mcGT = "Fall17_FastsimV1"
+      else : 
+          selectedComponents = [SMS_T5qqqqVV_TuneCP2_102]
+          jetAna.mcGT = "Autumn18_FastSimV1_MC"
   
   if multib and zerob : print "Warning ! Both zero b and multi b is set to  True, you will be running Zero b signals ;"
   if not (multib or zerob) : print 8*"*", "Error ! Choose a signal to process", 8*"*"
