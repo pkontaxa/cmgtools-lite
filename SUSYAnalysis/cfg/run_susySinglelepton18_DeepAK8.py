@@ -92,8 +92,8 @@ elif run94X :
 	metAna.noPUMetCollection = "slimmedMETsModifiedMET"
 
 elif run104X : 
-	jetAna.mcGT     = "Autumn18_V8_MC"
-	jetAna.dataGT   = [(1,"Autumn18_RunA_V8_DATA"),(317080,"Autumn18_RunB_V8_DATA"),(319337,"Autumn18_RunC_V8_DATA"),(320673,"Autumn18_RunD_V8_DATA")]
+	jetAna.mcGT     = "Autumn18_V19_MC"
+	jetAna.dataGT   = [(1,"Autumn18_RunA_V19_DATA"),(317080,"Autumn18_RunB_V19_DATA"),(319337,"Autumn18_RunC_V19_DATA"),(320673,"Autumn18_RunD_V19_DATA")]
 	
 #jetAna.lepSelCut = lambda lep : False # no cleaning of jets with leptons
 #jetAnaScaleDown.lepSelCut = lambda lep : False # no cleaning of jets with leptons
@@ -510,7 +510,7 @@ elif runSig:
   if multib: 
       if run80X : 
           selectedComponents = [SMS_T1tttt_TuneCUETP8M1]
-          jetAna.mcGT = "Spring16_FastSimV1_MC"
+          jetAna.mcGT = "Summer16_FastSimV1_MC"
       else : 
           selectedComponents = [SMS_T1ttttCP5_MVA]
           jetAna.mcGT = "Fall17_FastsimV1"
@@ -518,7 +518,7 @@ elif runSig:
   if zerob:
       if run80X : 
           selectedComponents = [SMS_T5qqqqVV_TuneCUETP8M1]
-          jetAna.mcGT = "Spring16_FastSimV1_MC"
+          jetAna.mcGT = "Summer16_FastSimV1_MC"
       else : 
           selectedComponents = SMS_T5qqqqVV_paper#[SMS_T5qqqqVV_TuneCP2,SMS_T5qqqqVV_TuneCP2_ext]
           jetAna.mcGT = "Fall17_FastsimV1"
