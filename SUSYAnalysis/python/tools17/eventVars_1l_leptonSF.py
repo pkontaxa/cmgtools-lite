@@ -13,7 +13,7 @@ muSFname = "../python/tools17/SFs/lepSFs/Mu_Medium_miniIso0p2_SIP3D_Moriond.root
 muHname = "Mu_Medium_miniIso0p2_SIP3D_Moriond"
 
 ####HIP Root files
-eleHIPname = "../python/tools17/SFs/lepSFs/EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root"
+eleHIPname = "../python/tools17/SFs/lepSFs/egammaEffi.txt_EGM2D_runBCDEF_passingRECO.root"
 eleHIPHname = "EGamma_SF2D"
 
 muHIPname = "../python/tools17/SFs/lepSFs/Tracking_EfficienciesAndSF_BCDEFGH.root"
@@ -89,39 +89,44 @@ def getLepSF(lep, nPU = 1, sample = "FullSim"):
     lepPt = lep.pt#lep.p4().Et()
     lepEta = abs(lep.eta)
 
-    if(abs(lep.pdgId) == 13):
-		hSF = hMuSF; hSFfs = hMuSF_FS
-		maxPt = hSF.GetXaxis().GetXmax()
-		if lepPt > maxPt: lepPt = maxPt-0.1
-		bin = hSF.FindBin(lepPt,lepEta)
-    elif(abs(lep.pdgId) == 11):
-		hSF = hEleSF; hSFfs = hEleSF_FS
-		maxPt = hSF.GetYaxis().GetXmax()
-		#print "maxPt is :  " , maxPt
-		if lepPt > maxPt: lepPt = maxPt-0.1
-		bin = hSF.FindBin(lepEta,lepPt)		
+    if(abs(lep.pdgId) == 13): hSF = hMuSF; hSFfs = hMuSF_FS
+    elif(abs(lep.pdgId) == 11): hSF = hEleSF; hSFfs = hEleSF_FS
     else: return 1,0
 
+    # fit pt to hist
+    #print hSF, hSFfs
+    # the full sim CBID SF for electron commes with pt in Y-axis and Eta in X-Axis so to overcome it we do 
+    if abs(lep.pdgId) == 11 and sample == "FullSim" : 
+        maxPt = hSF.GetYaxis().GetXmax()
+        if lepPt > maxPt: lepPt = maxPt-0.1
+        bin = hSF.FindBin(lepEta,lepPt)
+    else : 
+        maxPt = hSF.GetXaxis().GetXmax()
+        if lepPt > maxPt: lepPt = maxPt-0.1
+        minPt = hSF.GetXaxis().GetXmin()
+        if lepPt < minPt : lepPt = minPt + 0.1
+        bin = hSF.FindBin(lepPt,lepEta)
 
     lepSF = hSF.GetBinContent(bin)
     lepSFerr = hSF.GetBinError(bin)
-
     # TO BE UPDATED
     # For Muons, ignore error from histogram, but use flat uncertainty of 3 %
     if abs(lep.pdgId) == 13:
         lepSFerr = 0.03
 
 #    print lepSF, lepSFerr
+
     # Tracking reconstruction efficiency (former HIP effect)
     if abs(lep.pdgId) == 11:
         # The second argument in FindBin() is arbitrary, since the 2D histogram has
-        # only one bin in x
+        # only one bin in y
         HIPbin = hEleHIP.FindBin(lep.eta, 100.)
         HIP =  hEleHIP.GetBinContent(HIPbin)
         HIPerr = hEleHIP.GetBinError(HIPbin)
     elif abs(lep.pdgId) == 13:
         # Get bin content and error for TGraphAsymmErrors (I'm sure this can be
         # done easier, but how?)
+
         # Get x values in a list
         hip_mu_x_buffer = hMuHIP.GetX()
         hip_mu_x = []
@@ -155,7 +160,7 @@ def getLepSF(lep, nPU = 1, sample = "FullSim"):
     #print lep, hSF, lepPt, lepEta, bin, lepSF
     if lepSF == 0:
         print "zero SF found!"
-        print lepPt, lepEta, bin, lepSF, lepSFerr
+        print lepPt, lepEta, bin, lepSF, lepSFerr, abs(lep.pdgId)
         return 1,0
 
     return lepSF,lepSFerr

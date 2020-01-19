@@ -148,6 +148,7 @@ class EventVars1LWeightsForSystematics:
             # W polarisation
             "WpolWup","WpolWdown",
             'nISRtt','nISRttweight','nISRttweightsyst_up', 'nISRttweightsyst_down',
+            "LHEweight_wgt",
             # PDF related -- Work In Progress
             #"pdfW","pdfW_Up","pdfW_Down",
             # Scale uncertainty
@@ -179,22 +180,12 @@ class EventVars1LWeightsForSystematics:
 
         ### PDF VARS
         #"Pdfw","Pdfw_Up","Pdfw_Down"
-
-        pdfWup= 1
-        pdfWdown = 1
-        pdfWcentr = 1
-
-        '''
-        if hasattr(event,"LHEweight_wgt"):
-        pdfWmin = 99
-        pdfWmax = 0
-        #lheWgts = [w for w in Collection(event,"LHEweight_wgt","nLHEweight")]
-
-        ret['pdfW'] = pdfWcentr
-        ret['pdfW_Up'] = pdfWup
-        ret['pdfW_Down'] = pdfWup
-        '''
-
+        
+        #if hasattr(event,"LHEweight"):
+        #    lhecoll = [w for w in Collection(event,"LHEweight","nLHEweight")]
+        #    lheWgts = [l.wgt for l in lhecoll]
+        #    ret["LHEweight_wgt"] = lheWgts
+        
         ### TOP RELATED VARS
         genParts = [l for l in Collection(event,"GenPart","nGenPart")]
 

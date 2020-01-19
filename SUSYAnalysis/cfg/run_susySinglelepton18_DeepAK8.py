@@ -12,13 +12,13 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 
 #-------- SET OPTIONS AND REDEFINE CONFIGURATIONS -----------
 
-run80X = getHeppyOption("run80X",False)
-run94X = getHeppyOption("run94X",True)
+run80X = getHeppyOption("run80X",True)
+run94X = getHeppyOption("run94X",False)
 run104X = getHeppyOption("run104X",False)
 
-runData = getHeppyOption("runData",False)
+runData = getHeppyOption("runData",True)
 runMC = getHeppyOption("runMC",False)
-runSig = getHeppyOption("runSig",True)
+runSig = getHeppyOption("runSig",False)
 
 runFastsim = getHeppyOption("runFastS",False)
 
@@ -591,7 +591,7 @@ if runData : # For running on data
   # central samples
   if run80X:
       from CMGTools.RootTools.samples.samples_13TeV_DATA2016_17Jul2018_1l import *
-      selectedComponents = dataSamples_17Jul2018_2l # for instance
+      selectedComponents = [SingleMuon_Run2016H_17Jul2018_v1]#dataSamples_17Jul2018_2l # for instance
   elif run94X : 
       from CMGTools.RootTools.samples.samples_13TeV_DATA2017 import *
       selectedComponents = dataSamples_31Mar2018_1l

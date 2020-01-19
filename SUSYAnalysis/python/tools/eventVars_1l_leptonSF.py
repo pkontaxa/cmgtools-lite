@@ -95,13 +95,20 @@ def getLepSF(lep, nPU = 1, sample = "FullSim"):
 
     # fit pt to hist
     #print hSF, hSFfs
-    maxPt = hSF.GetXaxis().GetXmax()
-    if lepPt > maxPt: lepPt = maxPt-0.1
+    # the full sim CBID SF for electron commes with pt in Y-axis and Eta in X-Axis so to overcome it we do 
+    if abs(lep.pdgId) == 11 and sample == "FullSim" : 
+        maxPt = hSF.GetYaxis().GetXmax()
+        if lepPt > maxPt: lepPt = maxPt-0.1
+        bin = hSF.FindBin(lepEta,lepPt)
+    else : 
+        maxPt = hSF.GetXaxis().GetXmax()
+        if lepPt > maxPt: lepPt = maxPt-0.1
+        minPt = hSF.GetXaxis().GetXmin()
+        if lepPt < minPt : lepPt = minPt + 0.1
+        bin = hSF.FindBin(lepPt,lepEta)
 
-    bin = hSF.FindBin(lepPt,lepEta)
     lepSF = hSF.GetBinContent(bin)
     lepSFerr = hSF.GetBinError(bin)
-
     # TO BE UPDATED
     # For Muons, ignore error from histogram, but use flat uncertainty of 3 %
     if abs(lep.pdgId) == 13:
@@ -153,7 +160,7 @@ def getLepSF(lep, nPU = 1, sample = "FullSim"):
     #print lep, hSF, lepPt, lepEta, bin, lepSF
     if lepSF == 0:
         print "zero SF found!"
-        print lepPt, lepEta, bin, lepSF, lepSFerr
+        print lepPt, lepEta, bin, lepSF, lepSFerr, abs(lep.pdgId)
         return 1,0
 
     return lepSF,lepSFerr

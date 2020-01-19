@@ -143,91 +143,6 @@ print 'Going to use', eleID, 'electron ID!'
 print 30*'#'
 print
 
-## PHYS14 IDs
-## Non-triggering electron MVA id (Phys14 WP)
-# Tight MVA WP
-Ele_mvaPhys14_eta0p8_T = 0.73;
-Ele_mvaPhys14_eta1p4_T = 0.57;
-Ele_mvaPhys14_eta2p4_T = 0.05;
-# Medium MVA WP  <--- UPDATE
-Ele_mvaPhys14_eta0p8_M = 0.35;
-Ele_mvaPhys14_eta1p4_M = 0.20;
-Ele_mvaPhys14_eta2p4_M = -0.52;
-# Loose MVA WP
-Ele_mvaPhys14_eta0p8_L = 0.35;
-Ele_mvaPhys14_eta1p4_L = 0.20;
-Ele_mvaPhys14_eta2p4_L = -0.52;
-
-## SPRING15 IDs
-## Non-triggering electron MVA id (Spring15 WP):
-# https://twiki.cern.ch/twiki/bin/viewauth/CMS/SUSLeptonSF#Electrons
-# Tight MVA WP
-Ele_mvaSpring15_eta0p8_T = 0.87;
-Ele_mvaSpring15_eta1p4_T = 0.6;
-Ele_mvaSpring15_eta2p4_T = 0.17;
-# Medium MVA WP  <--- UPDATE
-Ele_mvaSpring15_eta0p8_M = 0.35;
-Ele_mvaSpring15_eta1p4_M = 0.20;
-Ele_mvaSpring15_eta2p4_M = -0.52;
-# Loose MVA WP
-Ele_mvaSpring15_eta0p8_L = -0.16;
-Ele_mvaSpring15_eta1p4_L = -0.65;
-Ele_mvaSpring15_eta2p4_L = -0.74;
-# VLoose MVA WP
-Ele_mvaSpring15_eta0p8_VL = -0.11;
-Ele_mvaSpring15_eta1p4_VL = -0.55;
-Ele_mvaSpring15_eta2p4_VL = -0.74;
-
-## Ele MVA check
-def checkEleMVA(lep,WP = 'Tight', era = "Spring15" ):
-    # Eta dependent MVA ID check:
-    passID = False
-
-    lepEta = abs(lep.eta)
-
-    # eta cut
-    if lepEta > eleEta:
-        print "here"
-        return False
-
-    if era == "Spring15":
-        lepMVA = lep.mvaIdSpring15
-
-        if WP == 'Tight':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaSpring15_eta0p8_T
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaSpring15_eta1p4_T
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaSpring15_eta2p4_T
-        elif WP == 'Medium':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaSpring15_eta0p8_M
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaSpring15_eta1p4_M
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaSpring15_eta2p4_M
-        elif WP == 'Loose':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaSpring15_eta0p8_L
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaSpring15_eta1p4_L
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaSpring15_eta2p4_L
-        elif WP == 'VLoose':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaSpring15_eta0p8_VL
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaSpring15_eta1p4_VL
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaSpring15_eta2p4_VL
-
-    elif era == "Phys14":
-        lepMVA = lep.mvaIdPhys14
-
-        if WP == 'Tight':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaPhys14_eta0p8_T
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaPhys14_eta1p4_T
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaPhys14_eta2p4_T
-        elif WP == 'Medium':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaPhys14_eta0p8_M
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaPhys14_eta1p4_M
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaPhys14_eta2p4_M
-        elif WP == 'Loose':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaPhys14_eta0p8_L
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaPhys14_eta1p4_L
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaPhys14_eta2p4_L
-
-    return passID
-
 ## Isolation
 ele_miniIsoCut = 0.1
 muo_miniIsoCut = 0.2
@@ -494,12 +409,6 @@ class EventVars1L_base:
                     #passLooseID = (eidCB >= 2)
                     passVetoID = (eidCB >= 1)
 
-                elif eleID == 'MVA':
-                    # ELE MVA ID
-                    # check MVA WPs
-                    passTightID = checkEleMVA(lep,'Tight')
-                    passLooseID = checkEleMVA(lep,'VLoose')
-
                 # selected
                 if passTightID:
 
@@ -509,8 +418,6 @@ class EventVars1L_base:
                     # Iso check:
                     if lep.miniRelIso < ele_miniIsoCut: passIso = True
                     # conversion check
-                    if eleID == 'MVA':
-                        if lep.lostHits <= goodEl_lostHits and lep.convVeto and lep.sip3d < goodEl_sip3d: passConv = True
                     elif eleID == 'CB':
                         passConv = True # cuts already included in POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_X
 
