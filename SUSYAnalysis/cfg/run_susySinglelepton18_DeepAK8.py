@@ -13,12 +13,12 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 #-------- SET OPTIONS AND REDEFINE CONFIGURATIONS -----------
 
 run80X = getHeppyOption("run80X",False)
-run94X = getHeppyOption("run94X",False)
+run94X = getHeppyOption("run94X",True)
 run104X = getHeppyOption("run104X",False)
 
 runData = getHeppyOption("runData",False)
 runMC = getHeppyOption("runMC",False)
-runSig = getHeppyOption("runSig",False)
+runSig = getHeppyOption("runSig",True)
 
 runFastsim = getHeppyOption("runFastS",False)
 
@@ -521,7 +521,7 @@ elif runSig:
           selectedComponents = [SMS_T5qqqqVV_TuneCUETP8M1]
           jetAna.mcGT = "Summer16_FastSimV1_MC"
       elif run94X: 
-          selectedComponents = [SMS_T5qqqqVV_TuneCP2,SMS_T5qqqqVV_TuneCP2_ext]
+          selectedComponents = [SMS_T5qqqqCP5_MVA]#[SMS_T5qqqqVV_TuneCP2,SMS_T5qqqqVV_TuneCP2_ext]
           jetAna.mcGT = "Fall17_FastsimV1"
       else : 
           selectedComponents = [SMS_T5qqqqVV_TuneCP2_102]
