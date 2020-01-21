@@ -4,7 +4,7 @@ kreator = ComponentCreator()
 
 # ----------------------------- 2017 pp run  ----------------------------------------
 dataDir = "$CMSSW_BASE/src/CMGTools/TTHAnalysis/data"  # use environmental variable, useful for instance to run on CRAB
-json=dataDir+'/json/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
+json=dataDir+'/json/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt'
 
 #json = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions17/13TeV/Final/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
 

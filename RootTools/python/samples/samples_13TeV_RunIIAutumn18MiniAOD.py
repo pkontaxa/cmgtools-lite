@@ -116,21 +116,23 @@ TToLeptons_sch_amcatnlo = kreator.makeMCComponent("TToLeptons_sch", "/ST_s-chann
 T_tch_powheg = kreator.makeMCComponent("T_tch_powheg", "/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM", "CMS", ".*root", 136.02) # inclusive sample
 TBar_tch_powheg = kreator.makeMCComponent("TBar_tch_powheg", "/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM", "CMS", ".*root", 80.95) # inclusive sample
 
-TBar_tWch_ext1 = kreator.makeMCComponent("TBar_tWch_ext1", "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v3/MINIAODSIM", "CMS", ".*root",19.55)
-TBar_tWch_ext2 = kreator.makeMCComponent("TBar_tWch_ext2", "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM", "CMS", ".*root",19.55)
+TBar_tWch_noFullyHad_ext1 = kreator.makeMCComponent("TBar_tWch_noFullyHad_ext1", "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v3/MINIAODSIM", "CMS", ".*root",19.55)
+TBar_tWch_noFullyHad_ext2 = kreator.makeMCComponent("TBar_tWch_noFullyHad_ext2", "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM", "CMS", ".*root",19.55)
 #TBar_tWch      = kreator.makeMCComponent("TBar_tWch"     , "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM", "CMS", ".*root",19.55)
-T_tWch_ext1 = kreator.makeMCComponent("T_tWch_ext1", "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v3/MINIAODSIM", "CMS", ".*root",19.55)
-T_tWch      = kreator.makeMCComponent("T_tWch"     , "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM", "CMS", ".*root",19.55)
+T_tWch_noFullyHad_ext1 = kreator.makeMCComponent("T_tWch_noFullyHad_ext1", "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v3/MINIAODSIM", "CMS", ".*root",19.55)
+T_tWch_noFullyHad      = kreator.makeMCComponent("T_tWch_noFullyHad"     , "/ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM", "CMS", ".*root",19.55)
+tZq_ll_ext = kreator.makeMCComponent("tZq_ll_ext", "/tZq_ll_4f_ckm_NLO_TuneCP5_13TeV-madgraph-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM", "CMS", ".*root", 0.0758 )
 
 SingleTop = [
 TToLeptons_sch_amcatnlo,
 T_tch_powheg,
 TBar_tch_powheg,
-TBar_tWch_ext1,
-TBar_tWch_ext2,
+TBar_tWch_noFullyHad_ext1,
+TBar_tWch_noFullyHad_ext2,
 #TBar_tWch,
-T_tWch_ext1,
-T_tWch,
+T_tWch_noFullyHad_ext1,
+T_tWch_noFullyHad,
+tZq_ll_ext,
 ]
 
 
@@ -147,7 +149,7 @@ TTWToLNu,
 TTWToQQ,
 TTZToQQ,
 TTZToLLNuNu,
-TTZ_LO,
+#TTZ_LO,
 ]
 
 
