@@ -17,6 +17,7 @@ cntFileT1 = "../python/tools17/t1ttt_scan_counts.txt"
 cntFileT5op4 = "../python/tools17/counts0p4.txt"
 cntFileT5op5 = "../python/tools17/counts0p5.txt"
 cntFileT5op6 = "../python/tools17/counts0p6.txt"
+cntFileT5qqqqMVA = "../python/tools17/T5qqqqVV_MVA.txt"
 
 #cntFile = "../python/tools17/scans/counts_T1tttt_2016.txt"
 ISRweightFile = "../python/tools17/ISRnormWeightsT1tttt.txt"
@@ -117,13 +118,14 @@ class EventVars1L_signal:
             if len(xsecGlu) == 0:
                 if "T1tttt" in self.sample :
                     loadSUSYparams(cntFileT1) 
-                elif "0p4" in self.sample :
-                    loadSUSYparams(cntFileT5op4)
-                elif "0p5" in self.sample :
-                    loadSUSYparams(cntFileT5op5)
-                elif "0p6" in self.sample :
-                    loadSUSYparams(cntFileT5op6)
-                else : loadSUSYparams(cntFileT5) 
+                else : loadSUSYparams(cntFileT5qqqqMVA)
+                #elif "0p4" in self.sample :
+                #    loadSUSYparams(cntFileT5op4)
+                #elif "0p5" in self.sample :
+                #    loadSUSYparams(cntFileT5op5)
+                #elif "0p6" in self.sample :
+                #    loadSUSYparams(cntFileT5op6)
+                #else : loadSUSYparams(cntFileT5) 
 
             ## MASS POINT
             mGo = 0

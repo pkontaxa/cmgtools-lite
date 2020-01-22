@@ -103,10 +103,10 @@ TTJets_LO_HT600to800,
 TTJets_LO_HT800to1200,
 TTJets_LO_HT1200to2500,
 TTJets_LO_HT2500toInf,
-TTJets_SingleLeptonFromTbar_genMET,  
+#TTJets_SingleLeptonFromTbar_genMET,  
 #TTJets_SingleLeptonFromTbar_genMET_ext,
-TTJets_SingleLeptonFromT_genMET,
-TTJets_DiLepton_genMET,       
+#TTJets_SingleLeptonFromT_genMET,
+#TTJets_DiLepton_genMET,       
 
 ]
 
