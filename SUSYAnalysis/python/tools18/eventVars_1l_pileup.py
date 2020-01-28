@@ -58,10 +58,9 @@ class EventVars1L_pileup:
 
         # output dict:
         ret = {}
-
+        ret['nVtx'] = event.nVert
+        
         if not event.isData:
-
-            ret['nVtx'] = event.nVert
 
             nTrueInt = event.nTrueInt
             ret['nTrueInt'] = nTrueInt
