@@ -121,7 +121,11 @@ btag_DeepTightWP = 0.8001
 topTag_DeepAK8_LooseWP = 0.18
 topTag_DeepAK8_MediumWP = 0.6
 topTag_DeepAK8_TightWP = 0.89
-
+#W tagging (DeepAK8)
+WTag_DeepAK8_LooseWP = 0.629375
+WTag_DeepAK8_MediumWP = 0.674375
+WTag_DeepAK8_TightWP = 0.891875
+WTag_DeepAK8_VeryTightWP = 0.988375
 
 ###########
 # MUONS
@@ -216,7 +220,8 @@ class EventVars1L_base:
 ###################################################for Prefire study ##############################################
             "prefireW","prefireWup","prefireWdwn",
 ################################################### to get all the variables in the FR rather than trees ##############################################
-            "met_caloPt","lheHTIncoming","genTau_grandmotherId","genTau_motherId","genLep_grandmotherId","genLep_motherId","DiLep_Flag","semiLep_Flag"
+            "met_caloPt","lheHTIncoming","genTau_grandmotherId","genTau_motherId","genLep_grandmotherId","genLep_motherId","DiLep_Flag","semiLep_Flag",
+            "nWLoose","nWMedium","nWTight","nWVeryTight"
             ]
 
     def listBranches(self):
@@ -681,20 +686,37 @@ class EventVars1L_base:
         nFatJetMedium = 0
         nFatJetTight = 0
 
+        nWLoose = 0
+        nWMedium = 0
+        nWTight = 0
+        nWVeryTight = 0
+
         for i,j in enumerate(FatJets):
-              fatJets.append(j)
+            fatJets.append(j)
 
-              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_LooseWP and j.pt>=400.):
-                    nFatJetLoose+=1
-                    _DeepAK8Top_Loose_pt_Array.append(j.pt)
-                    _DeepAK8Top_Loose_eta_Array.append(j.eta)
-                    _DeepAK8Top_Loose_phi_Array.append(j.phi)
+            if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_LooseWP and j.pt>=400.):
+                  nFatJetLoose+=1
+                  _DeepAK8Top_Loose_pt_Array.append(j.pt)
+                  _DeepAK8Top_Loose_eta_Array.append(j.eta)
+                  _DeepAK8Top_Loose_phi_Array.append(j.phi)
 
-              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_MediumWP and j.pt>=400.):
-                   nFatJetMedium+=1
+            if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_MediumWP and j.pt>=400.):
+                nFatJetMedium+=1
+            
+            if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_TightWP and j.pt>=400.):
+                nFatJetTight+=1
+            
+            if(j.Binarized_score_deep_W_PUPPI > WTag_DeepAK8_LooseWP and j.pt>=200.):
+                nWLoose += 1
 
-              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_TightWP and j.pt>=400.):
-                   nFatJetTight+=1
+            if(j.Binarized_score_deep_W_PUPPI > WTag_DeepAK8_MediumWP and j.pt>=200.):
+                nWMedium += 1
+
+            if(j.Binarized_score_deep_W_PUPPI > WTag_DeepAK8_TightWP and j.pt>=200.):
+                nWTight += 1
+
+            if(j.Binarized_score_deep_W_PUPPI > WTag_DeepAK8_VeryTightWP and j.pt>=200.):
+                nWVeryTight += 1
 
         ret['nDeepTop_loose'] = nFatJetLoose
         ret['nDeepTop_medium'] = nFatJetMedium
@@ -703,6 +725,10 @@ class EventVars1L_base:
         ret['DeepAK8Top_Loose_eta_Array'] = _DeepAK8Top_Loose_eta_Array
         ret['DeepAK8Top_Loose_phi_Array'] = _DeepAK8Top_Loose_phi_Array
 
+        ret['nWLoose'] = nWLoose
+        ret['nWMedium'] = nWMedium
+        ret['nWTight'] = nWTight
+        ret['nWVeryTight'] = nWVeryTight
 
         if nfatjet>=1:
               ret['FatJet1_pt'] = fatJets[0].pt
