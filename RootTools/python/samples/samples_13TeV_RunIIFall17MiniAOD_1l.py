@@ -76,10 +76,17 @@ DYJetsToLLM50HT = [
 DYs = DYJetsToLLM50HT  
 
 
+DYJetsToLL_M_10to50      = kreator.makeMCComponent("DYJetsToLL_M-10to50","/DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2/MINIAODSIM",       "CMS", ".*root", 21658.0)
+DYJetsToLL_M_50          = kreator.makeMCComponent("DYJetsToLL_M-50","/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM",       "CMS", ".*root", 6529.0)
+DYJetsToLL_M_50_ext      = kreator.makeMCComponent("DYJetsToLL_M-50_ext","/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM",       "CMS", ".*root",6529.0)
 
+DYJetsInclusive = [
+    DYJetsToLL_M_10to50,
+    DYJetsToLL_M_50,
+    DYJetsToLL_M_50_ext,
+]
 
-
-
+DYJetsInc = DYJetsInclusive
 
 # ====== TT INCLUSIVE =====
 # TTbar cross section: NNLO, https://twiki.cern.ch/twiki/bin/view/LHCPhysics/TtbarNNLO (172.5)

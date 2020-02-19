@@ -34,8 +34,8 @@ keepGenPart=getHeppyOption("keepGenPart",False)
 
 sample = "main"
 test = 0    
-multib = True
-zerob = False
+multib = False
+zerob = True
 
 # Lepton Skimming
 ttHLepSkim.minLeptons = 0
@@ -451,7 +451,7 @@ if runMC:
       # apply a loose lepton skim to MC
       anyLepSkim.minLeptons = 1
       #pick the file you want to run on
-      selectedComponents = samples
+      selectedComponents = DYJetsInc
       
 #  [TTJets_SingleLeptonFromTbar,TTJets_SingleLeptonFromTbar_ext,TTJets_SingleLeptonFromT,TTJets_DiLepton,TTJets_DiLepton_ext,
   if test==1:
@@ -552,7 +552,7 @@ elif runSig:
     # run on everything
     for comp in selectedComponents:
       comp.fineSplitFactor = 1
-      comp.splitFactor = len(comp.files)/3
+      comp.splitFactor = len(comp.files)
 
   susyCoreSequence.insert(susyCoreSequence.index(susyScanAna)+1,
         susyCounter)

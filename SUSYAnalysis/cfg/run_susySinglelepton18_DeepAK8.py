@@ -17,8 +17,8 @@ run94X = getHeppyOption("run94X",True)
 run104X = getHeppyOption("run104X",False)
 
 runData = getHeppyOption("runData",False)
-runMC = getHeppyOption("runMC",False)
-runSig = getHeppyOption("runSig",True)
+runMC = getHeppyOption("runMC",True)
+runSig = getHeppyOption("runSig",False)
 
 runFastsim = getHeppyOption("runFastS",False)
 
@@ -33,9 +33,9 @@ selectedEvents=getHeppyOption("selectEvents","")
 keepGenPart=getHeppyOption("keepGenPart",False)
 
 sample = "main"
-test = 0    
-multib = False
-zerob = True
+test = 3    
+multib = True
+zerob = False
 
 # Lepton Skimming
 ttHLepSkim.minLeptons = 0
@@ -194,7 +194,7 @@ anyLepSkim = cfg.Analyzer(
 from CMGTools.TTHAnalysis.analyzers.ttHSTSkimmer import ttHSTSkimmer
 ttHSTSkimmer = cfg.Analyzer(
   ttHSTSkimmer, name='ttHSTSkimmer',
-  minST = 150,
+  minST = 0,
   )
 
 from CMGTools.TTHAnalysis.analyzers.nIsrAnalyzer import NIsrAnalyzer
@@ -212,7 +212,7 @@ if not run104X :
 from CMGTools.TTHAnalysis.analyzers.ttHHTSkimmer import ttHHTSkimmer
 ttHHTSkimmer = cfg.Analyzer(
   ttHHTSkimmer, name='ttHHTSkimmer',
-  minHT = 350,
+  minHT = 0,
   )
 
 
@@ -451,7 +451,7 @@ if runMC:
       # apply a loose lepton skim to MC
       anyLepSkim.minLeptons = 1
       #pick the file you want to run on
-      selectedComponents = [TTJets_LO_HT800to1200]
+      selectedComponents = [DYJetsToLL_M_10to50]
       
 #  [TTJets_SingleLeptonFromTbar,TTJets_SingleLeptonFromTbar_ext,TTJets_SingleLeptonFromT,TTJets_DiLepton,TTJets_DiLepton_ext,
   if test==1:
@@ -472,7 +472,7 @@ if runMC:
       comp.fineSplitFactor = 1
       comp.splitFactor = len(comp.files)
   elif test==0:
-    selectedComponents = [TTJets_LO_HT800to1200]
+    #selectedComponents = [TTJets_LO_HT800to1200]
     #selectedComponents = [WJetsToLNuHT[1]]
     #selectedComponents = mcSamples
     for comp in selectedComponents:
@@ -688,10 +688,12 @@ elif runMC  or runSig and run104X:
 elif runData and run104X:
     fname1="$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/FatJetNN_104X_data.py"
 
-preprocessor =  CmsswPreprocessor(fname1)
+preprocessor = CmsswPreprocessor(fname1)
 
-ttHFatJetAna.jetCol="deepntuplizer"
-#jetAna.jetCol = 'selectedUpdatedPatJets'
+if preprocessor != None : 
+    ttHFatJetAna.jetCol="deepntuplizer"
+#else : 
+#    jetAna.jetCol = 'selectedUpdatedPatJets'
 ##################################################################################################
 
 selectComponents = getHeppyOption('selectComponents',None)

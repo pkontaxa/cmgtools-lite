@@ -396,25 +396,6 @@ if options.jobs > 0:
 else:
     ret = dict(map(_runIt, jobs))
 
-
-
-'''if ((not options.naf ) and (not options.queue)) : 
-    (name,fin,fout,data,range,chunk) = jobs[0]
-    masslist = [[1900,100],[2200,100],[2200,800],[1900,800],[1900,100],[1500,1000],[1500,1200],[1700,1200],[1600,1100],[1800,1300]]
-    var_list = ['MET', 'MT', 'Jet2_pt','Jet1_pt', 'nLep', 'Lep_pt', 'Selected', 'nVeto', 'LT', 'HT', 'nBCleaned_TOTAL','nTop_Total_Combined', 'nJets30Clean', 'dPhi',"Lep_relIso","Lep_miniIso","iso_pt","iso_MT2"]#,"mGo", "mLSP"]
-    
-    
-    from predict_DNN import Predict_Keras
-
-    if ( "T1tttt" in fout or 'T5qqqq' in fout) :
-        Predict_Keras(fout,var_list,['TTS','TTDi', 'WJ', 'sig'], mgo = 0.0,mlsp = 0.0,model = '/nfs/dust/cms/user/amohamed/susy-desy/ML/hepML_1Lep/modelToFreez1718/model/1Lep_DNN_Multiclass')
-    
-    else : 
-        for mass in masslist : 
-            mgo = mass[0] ; mlsp = mass[1]
-            Predict_Keras(fout,var_list,['TTS','TTDi', 'WJ', 'sig'], mgo = mgo,mlsp = mlsp,model = '/nfs/dust/cms/user/amohamed/susy-desy/ML/hepML_1Lep/modelToFreez1718/model/1Lep_DNN_Multiclass')
-'''
-
 fulltime = maintimer.RealTime()
 totev   = sum([ev   for (ev,time) in ret.itervalues()])
 tottime = sum([time for (ev,time) in ret.itervalues()])

@@ -180,7 +180,7 @@ class EventVars1L_leptonSF:
         if event.isData: return ret
 
         sample = self.sample
-        if "T1ttt" in sample: sample = "FastSim"
+        if "T1ttt" in sample or "T5qqqq" in sample : sample = "FastSim"
         else: sample = "FullSim"
 
         ret['lepSF'] = 1; ret['lepSFerr'] = 0; ret['lepSFunc'] = 0.5
