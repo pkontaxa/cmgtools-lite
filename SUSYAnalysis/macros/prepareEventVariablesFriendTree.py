@@ -148,7 +148,7 @@ for D in glob(args[0]+"/*"):
         treename = "tree"
         fname    = "%s/%s/tree.root" % (D,options.tree)
         fname    = open(fname+".url","r").readline().strip()
-    #if not "T5qqqq" in fname : continue
+    if  not ( ("/TTJets_SingleLeptonFrom" in fname) or("/TTJets_DiLepton" in fname)) : continue 
     if os.path.exists(fname) or (os.path.exists("%s/%s/tree.root.url" % (D,options.tree))):
         short = os.path.basename(D)
         if options.datasets != []:

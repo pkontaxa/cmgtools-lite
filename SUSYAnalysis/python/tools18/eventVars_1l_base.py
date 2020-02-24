@@ -192,11 +192,12 @@ class EventVars1L_base:
 #            'METNoHF', 'LTNoHF', 'dPhiNoHF',
             ## jets
             'HT','nJets',('nBJet','I'), 'nBJetDeep',
-            ("nJets30","I"),("Jets30Idx","I",50,"nJets30"),'nBJets30',('nJets30Clean',"I"),
-        
-            ('Jet_pt','F',100,'nJets30Clean'),
-            ('Jet_eta','F',100,'nJets30Clean'),
-            ('Jet_phi','F',100,'nJets30Clean'),
+            ("nJets30","I"),("Jets30Idx","I",50,"nJets30"),'nBJets30','nJets30Clean',
+            'Jet_pt','Jet_eta','Jet_phi',
+
+            ('Jet_pt_arr','F',20,20),
+            ('ISRJet_pt_arr','F',20,20),
+
 
             'nJets40','nBJets40',
             "htJet30j", "htJet30ja","htJet40j",
@@ -225,8 +226,7 @@ class EventVars1L_base:
             'RA2_muJetFilter',
             'Flag_fastSimCorridorJetCleaning',
 ###################################################for ISR study ##############################################
-            'ISR_HT',('ISR_N',"I"),
-            ('ISR_pT','F',100,'ISR_N'),
+            'ISR_HT','ISR_N','ISR_pT',
 ###################################################for PS Tune study ##############################################
             "nGenJets","nGenbJets","nGenJets30","nGenbJets30",
 ###################################################for Prefire study ##############################################
@@ -816,19 +816,20 @@ class EventVars1L_base:
 
         ret['HT'] = ret['htJet30j']
         
-        Jet_pt  = []
-        Jet_eta = []
-        Jet_phi = []
-        
-        for j in cJet30Clean : 
-            Jet_pt.append(j.pt)
-            Jet_eta.append(j.eta)
-            Jet_phi.append(j.phi)
 
-        ret['Jet_pt']  = Jet_pt
-        ret['Jet_eta'] = Jet_eta
-        ret['Jet_phi'] = Jet_phi
+        jetp4 = ROOT.TLorentzVector(0,0,0,0) 
+        Jet_pt_arr = [-999 for i in range(0,20)]
 
+        if len(cJet30Clean) != 0 : 
+            Jet_pt_arr = []
+            for j in cJet30Clean : 
+                jetp4 += j.p4()
+                Jet_pt_arr.append(j.pt)
+
+        ret['Jet_pt']  = jetp4.Pt()
+        ret['Jet_eta'] = jetp4.Eta()
+        ret['Jet_phi'] = jetp4.Phi()
+        ret['Jet_pt_arr'] = Jet_pt_arr
 
         ## B tagging WPs for CSVv2 (CSV-IVF)
         ## from: https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideBTagging#Preliminary_working_or_operating
@@ -992,12 +993,21 @@ class EventVars1L_base:
         ######### for ISR ###################
 ###########################################################################
 ###########################################################################
-        ISR_HT = -999
-        ISR_N = 0
+        
+        ISRjetp4 = ROOT.TLorentzVector(0,0,0,0) 
+        ISRJet_pt_arr = [-999 for i in range(0,20)]
         cISRJet30Clean =  [ j for j in cJet30Clean if j.btagDeepCSV <= btagWP ] 
+        if len(cISRJet30Clean) != 0 : 
+            ISRJet_pt_arr = []
+            for j in cISRJet30Clean : 
+                ISRjetp4 += j.p4()
+                ISRJet_pt_arr.append(j.pt)
+
         ret['ISR_HT']  = sum([j.pt for j in cISRJet30Clean])
         ret['ISR_N' ] = len(cISRJet30Clean)
-        ret['ISR_pT']  = [j.pt for j in cISRJet30Clean]
+        ret['ISR_pT']  = ISRjetp4.Pt()
+        ret['ISRJet_pt_arr'] = ISRJet_pt_arr
+
 
 
 #####################################################################################

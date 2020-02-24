@@ -148,7 +148,7 @@ for D in glob(args[0]+"/*"):
         treename = "tree"
         fname    = "%s/%s/tree.root" % (D,options.tree)
         fname    = open(fname+".url","r").readline().strip()
-    if  (("/SingleEl" in fname) or ("/SingleMu" in fname)): continue
+    #if  not ( ("/SingleMu" in fname)) : continue #("/SingleEl" in fname) or
     if os.path.exists(fname) or (os.path.exists("%s/%s/tree.root.url" % (D,options.tree))):
         short = os.path.basename(D)
         if options.datasets != []:
