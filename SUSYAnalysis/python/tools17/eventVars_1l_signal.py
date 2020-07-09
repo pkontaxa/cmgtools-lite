@@ -13,11 +13,18 @@ xsecFile = "../python/tools/glu_xsecs_13TeV.txt"
 
 cntsSusy = {} # dict for signal counts
 C_ISRweightsSusy = {}
-cntFile = "../python/tools17/t1ttt_scan_counts.txt"
+cntFileT1 = "../python/tools17/t1ttt_scan_counts.txt"
+cntFileT5 = "../python/tools17/t5qqqq_scan_counts.txt"
+
+cntFileT5op4 = "../python/tools17/counts0p4.txt"
+cntFileT5op5 = "../python/tools17/counts0p5.txt"
+cntFileT5op6 = "../python/tools17/counts0p6.txt"
+cntFileT5qqqqMVA = "../python/tools17/T5qqqqVV_MVA.txt"
+
 #cntFile = "../python/tools17/scans/counts_T1tttt_2016.txt"
 ISRweightFile = "../python/tools17/ISRnormWeightsT1tttt.txt"
 
-def loadSUSYparams():
+def loadSUSYparams(cntFile):
 
     global xsecGlu
     global cntsSusy
@@ -104,14 +111,20 @@ class EventVars1L_signal:
 
         # output dict:
         ret = {}
-
-        if not event.isData and "T1tttt" in self.sample:
+        if (not event.isData and ("T1tttt" in self.sample or "T5qqqq" in self.sample ) ) :
 
             global xsecGlu
             global cntsSusy
             global C_ISRweightsSusy 
 
-            if len(xsecGlu) == 0: loadSUSYparams()
+            if len(xsecGlu) == 0: loadSUSYparams(cntFileT1) if "T1tttt" in self.sample else loadSUSYparams(cntFileT5)
+                #elif "0p4" in self.sample :
+                #    loadSUSYparams(cntFileT5op4)
+                #elif "0p5" in self.sample :
+                #    loadSUSYparams(cntFileT5op5)
+                #elif "0p6" in self.sample :
+                #    loadSUSYparams(cntFileT5op6)
+                #else : loadSUSYparams(cntFileT5) 
 
             ## MASS POINT
             mGo = 0
@@ -147,25 +160,25 @@ class EventVars1L_signal:
             #ICHEP weights
             #ISRweights = { 0: 1, 1 : 0.882, 2 : 0.792, 3 : 0.702, 4 : 0.648, 5 : 0.601, 6 : 0.515}
             #ISRweightssyst = { 0: 0.0, 1 : 0.059, 2 : 0.104, 3 : 0.149, 4 : 0.176, 5 : 0.199, 6 : 0.242}
-            
-            #Moriond17 weights
-            ISRweights = { 0: 1, 1 : 0.920, 2 : 0.821, 3 : 0.715, 4 : 0.662, 5 : 0.561, 6 : 0.511}
-            ISRweightssyst = { 0: 0.0, 1 : 0.040, 2 : 0.090, 3 : 0.143, 4 : 0.169, 5 : 0.219, 6 : 0.244}
-            
-            C_ISR =  float(C_ISRweightsSusy[(mGo,mLSP)][0])
-            C_ISR_up = float(C_ISRweightsSusy[(mGo,mLSP)][1])
-            C_ISR_down = float(C_ISRweightsSusy[(mGo,mLSP)][2])
+            if "T1tttt" in self.sample : 
+                #Moriond17 weights
+                ISRweights = { 0: 1, 1 : 0.920, 2 : 0.821, 3 : 0.715, 4 : 0.662, 5 : 0.561, 6 : 0.511}
+                ISRweightssyst = { 0: 0.0, 1 : 0.040, 2 : 0.090, 3 : 0.143, 4 : 0.169, 5 : 0.219, 6 : 0.244}
+                
+                C_ISR =  float(C_ISRweightsSusy[(mGo,mLSP)][0])
+                C_ISR_up = float(C_ISRweightsSusy[(mGo,mLSP)][1])
+                C_ISR_down = float(C_ISRweightsSusy[(mGo,mLSP)][2])
 
 
 
-            nISRweight = C_ISR * ISRweights[nISRforWeights]
-            nISRweightsyst_up =  C_ISR_up * (ISRweights[nISRforWeights]+ISRweightssyst[nISRforWeights])
-            nISRweightsyst_down =  C_ISR_down * (ISRweights[nISRforWeights]-ISRweightssyst[nISRforWeights])
+                nISRweight = C_ISR * ISRweights[nISRforWeights]
+                nISRweightsyst_up =  C_ISR_up * (ISRweights[nISRforWeights]+ISRweightssyst[nISRforWeights])
+                nISRweightsyst_down =  C_ISR_down * (ISRweights[nISRforWeights]-ISRweightssyst[nISRforWeights])
 
-            ret['nISRweight'] = nISRweight
-            ret['nISRweightsyst_up'] = nISRweightsyst_up 
-            ret['nISRweightsyst_down'] = nISRweightsyst_down
-            #print nISR, nISRweight, nISRweightsyst_up, nISRweightsyst_down
+                ret['nISRweight'] = nISRweight
+                ret['nISRweightsyst_up'] = nISRweightsyst_up 
+                ret['nISRweightsyst_down'] = nISRweightsyst_down
+                #print nISR, nISRweight, nISRweightsyst_up, nISRweightsyst_down
             ###Get ISR stuff
 
             ##############
@@ -231,9 +244,9 @@ class EventVars1L_signal:
                 print scaleWgts
             else: print "No mean scale weights found for", sampkey
             ret['ScaleWgt'] = scaleWgts
-
+        #else : print('sample is not signal sample')
         return ret
-
+        
 if __name__ == '__main__':
     from sys import argv
     file = ROOT.TFile(argv[1])

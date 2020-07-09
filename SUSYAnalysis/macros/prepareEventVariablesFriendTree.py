@@ -148,7 +148,7 @@ for D in glob(args[0]+"/*"):
         treename = "tree"
         fname    = "%s/%s/tree.root" % (D,options.tree)
         fname    = open(fname+".url","r").readline().strip()
-
+    if  not ( ("/TTJets_SingleLeptonFrom" in fname) or("/TTJets_DiLepton" in fname)) : continue 
     if os.path.exists(fname) or (os.path.exists("%s/%s/tree.root.url" % (D,options.tree))):
         short = os.path.basename(D)
         if options.datasets != []:
@@ -388,7 +388,9 @@ if options.jobs > 0:
     ret  = dict(pool.map(_runIt, jobs)) if options.jobs > 0 else dict([_runIt(j) for j in jobs])
 else:
     ret = dict(map(_runIt, jobs))
+
 fulltime = maintimer.RealTime()
 totev   = sum([ev   for (ev,time) in ret.itervalues()])
 tottime = sum([time for (ev,time) in ret.itervalues()])
 print "Done %d tasks in %.1f min (%d entries, %.1f min)" % (len(jobs),fulltime/60.,totev,tottime/60.)
+

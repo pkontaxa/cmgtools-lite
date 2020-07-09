@@ -17,8 +17,8 @@ run94X = getHeppyOption("run94X",True)
 run104X = getHeppyOption("run104X",False)
 
 runData = getHeppyOption("runData",False)
-runMC = getHeppyOption("runMC",False)
-runSig = getHeppyOption("runSig",True)
+runMC = getHeppyOption("runMC",True)
+runSig = getHeppyOption("runSig",False)
 
 runFastsim = getHeppyOption("runFastS",False)
 
@@ -33,7 +33,7 @@ selectedEvents=getHeppyOption("selectEvents","")
 keepGenPart=getHeppyOption("keepGenPart",False)
 
 sample = "main"
-test = 0
+test = 3    
 multib = True
 zerob = False
 
@@ -92,8 +92,8 @@ elif run94X :
 	metAna.noPUMetCollection = "slimmedMETsModifiedMET"
 
 elif run104X : 
-	jetAna.mcGT     = "Autumn18_V8_MC"
-	jetAna.dataGT   = [(1,"Autumn18_RunA_V8_DATA"),(317080,"Autumn18_RunB_V8_DATA"),(319337,"Autumn18_RunC_V8_DATA"),(320673,"Autumn18_RunD_V8_DATA")]
+	jetAna.mcGT     = "Autumn18_V19_MC"
+	jetAna.dataGT   = [(1,"Autumn18_RunA_V19_DATA"),(317080,"Autumn18_RunB_V19_DATA"),(319337,"Autumn18_RunC_V19_DATA"),(320673,"Autumn18_RunD_V19_DATA")]
 	
 #jetAna.lepSelCut = lambda lep : False # no cleaning of jets with leptons
 #jetAnaScaleDown.lepSelCut = lambda lep : False # no cleaning of jets with leptons
@@ -194,7 +194,7 @@ anyLepSkim = cfg.Analyzer(
 from CMGTools.TTHAnalysis.analyzers.ttHSTSkimmer import ttHSTSkimmer
 ttHSTSkimmer = cfg.Analyzer(
   ttHSTSkimmer, name='ttHSTSkimmer',
-  minST = 150,
+  minST = 0,
   )
 
 from CMGTools.TTHAnalysis.analyzers.nIsrAnalyzer import NIsrAnalyzer
@@ -212,7 +212,7 @@ if not run104X :
 from CMGTools.TTHAnalysis.analyzers.ttHHTSkimmer import ttHHTSkimmer
 ttHHTSkimmer = cfg.Analyzer(
   ttHHTSkimmer, name='ttHHTSkimmer',
-  minHT = 350,
+  minHT = 0,
   )
 
 
@@ -451,7 +451,7 @@ if runMC:
       # apply a loose lepton skim to MC
       anyLepSkim.minLeptons = 1
       #pick the file you want to run on
-      selectedComponents = [TTJets_LO_HT800to1200]
+      selectedComponents = [DYJetsToLL_M_10to50]
       
 #  [TTJets_SingleLeptonFromTbar,TTJets_SingleLeptonFromTbar_ext,TTJets_SingleLeptonFromT,TTJets_DiLepton,TTJets_DiLepton_ext,
   if test==1:
@@ -472,7 +472,7 @@ if runMC:
       comp.fineSplitFactor = 1
       comp.splitFactor = len(comp.files)
   elif test==0:
-    selectedComponents = [TTJets_LO_HT800to1200]
+    #selectedComponents = [TTJets_LO_HT800to1200]
     #selectedComponents = [WJetsToLNuHT[1]]
     #selectedComponents = mcSamples
     for comp in selectedComponents:
@@ -502,7 +502,6 @@ elif runSig:
   #jetAna.mcGT = "Spring16_25nsFastSimV1_MC"
   #### REMOVE JET ID FOR FASTSIM
   jetAna.relaxJetId = True
-
   # modify skim (noe leptons skim)
   anyLepSkim.minLeptons = 0
 
@@ -510,18 +509,23 @@ elif runSig:
   if multib: 
       if run80X : 
           selectedComponents = [SMS_T1tttt_TuneCUETP8M1]
-          jetAna.mcGT = "Spring16_FastSimV1_MC"
-      else : 
-          selectedComponents = [SMS_T1ttttCP5_MVA]
+          jetAna.mcGT = "Summer16_FastSimV1_MC"
+      elif run94X : 
+          selectedComponents = [SMS_T1tttt_TuneCP2]
           jetAna.mcGT = "Fall17_FastsimV1"
-  
+      else : 
+          selectedComponents = [SMS_T1tttt_TuneCP2_102]
+          jetAna.mcGT = "Autumn18_FastSimV1_MC"
   if zerob:
       if run80X : 
           selectedComponents = [SMS_T5qqqqVV_TuneCUETP8M1]
-          jetAna.mcGT = "Spring16_FastSimV1_MC"
-      else : 
-          selectedComponents = [SMS_T5qqqqVV_TuneCP2,SMS_T5qqqqVV_TuneCP2_ext]
+          jetAna.mcGT = "Summer16_FastSimV1_MC"
+      elif run94X: 
+          selectedComponents = [SMS_T5qqqqCP5_MVA]#[SMS_T5qqqqVV_TuneCP2,SMS_T5qqqqVV_TuneCP2_ext]
           jetAna.mcGT = "Fall17_FastsimV1"
+      else : 
+          selectedComponents = [SMS_T5qqqqVV_TuneCP2_102]
+          jetAna.mcGT = "Autumn18_FastSimV1_MC"
   
   if multib and zerob : print "Warning ! Both zero b and multi b is set to  True, you will be running Zero b signals ;"
   if not (multib or zerob) : print 8*"*", "Error ! Choose a signal to process", 8*"*"
@@ -548,7 +552,7 @@ elif runSig:
     # run on everything
     for comp in selectedComponents:
       comp.fineSplitFactor = 1
-      comp.splitFactor = len(comp.files)
+      comp.splitFactor = len(comp.files)/3
 
   susyCoreSequence.insert(susyCoreSequence.index(susyScanAna)+1,
         susyCounter)
@@ -567,6 +571,7 @@ elif runSig:
   sequence.remove(triggerFlagsAna)
   treeProducer.globalVariables+=[
        NTupleVariable("GenSusyMGluino", lambda ev : ev.genSusyMGluino, int, mcOnly=True, help="Susy Gluino mass"),
+       NTupleVariable("GenSusyMChargino", lambda ev : ev.genSusyMChargino, int, mcOnly=True, help="Susy Chargino mass"),
        NTupleVariable("GenSusyMNeutralino", lambda ev : ev.genSusyMNeutralino, int, mcOnly=True, help="Susy Neutralino mass"),
        NTupleVariable("nIsr", lambda ev : ev.nIsr, mcOnly=True, help="Number of ISR jets not matched to gen particles"),
        NTupleVariable("lheHT", lambda ev : ev.lheHT, help="H_{T} computed from quarks and gluons in Heppy LHEAnalyzer"),
@@ -576,6 +581,9 @@ elif runSig:
        NTupleVariable("prefireWdwn", lambda ev: ev.prefiringweightdown, help="get the prefire weight down in Heppy prefireanalyzer"),
 
     ]
+  if zerob:
+      treeProducer.globalVariables+=[NTupleVariable("GenSusyMChargino", lambda ev : ev.genSusyMChargino, int, mcOnly=True, help="Susy Chargino mass")]
+
 
 if runData : # For running on data
 
@@ -587,7 +595,7 @@ if runData : # For running on data
   # central samples
   if run80X:
       from CMGTools.RootTools.samples.samples_13TeV_DATA2016_17Jul2018_1l import *
-      selectedComponents = dataSamples_17Jul2018_2l # for instance
+      selectedComponents = [SingleMuon_Run2016H_17Jul2018_v1]#dataSamples_17Jul2018_2l # for instance
   elif run94X : 
       from CMGTools.RootTools.samples.samples_13TeV_DATA2017 import *
       selectedComponents = dataSamples_31Mar2018_1l
@@ -680,10 +688,12 @@ elif runMC  or runSig and run104X:
 elif runData and run104X:
     fname1="$CMSSW_BASE/src/CMGTools/SUSYAnalysis/cfg/FatJetNN_104X_data.py"
 
-preprocessor =  CmsswPreprocessor(fname1)
+preprocessor = CmsswPreprocessor(fname1)
 
-ttHFatJetAna.jetCol="deepntuplizer"
-#jetAna.jetCol = 'selectedUpdatedPatJets'
+if preprocessor != None : 
+    ttHFatJetAna.jetCol="deepntuplizer"
+#else : 
+#    jetAna.jetCol = 'selectedUpdatedPatJets'
 ##################################################################################################
 
 selectComponents = getHeppyOption('selectComponents',None)

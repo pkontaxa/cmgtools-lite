@@ -6,17 +6,17 @@ import math
 
 ### SF ROOT files
 ### Full SIM ###
-eleSFname = "../python/tools/SFs/Moriond/El_CBtight_miniIso0p1_Moriond.root"
+eleSFname = "../python/tools/SFs/lepSFs/El_CBtight_miniIso0p1_Moriond.root"
 eleHname = "El_CBtight_miniIso0p1_Moriond"
 
-muSFname = "../python/tools/SFs/Moriond/Mu_Medium_miniIso0p2_SIP3D_Moriond.root"
+muSFname = "../python/tools/SFs/lepSFs/Mu_Medium_miniIso0p2_SIP3D_Moriond.root"
 muHname = "Mu_Medium_miniIso0p2_SIP3D_Moriond"
 
 ####HIP Root files
-eleHIPname = "../python/tools/SFs/Moriond/egammaEffi.txt_EGM2D.root"
+eleHIPname = "../python/tools/SFs/lepSFs/EGM2D_BtoH_GT20GeV_RecoSF_Legacy2016.root"
 eleHIPHname = "EGamma_SF2D"
 
-muHIPname = "../python/tools/SFs/Moriond/Tracking_EfficienciesAndSF_BCDEFGH.root"
+muHIPname = "../python/tools/SFs/lepSFs/Tracking_EfficienciesAndSF_BCDEFGH.root"
 muHIPHname = "ratio_eff_eta3_dr030e030_corr"
 
 hEleSF = 0
@@ -57,9 +57,9 @@ if not hEleHIP:
 
 
 ### Fast? SIM ###
-eleSFname = "../python/tools/SFs/Moriond/CBtight_miniIso0p1_FastSim_Moriond.root"
+eleSFname = "../python/tools/SFs/lepSFs/CBtight_miniIso0p1_FastSim_Moriond.root"
 eleHname = "CBtight_miniIso0p1_FastSim_Moriond"
-muSFname = "../python/tools/SFs/Moriond/MediumMuon_miniIso0p2_SIP3D_FastSim_Moriond.root"
+muSFname = "../python/tools/SFs/lepSFs/MediumMuon_miniIso0p2_SIP3D_FastSim_Moriond.root"
 muHname = "MediumMuon_miniIso0p2_SIP3D_FastSim_Moriond"
 
 
@@ -95,13 +95,20 @@ def getLepSF(lep, nPU = 1, sample = "FullSim"):
 
     # fit pt to hist
     #print hSF, hSFfs
-    maxPt = hSF.GetXaxis().GetXmax()
-    if lepPt > maxPt: lepPt = maxPt-0.1
+    # the full sim CBID SF for electron commes with pt in Y-axis and Eta in X-Axis so to overcome it we do 
+    if abs(lep.pdgId) == 11 and sample == "FullSim" : 
+        maxPt = hSF.GetYaxis().GetXmax()
+        if lepPt > maxPt: lepPt = maxPt-0.1
+        bin = hSF.FindBin(lepEta,lepPt)
+    else : 
+        maxPt = hSF.GetXaxis().GetXmax()
+        if lepPt > maxPt: lepPt = maxPt-0.1
+        minPt = hSF.GetXaxis().GetXmin()
+        if lepPt < minPt : lepPt = minPt + 0.1
+        bin = hSF.FindBin(lepPt,lepEta)
 
-    bin = hSF.FindBin(lepPt,lepEta)
     lepSF = hSF.GetBinContent(bin)
     lepSFerr = hSF.GetBinError(bin)
-
     # TO BE UPDATED
     # For Muons, ignore error from histogram, but use flat uncertainty of 3 %
     if abs(lep.pdgId) == 13:
@@ -153,7 +160,7 @@ def getLepSF(lep, nPU = 1, sample = "FullSim"):
     #print lep, hSF, lepPt, lepEta, bin, lepSF
     if lepSF == 0:
         print "zero SF found!"
-        print lepPt, lepEta, bin, lepSF, lepSFerr
+        print lepPt, lepEta, bin, lepSF, lepSFerr, abs(lep.pdgId)
         return 1,0
 
     return lepSF,lepSFerr
@@ -173,7 +180,7 @@ class EventVars1L_leptonSF:
         if event.isData: return ret
 
         sample = self.sample
-        if "T1ttt" in sample: sample = "FastSim"
+        if "T1tttt" in sample or "T5qqqq" in sample: sample = "FastSim"
         else: sample = "FullSim"
 
         ret['lepSF'] = 1; ret['lepSFerr'] = 0; ret['lepSFunc'] = 0.5

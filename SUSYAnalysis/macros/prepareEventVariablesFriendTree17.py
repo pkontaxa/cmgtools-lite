@@ -140,7 +140,7 @@ frpref = "evVarFriend_"
 
 for D in glob(args[0]+"/*"):
     treename = options.tree
-    fname    = "%s/%s/%s_tree.root" % (D,options.tree,options.tree)
+    fname    = "%s/%s/%s_tree.root" % (D,options.tree,options.tree) 
     if (not os.path.exists(fname)) and os.path.exists("%s/%s/tree.root" % (D,options.tree)):
         treename = "tree"
         fname    = "%s/%s/tree.root" % (D,options.tree)
@@ -148,7 +148,7 @@ for D in glob(args[0]+"/*"):
         treename = "tree"
         fname    = "%s/%s/tree.root" % (D,options.tree)
         fname    = open(fname+".url","r").readline().strip()
-
+    #if  not ( ("/SingleMu" in fname)) : continue #("/SingleEl" in fname) or
     if os.path.exists(fname) or (os.path.exists("%s/%s/tree.root.url" % (D,options.tree))):
         short = os.path.basename(D)
         if options.datasets != []:
@@ -390,6 +390,7 @@ if options.jobs > 0:
     ret  = dict(pool.map(_runIt, jobs)) if options.jobs > 0 else dict([_runIt(j) for j in jobs])
 else:
     ret = dict(map(_runIt, jobs))
+
 fulltime = maintimer.RealTime()
 totev   = sum([ev   for (ev,time) in ret.itervalues()])
 tottime = sum([time for (ev,time) in ret.itervalues()])

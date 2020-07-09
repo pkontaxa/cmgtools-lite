@@ -117,18 +117,15 @@ btag_DeepLooseWP = 0.1522
 btag_DeepMediumWP = 0.4941
 btag_DeepTightWP = 0.8001
 
-
-# DeepFlavour (new Deep Flavour tagger)
-btag_DeepFLooseWP = 0.0521
-btag_DeepFMediumWP = 0.3033
-btag_DeepFTightWP = 0.7489
-
-
 #DeepAK8 (brand new Deep Multiclass Tagger)
 topTag_DeepAK8_LooseWP = 0.18
 topTag_DeepAK8_MediumWP = 0.6
 topTag_DeepAK8_TightWP = 0.89
-
+#W tagging (DeepAK8)
+WTag_DeepAK8_LooseWP = 0.629375
+WTag_DeepAK8_MediumWP = 0.674375
+WTag_DeepAK8_TightWP = 0.891875
+WTag_DeepAK8_VeryTightWP = 0.988375
 
 ###########
 # MUONS
@@ -149,91 +146,6 @@ print 30*'#'
 print 'Going to use', eleID, 'electron ID!'
 print 30*'#'
 print
-
-## PHYS14 IDs
-## Non-triggering electron MVA id (Phys14 WP)
-# Tight MVA WP
-Ele_mvaPhys14_eta0p8_T = 0.73;
-Ele_mvaPhys14_eta1p4_T = 0.57;
-Ele_mvaPhys14_eta2p4_T = 0.05;
-# Medium MVA WP  <--- UPDATE
-Ele_mvaPhys14_eta0p8_M = 0.35;
-Ele_mvaPhys14_eta1p4_M = 0.20;
-Ele_mvaPhys14_eta2p4_M = -0.52;
-# Loose MVA WP
-Ele_mvaPhys14_eta0p8_L = 0.35;
-Ele_mvaPhys14_eta1p4_L = 0.20;
-Ele_mvaPhys14_eta2p4_L = -0.52;
-
-## SPRING15 IDs
-## Non-triggering electron MVA id (Spring15 WP):
-# https://twiki.cern.ch/twiki/bin/viewauth/CMS/SUSLeptonSF#Electrons
-# Tight MVA WP
-Ele_mvaSpring15_eta0p8_T = 0.87;
-Ele_mvaSpring15_eta1p4_T = 0.6;
-Ele_mvaSpring15_eta2p4_T = 0.17;
-# Medium MVA WP  <--- UPDATE
-Ele_mvaSpring15_eta0p8_M = 0.35;
-Ele_mvaSpring15_eta1p4_M = 0.20;
-Ele_mvaSpring15_eta2p4_M = -0.52;
-# Loose MVA WP
-Ele_mvaSpring15_eta0p8_L = -0.16;
-Ele_mvaSpring15_eta1p4_L = -0.65;
-Ele_mvaSpring15_eta2p4_L = -0.74;
-# VLoose MVA WP
-Ele_mvaSpring15_eta0p8_VL = -0.11;
-Ele_mvaSpring15_eta1p4_VL = -0.55;
-Ele_mvaSpring15_eta2p4_VL = -0.74;
-
-## Ele MVA check
-def checkEleMVA(lep,WP = 'Tight', era = "Spring15" ):
-    # Eta dependent MVA ID check:
-    passID = False
-
-    lepEta = abs(lep.eta)
-
-    # eta cut
-    if lepEta > eleEta:
-        print "here"
-        return False
-
-    if era == "Spring15":
-        lepMVA = lep.mvaIdSpring15
-
-        if WP == 'Tight':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaSpring15_eta0p8_T
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaSpring15_eta1p4_T
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaSpring15_eta2p4_T
-        elif WP == 'Medium':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaSpring15_eta0p8_M
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaSpring15_eta1p4_M
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaSpring15_eta2p4_M
-        elif WP == 'Loose':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaSpring15_eta0p8_L
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaSpring15_eta1p4_L
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaSpring15_eta2p4_L
-        elif WP == 'VLoose':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaSpring15_eta0p8_VL
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaSpring15_eta1p4_VL
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaSpring15_eta2p4_VL
-
-    elif era == "Phys14":
-        lepMVA = lep.mvaIdPhys14
-
-        if WP == 'Tight':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaPhys14_eta0p8_T
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaPhys14_eta1p4_T
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaPhys14_eta2p4_T
-        elif WP == 'Medium':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaPhys14_eta0p8_M
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaPhys14_eta1p4_M
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaPhys14_eta2p4_M
-        elif WP == 'Loose':
-            if lepEta < 0.8: passID = lepMVA > Ele_mvaPhys14_eta0p8_L
-            elif lepEta < 1.44: passID = lepMVA > Ele_mvaPhys14_eta1p4_L
-            elif lepEta >= 1.57: passID = lepMVA > Ele_mvaPhys14_eta2p4_L
-
-    return passID
 
 ## Isolation
 ele_miniIsoCut = 0.1
@@ -275,6 +187,11 @@ class EventVars1L_base:
             ## jets
             'HT','nJets',('nBJet','I'), 'nBJetDeep',
             ("nJets30","I"),("Jets30Idx","I",50,"nJets30"),'nBJets30','nJets30Clean',
+            'Jet_pt','Jet_eta','Jet_phi',
+
+            ('Jet_pt_arr','F',20,20),
+            ('ISRJet_pt_arr','F',20,20),
+
             'nJets40','nBJets40',
             "htJet30j", "htJet30ja","htJet40j",
             'Jet1_pt','Jet2_pt', 'Jet1_eta','Jet2_eta','Jet1_phi','Jet2_phi',
@@ -302,13 +219,14 @@ class EventVars1L_base:
             'RA2_muJetFilter',
             'Flag_fastSimCorridorJetCleaning',
 ###################################################for ISR study ##############################################
-            'ISR_HT','ISR_pT','ISR_N',
+            'ISR_HT','ISR_N','ISR_pT',
 ###################################################for PS Tune study ##############################################
             "nGenJets","nGenbJets","nGenJets30","nGenbJets30",
 ###################################################for Prefire study ##############################################
             "prefireW","prefireWup","prefireWdwn",
 ################################################### to get all the variables in the FR rather than trees ##############################################
-            "met_caloPt","lheHTIncoming","genTau_grandmotherId","genTau_motherId","genLep_grandmotherId","genLep_motherId","DiLep_Flag","semiLep_Flag"
+            "met_caloPt","lheHTIncoming","genTau_grandmotherId","genTau_motherId","genLep_grandmotherId","genLep_motherId","DiLep_Flag","semiLep_Flag",
+            "nWLoose","nWMedium","nWTight","nWVeryTight"
             ]
 
     def listBranches(self):
@@ -349,7 +267,7 @@ class EventVars1L_base:
             elif "SingleMu" in self.sample: ret['PD_SingleMu'] = 1
             elif "MET_" in self.sample: ret['PD_MET'] = 1
         if not event.isData and hasattr(self,"sample"):
-            if "T1tttt" in self.sample or "T5qqqqWW" in self.sample:
+            if "T1tttt" in self.sample or "T5qqqq" in self.sample:
                 ret['isDPhiSignal'] = 1
         ##############################
 
@@ -501,12 +419,6 @@ class EventVars1L_base:
                     #passLooseID = (eidCB >= 2)
                     passVetoID = (eidCB >= 1)
 
-                elif eleID == 'MVA':
-                    # ELE MVA ID
-                    # check MVA WPs
-                    passTightID = checkEleMVA(lep,'Tight')
-                    passLooseID = checkEleMVA(lep,'VLoose')
-
                 # selected
                 if passTightID:
 
@@ -516,8 +428,6 @@ class EventVars1L_base:
                     # Iso check:
                     if lep.miniRelIso < ele_miniIsoCut: passIso = True
                     # conversion check
-                    if eleID == 'MVA':
-                        if lep.lostHits <= goodEl_lostHits and lep.convVeto and lep.sip3d < goodEl_sip3d: passConv = True
                     elif eleID == 'CB':
                         passConv = True # cuts already included in POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_X
 
@@ -781,20 +691,37 @@ class EventVars1L_base:
         nFatJetMedium = 0
         nFatJetTight = 0
 
+        nWLoose = 0
+        nWMedium = 0
+        nWTight = 0
+        nWVeryTight = 0
+
         for i,j in enumerate(FatJets):
-              fatJets.append(j)
+            fatJets.append(j)
 
-              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_LooseWP and j.pt>=400.):
-                    nFatJetLoose+=1
-                    _DeepAK8Top_Loose_pt_Array.append(j.pt)
-                    _DeepAK8Top_Loose_eta_Array.append(j.eta)
-                    _DeepAK8Top_Loose_phi_Array.append(j.phi)
+            if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_LooseWP and j.pt>=400.):
+                  nFatJetLoose+=1
+                  _DeepAK8Top_Loose_pt_Array.append(j.pt)
+                  _DeepAK8Top_Loose_eta_Array.append(j.eta)
+                  _DeepAK8Top_Loose_phi_Array.append(j.phi)
 
-              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_MediumWP and j.pt>=400.):
-                   nFatJetMedium+=1
+            if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_MediumWP and j.pt>=400.):
+                nFatJetMedium+=1
+            
+            if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_TightWP and j.pt>=400.):
+                nFatJetTight+=1
+            
+            if(j.Binarized_score_deep_W_PUPPI > WTag_DeepAK8_LooseWP and j.pt>=200.):
+                nWLoose += 1
 
-              if(j.raw_score_deep_Top_PUPPI > topTag_DeepAK8_TightWP and j.pt>=400.):
-                   nFatJetTight+=1
+            if(j.Binarized_score_deep_W_PUPPI > WTag_DeepAK8_MediumWP and j.pt>=200.):
+                nWMedium += 1
+
+            if(j.Binarized_score_deep_W_PUPPI > WTag_DeepAK8_TightWP and j.pt>=200.):
+                nWTight += 1
+
+            if(j.Binarized_score_deep_W_PUPPI > WTag_DeepAK8_VeryTightWP and j.pt>=200.):
+                nWVeryTight += 1
 
         ret['nDeepTop_loose'] = nFatJetLoose
         ret['nDeepTop_medium'] = nFatJetMedium
@@ -803,6 +730,10 @@ class EventVars1L_base:
         ret['DeepAK8Top_Loose_eta_Array'] = _DeepAK8Top_Loose_eta_Array
         ret['DeepAK8Top_Loose_phi_Array'] = _DeepAK8Top_Loose_phi_Array
 
+        ret['nWLoose'] = nWLoose
+        ret['nWMedium'] = nWMedium
+        ret['nWTight'] = nWTight
+        ret['nWVeryTight'] = nWVeryTight
 
         if nfatjet>=1:
               ret['FatJet1_pt'] = fatJets[0].pt
@@ -877,11 +808,25 @@ class EventVars1L_base:
 
         ret['HT'] = ret['htJet30j']
 
+        
+        jetp4 = ROOT.TLorentzVector(0,0,0,0) 
+        Jet_pt_arr = [-999 for i in range(0,20)]
+
+        if len(cJet30Clean) != 0 : 
+            Jet_pt_arr = []
+            for j in cJet30Clean : 
+                jetp4 += j.p4()
+                Jet_pt_arr.append(j.pt)
+
+        ret['Jet_pt']  = jetp4.Pt()
+        ret['Jet_eta'] = jetp4.Eta()
+        ret['Jet_phi'] = jetp4.Phi()
+        ret['Jet_pt_arr'] = Jet_pt_arr
         ## B tagging WPs for CSVv2 (CSV-IVF)
         ## from: https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideBTagging#Preliminary_working_or_operating
 
         # WP defined on top
-        btagWP = btag_MediumWP
+        btagWP = btag_DeepMediumWP
 
         BJetMedium30 = []
         BJetMedium40 = []
@@ -903,7 +848,7 @@ class EventVars1L_base:
 
 ############################################################################
         for i,j in enumerate(cJet30Clean):
-            if j.btagCSV > btagWP:
+            if j.btagDeepCSV > btagWP:
                 BJetMedium30.append(j)
 ###########################################################################
 
@@ -1039,14 +984,21 @@ class EventVars1L_base:
         ######### for ISR ###################
 ###########################################################################
 ###########################################################################
-        ISR_HT = -999
-        ISR_pT = -999
-        ISR_N = 0
-        cISRJet30Clean =  [ j for j in cJet30Clean if j.btagCSV <= 0.5803 ] 
+        
+        ISRjetp4 = ROOT.TLorentzVector(0,0,0,0) 
+        ISRJet_pt_arr = [-999 for i in range(0,20)]
+        cISRJet30Clean =  [ j for j in cJet30Clean if j.btagDeepCSV <= btagWP ] 
+        if len(cISRJet30Clean) != 0 : 
+            ISRJet_pt_arr = []
+            for j in cISRJet30Clean : 
+                ISRjetp4 += j.p4()
+                ISRJet_pt_arr.append(j.pt)
+
         ret['ISR_HT']  = sum([j.pt for j in cISRJet30Clean])
-        for j in cISRJet30Clean :
-            ret['ISR_pT']  = j.pt
         ret['ISR_N' ] = len(cISRJet30Clean)
+        ret['ISR_pT']  = ISRjetp4.Pt()
+        ret['ISRJet_pt_arr'] = ISRJet_pt_arr
+
 
 
 #####################################################################################
@@ -1055,7 +1007,7 @@ class EventVars1L_base:
        #         nBJetDeep += 1
 
         for i,j in enumerate(centralJet40):
-            if j.btagCSV > btagWP:
+            if j.btagDeepCSV > btagWP:
                 BJetMedium40.append(j)
 
         # using cleaned collection!
