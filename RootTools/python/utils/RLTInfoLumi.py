@@ -42,7 +42,7 @@ class RLTInfoLumi(object):
             
     def writeJson(self, outputJsonFileName=None ):
         if outputJsonFileName is None:
-            outputJsonFileName = self.file.GetName().replace('.root','.json')
+            outputJsonFileName = self.file.GetName().split("/")[-1].replace('.root','.json')
         jstr = json.dumps( self.compactDict )
         # print jstr
         ofile = open(outputJsonFileName, 'w')
@@ -52,7 +52,7 @@ class RLTInfoLumi(object):
     def computeLumi(self, lumiCalc, inputJsonFileName=None):
         if inputJsonFileName is None:
             inputJsonFileName = self.file.GetName().replace('.root','.json')
-        outputLumiFileName = inputJsonFileName.replace('.json','.lumi')
+        outputLumiFileName = inputJsonFileName.split("/")[-1].replace('.json','.lumi')
 ##         if lumiCalc is None:
 ##             lumiCalc = 'pixelLumiCalc.py'
         cmd = [lumiCalc, 'overview -i',
@@ -71,7 +71,7 @@ class RLTInfoLumi(object):
             spl = line.split('|')
             # print spl
             if len(spl)==6 and spl[0]=='' and spl[5]=='\n':
-                # print line
+                #print line
                 try:
                     self.sumdlum = float(spl[2]) 
                     self.sumrlum = float(spl[4]) 

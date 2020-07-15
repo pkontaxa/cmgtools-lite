@@ -207,7 +207,9 @@ WZTo2L2Q,
 #WZTo3LNu,
 ]
 
+#dav = kreator.makeMCComponentFromLocal("dav","LOCAL","/pnfs/desy.de/cms/tier2/store/mc/RunIIFall17MiniAODv2/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/MINIAODSIM/PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2/00000/",".*root")
 
+#dav_ = [dav]
 # ----------------------------- summary ----------------------------------------
 
 

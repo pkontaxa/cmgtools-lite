@@ -99,8 +99,12 @@ dataSamples_31Mar2018_1l = dataSamples_Run2017B_31Mar2018_1l + dataSamples_Run20
 
 dataSamples = dataSamples_31Mar2018
 dataSamples_1l = dataSamples_31Mar2018_1l
-
+dataSamples_31Mar2018_1l_trig = [JetHT_Run2017B_31Mar2018,JetHT_Run2017C_31Mar2018,JetHT_Run2017D_31Mar2018,JetHT_Run2017E_31Mar2018,JetHT_Run2017F_31Mar2018]
+#                                 HTMHT_Run2017B_31Mar2018,HTMHT_Run2017C_31Mar2018,HTMHT_Run2017D_31Mar2018,HTMHT_Run2017E_31Mar2018,HTMHT_Run2017F_31Mar2018]
 samples = dataSamples
+
+dav_data = kreator.makeDataComponentFromLocal("dav","LOCAL","/pnfs/desy.de/cms/tier2/store/data/Run2017B/SingleMuon/MINIAOD/31Mar2018-v1/80000/",".*root")
+
 
 # ---------------------------------------------------------------------
 

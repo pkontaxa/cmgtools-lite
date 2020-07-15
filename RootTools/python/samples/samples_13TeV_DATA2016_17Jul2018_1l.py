@@ -32,6 +32,7 @@ Tau_Run2016B_17Jul2018_v2  = kreator.makeDataComponent("Tau_Run2016B_17Jul2018_v
 dataSamples_Run2016B_17Jul2018_v2 = [JetHT_Run2016B_17Jul2018_v2, HTMHT_Run2016B_17Jul2018_v2, MET_Run2016B_17Jul2018_v2, SingleElectron_Run2016B_17Jul2018_v2, SingleMuon_Run2016B_17Jul2018_v2]#, SinglePhoton_Run2016B_17Jul2018_v2, DoubleEG_Run2016B_17Jul2018_v2, MuonEG_Run2016B_17Jul2018_v2, DoubleMuon_Run2016B_17Jul2018_v2, Tau_Run2016B_17Jul2018_v2]
 dataSamples_Run2016B_17Jul2018_v2_1l = [MET_Run2016B_17Jul2018_v2, SingleElectron_Run2016B_17Jul2018_v2, SingleMuon_Run2016B_17Jul2018_v2]#, SinglePhoton_Run2016B_17Jul2018_v2, DoubleEG_Run2016B_17Jul2018_v2, MuonEG_Run2016B_17Jul2018_v2, DoubleMuon_Run2016B_17Jul2018_v2, Tau_Run2016B_17Jul2018_v2]
 dataSamples_Run2016B_17Jul2018_v2_2l = [DoubleMuon_Run2016B_17Jul2018_v2, DoubleEG_Run2016B_17Jul2018_v2]
+
 ### ----------------------------- Run2016C 17Jul2018 ----------------------------------------
 
 JetHT_Run2016C_17Jul2018          = kreator.makeDataComponent("JetHT_Run2016C_17Jul2018"         , "/JetHT/Run2016C-17Jul2018-v1/MINIAOD"         , "CMS", ".*root", json)
@@ -81,7 +82,6 @@ Tau_Run2016E_17Jul2018            = kreator.makeDataComponent("Tau_Run2016E_17Ju
 dataSamples_Run2016E_17Jul2018 = [JetHT_Run2016E_17Jul2018, HTMHT_Run2016E_17Jul2018, MET_Run2016E_17Jul2018, SingleElectron_Run2016E_17Jul2018, SingleMuon_Run2016E_17Jul2018]#, SinglePhoton_Run2016E_17Jul2018, DoubleEG_Run2016E_17Jul2018, MuonEG_Run2016E_17Jul2018, DoubleMuon_Run2016E_17Jul2018, Tau_Run2016E_17Jul2018]
 dataSamples_Run2016E_17Jul2018_1l = [MET_Run2016E_17Jul2018, SingleElectron_Run2016E_17Jul2018, SingleMuon_Run2016E_17Jul2018]#, SinglePhoton_Run2016E_17Jul2018, DoubleEG_Run2016E_17Jul2018, MuonEG_Run2016E_17Jul2018, DoubleMuon_Run2016E_17Jul2018, Tau_Run2016E_17Jul2018]
 dataSamples_Run2016E_17Jul2018_2l = [DoubleEG_Run2016E_17Jul2018,DoubleMuon_Run2016E_17Jul2018]
-
 
 ### ----------------------------- Run2016F 17Jul2018 v1 ----------------------------------------
 
@@ -138,7 +138,10 @@ dataSamples_Run2016H_17Jul2018_v1_2l = [DoubleEG_Run2016H_17Jul2018_v1,DoubleMuo
 dataSamples_17Jul2018 = dataSamples_Run2016B_17Jul2018_v2 + dataSamples_Run2016C_17Jul2018 + dataSamples_Run2016D_17Jul2018 + dataSamples_Run2016E_17Jul2018 + dataSamples_Run2016F_17Jul2018 + dataSamples_Run2016G_17Jul2018 + dataSamples_Run2016H_17Jul2018_v1 
 dataSamples_17Jul2018_1l = dataSamples_Run2016B_17Jul2018_v2_1l + dataSamples_Run2016C_17Jul2018_1l + dataSamples_Run2016D_17Jul2018_1l + dataSamples_Run2016E_17Jul2018_1l + dataSamples_Run2016F_17Jul2018_1l + dataSamples_Run2016G_17Jul2018_1l + dataSamples_Run2016H_17Jul2018_v1_1l 
 dataSamples_17Jul2018_2l = dataSamples_Run2016B_17Jul2018_v2_2l + dataSamples_Run2016C_17Jul2018_2l + dataSamples_Run2016D_17Jul2018_2l + dataSamples_Run2016E_17Jul2018_2l + dataSamples_Run2016F_17Jul2018_2l + dataSamples_Run2016G_17Jul2018_2l + dataSamples_Run2016H_17Jul2018_v1_2l 
-
+dataSamples_17Jul2018_trig = [JetHT_Run2016B_17Jul2018_v2,JetHT_Run2016C_17Jul2018,JetHT_Run2016D_17Jul2018,JetHT_Run2016E_17Jul2018,JetHT_Run2016F_17Jul2018,
+                             JetHT_Run2016G_17Jul2018,JetHT_Run2016H_17Jul2018_v1]#,
+#                             HTMHT_Run2016B_17Jul2018_v2,HTMHT_Run2016C_17Jul2018,HTMHT_Run2016D_17Jul2018,HTMHT_Run2016E_17Jul2018,HTMHT_Run2016F_17Jul2018,
+#                             HTMHT_Run2016G_17Jul2018, HTMHT_Run2016H_17Jul2018_v1]
 
 dataSamples = dataSamples_17Jul2018
 samples = dataSamples

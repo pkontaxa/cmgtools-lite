@@ -13,8 +13,8 @@ from PhysicsTools.HeppyCore.framework.heppy_loop import getHeppyOption
 #-------- SET OPTIONS AND REDEFINE CONFIGURATIONS -----------
 
 run80X = getHeppyOption("run80X",False)
-run94X = getHeppyOption("run94X",True)
-run104X = getHeppyOption("run104X",False)
+run94X = getHeppyOption("run94X",False)
+run104X = getHeppyOption("run104X",True)
 
 runData = getHeppyOption("runData",False)
 runMC = getHeppyOption("runMC",True)
@@ -33,9 +33,9 @@ selectedEvents=getHeppyOption("selectEvents","")
 keepGenPart=getHeppyOption("keepGenPart",False)
 
 sample = "main"
-test = 0    
-multib = False
-zerob = True
+test = 0   
+multib = True
+zerob = False
 
 # Lepton Skimming
 ttHLepSkim.minLeptons = 0
@@ -194,7 +194,7 @@ anyLepSkim = cfg.Analyzer(
 from CMGTools.TTHAnalysis.analyzers.ttHSTSkimmer import ttHSTSkimmer
 ttHSTSkimmer = cfg.Analyzer(
   ttHSTSkimmer, name='ttHSTSkimmer',
-  minST = 0,
+  minST = 150,
   )
 
 from CMGTools.TTHAnalysis.analyzers.nIsrAnalyzer import NIsrAnalyzer
@@ -212,7 +212,7 @@ if not run104X :
 from CMGTools.TTHAnalysis.analyzers.ttHHTSkimmer import ttHHTSkimmer
 ttHHTSkimmer = cfg.Analyzer(
   ttHHTSkimmer, name='ttHHTSkimmer',
-  minHT = 0,
+  minHT = 350,
   )
 
 
@@ -451,33 +451,12 @@ if runMC:
       # apply a loose lepton skim to MC
       anyLepSkim.minLeptons = 1
       #pick the file you want to run on
-      selectedComponents = DYJetsInc
-      
-#  [TTJets_SingleLeptonFromTbar,TTJets_SingleLeptonFromTbar_ext,TTJets_SingleLeptonFromT,TTJets_DiLepton,TTJets_DiLepton_ext,
-  if test==1:
-    # test a single component, using a single thread.
-    comp = selectedComponents[0]
-    comp.files = comp.files[:1]
-    selectedComponents = [comp]
-    comp.splitFactor = 1
-  elif test==2:
-    # test all components (1 thread per component).
-    for comp in selectedComponents:
-      comp.splitFactor = 1
-      comp.fineSplitFactor = 1
-      comp.files = comp.files[:1]
-  elif test==3:
-    # run all components (1 thread per component).
-    for comp in selectedComponents:
+      selectedComponents = mcSamples#[DYJetsToLL_M_10to50]
+
+  for comp in selectedComponents:
       comp.fineSplitFactor = 1
       comp.splitFactor = len(comp.files)
-  elif test==0:
-    selectedComponents = selectedComponents
-    #selectedComponents = [WJetsToLNuHT[1]]
-    #selectedComponents = mcSamples
-    for comp in selectedComponents:
-      comp.fineSplitFactor = 1
-      comp.splitFactor = len(comp.files)
+
   treeProducer.globalVariables+=[
        NTupleVariable("lheHT", lambda ev : ev.lheHT, help="H_{T} computed from quarks and gluons in Heppy LHEAnalyzer"),
        NTupleVariable("lheHTIncoming", lambda ev : ev.lheHTIncoming, help="H_{T} computed from quarks and gluons in Heppy LHEAnalyzer (only LHE status<0 as mothers)"),
@@ -529,30 +508,12 @@ elif runSig:
   
   if multib and zerob : print "Warning ! Both zero b and multi b is set to  True, you will be running Zero b signals ;"
   if not (multib or zerob) : print 8*"*", "Error ! Choose a signal to process", 8*"*"
-  if test==1:
-    # test a single component, using a single thread.
-    if multib: comp  = SMS_T1ttttCP5_MVA
-    if zerob: comp  = SMS_T5qqqqVV_TuneCUETP8M1
-    comp.files = comp.files[:2]
-    selectedComponents = [comp]
-    comp.splitFactor = 1
-  elif test==2:
-    # test all components (1 thread per component).
-    for comp in selectedComponents:
-      comp.splitFactor = 1
+
+# PRODUCTION
+# run on everything
+  for comp in selectedComponents:
       comp.fineSplitFactor = 1
-      comp.files = comp.files[:1]
-  elif test==3:
-    # run all components (1 thread per component).
-    for comp in selectedComponents:
-      comp.fineSplitFactor = 1
-      comp.splitFactor = len(comp.files)
-  elif test==0:
-    # PRODUCTION
-    # run on everything
-    for comp in selectedComponents:
-      comp.fineSplitFactor = 1
-      comp.splitFactor = len(comp.files)
+      comp.splitFactor = len(comp.files)/3
 
   susyCoreSequence.insert(susyCoreSequence.index(susyScanAna)+1,
         susyCounter)
@@ -581,9 +542,6 @@ elif runSig:
        NTupleVariable("prefireWdwn", lambda ev: ev.prefiringweightdown, help="get the prefire weight down in Heppy prefireanalyzer"),
 
     ]
-  if zerob:
-      treeProducer.globalVariables+=[NTupleVariable("GenSusyMChargino", lambda ev : ev.genSusyMChargino, int, mcOnly=True, help="Susy Chargino mass")]
-
 
 if runData : # For running on data
 
@@ -595,47 +553,24 @@ if runData : # For running on data
   # central samples
   if run80X:
       from CMGTools.RootTools.samples.samples_13TeV_DATA2016_17Jul2018_1l import *
-      selectedComponents = [SingleMuon_Run2016H_17Jul2018_v1]#dataSamples_17Jul2018_2l # for instance
+      selectedComponents = dataSamples_17Jul2018_trig#dataSamples_17Jul2018_2l # for instance
   elif run94X : 
       from CMGTools.RootTools.samples.samples_13TeV_DATA2017 import *
-      selectedComponents = dataSamples_31Mar2018_1l
+      selectedComponents = dataSamples_31Mar2018_1l_trig#dataSamples_31Mar2018_1l
   else : 
       from CMGTools.RootTools.samples.samples_13TeV_DATA2018 import *
-      selectedComponents = dataSamples_17Sep2018_1l
-      
-  if (test != 0 and jsonAna in sequence):
-      sequence.remove(jsonAna)
-  if test==1:
-    # test one component (2 thread)
-    comp = selectedComponents[1]
-#    comp.files = comp.files[:1]
-    comp.files = comp.files[10:11]
-    print comp.files 
-    selectedComponents = [comp]
-    comp.splitFactor = len(comp.files)
-  elif test==2:
-    # test all components (1 thread per component).
-    for comp in selectedComponents:
-      comp.splitFactor = 1
-      comp.fineSplitFactor = 1
-      comp.files = comp.files[10:11]
-  elif test==3:
-    # run all components (10 files per component).
-    for comp in selectedComponents:
-      comp.files = comp.files[20:30]
-      comp.fineSplitFactor = 1
+      selectedComponents = dataSamples_17Sep2018_1l_trig#dataSamples_17Sep2018_1l
+# PRODUCTION
+# run on everything
+  for comp in selectedComponents:
       comp.splitFactor = len(comp.files)
-  elif test==0:
-    # PRODUCTION
-    # run on everything
-    for comp in selectedComponents:
       comp.fineSplitFactor = 1
-      comp.splitFactor = len(comp.files)
   sequence.remove(anyLepSkim)
   sequence.remove(NIsrAnalyzer)
   sequence.remove(ttHSTSkimmer)
   sequence.remove(PrefiringAnalyzer)
   sequence.remove(susyScanAna)
+  
 
 if removeJetReCalibration:
     jetAna.recalibrateJets = False
@@ -688,10 +623,12 @@ elif runMC  or runSig and run104X:
 elif runData and run104X:
     fname1="./FatJetNN_104X_data.py"
 
-preprocessor =  CmsswPreprocessor(fname1)
+preprocessor = CmsswPreprocessor(fname1)
 
-ttHFatJetAna.jetCol="deepntuplizer"
-#jetAna.jetCol = 'selectedUpdatedPatJets'
+if preprocessor != None : 
+    ttHFatJetAna.jetCol="deepntuplizer"
+#else : 
+#    jetAna.jetCol = 'selectedUpdatedPatJets'
 ##################################################################################################
 
 selectComponents = getHeppyOption('selectComponents',None)

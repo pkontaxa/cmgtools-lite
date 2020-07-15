@@ -22,18 +22,9 @@ eleEta = 2.4
 # Jets
 ###########
 
-corrJEC = "central" # can be "central","up","down"
-JECAllowedValues = ["central","up","down"]
-assert any(val==corrJEC for val in JECAllowedValues)
-
 smearJER = "None"# can be "None","central","up","down"
 JERAllowedValues = ["None","central","up","down"]
 assert any(val==smearJER for val in JERAllowedValues)
-
-print
-print 30*'#'
-print 'Going to use', corrJEC , 'JEC and', smearJER, 'JER!'
-print 30*'#'
 
 def getRecalcMET(metp4, event, corrJEC = "central", smearJER = "None"):
     ## newMETp4 = oldMETp4 - (Sum(oldJetsP4) - Sum(newJetsP4))
@@ -172,8 +163,14 @@ goodEl_sip3d = 4
 goodMu_sip3d = 4
 
 class EventVars1L_base:
-    def __init__(self):
-
+    def __init__(self,corrJEC = "central"):
+        self.corrJEC = corrJEC
+        JECAllowedValues = ["central","up","down"]
+        assert any(val==self.corrJEC for val in JECAllowedValues)
+        print
+        print 30*'#'
+        print 'Going to use', self.corrJEC , 'JEC and', smearJER, 'JER!'
+        print 30*'#'
         self.branches = [
             ## general event info
             'Run','Lumi','Xsec',("Event","l"),'genWeight','isData',
@@ -389,8 +386,7 @@ class EventVars1L_base:
 
                 # ID, IP and Iso check:
                 passID = 0
-                if muID=='ICHEPmediumMuonId': passID = lep.ICHEPmediumMuonId
-                else: passID = lep.mediumMuonId
+                passID = lep.mediumMuonId
                 passIso = lep.miniRelIso < muo_miniIsoCut
                 passIP = lep.sip3d < goodMu_sip3d
 
@@ -413,40 +409,40 @@ class EventVars1L_base:
             ###################
 
             elif(abs(lep.pdgId) == 11):
-
+                
                 if lepEta > eleEta: continue
-
                 # pass variables
                 passIso = False
                 passConv = False
 
-                if eleID == 'CB':
-                    # ELE CutBased ID
-                    eidCB = lep.eleCBID_FALL17_94X_ConvVetoDxyDz
-
-                    passTightID = (eidCB == 4)
-                    passMediumID = (eidCB >= 3)
-                    #passLooseID = (eidCB >= 2)
-                    passVetoID = (eidCB >= 1)
+                # ELE CutBased ID
+                eidCB = lep.eleCBID_FALL17_94X_ConvVetoDxyDz
+                print(eidCB)
+                passTightID = (eidCB == 4)
+                passMediumID = (eidCB >= 3)
+                #passLooseID = (eidCB >= 2)
+                passVetoID = (eidCB >= 1)
 
                 # selected
                 if passTightID:
-
+                    print(passTightID)
                     # all tight leptons are veto for anti
                     antiVetoLeps.append(lep)
 
                     # Iso check:
                     if lep.miniRelIso < ele_miniIsoCut: passIso = True
-                    elif eleID == 'CB':
-                        passConv = True # cuts already included in POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_X
+                    passConv = True # cuts already included in POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_X
 
 
                     passPostICHEPHLTHOverE = True # comment out again if (lep.hOverE < 0.04 and abs(lep.eta)>1.479) or abs(lep.eta)<=1.479 else False
 
+                    print(passIso , passConv , passPostICHEPHLTHOverE)
                     # fill
-                    if passIso and passConv and passPostICHEPHLTHOverE:
+                    if passIso and passPostICHEPHLTHOverE:
+                        print("passIso")
                         selectedTightLeps.append(lep); selectedTightLepsIdx.append(idx)
                     else:
+                        print("didn't passIso")
                         selectedVetoLeps.append(lep)
 
                 # anti-selected
@@ -521,16 +517,11 @@ class EventVars1L_base:
                 if lep.miniRelIso > Lep_miniIsoCut: continue
 
                 ## Set Ele IDs
-                if eleID == 'CB':
-                    # ELE CutBased ID
-                    eidCB = lep.eleCBID_SPRING15_25ns_ConvVetoDxyDz
+                # ELE CutBased ID
+                eidCB = lep.eleCBID_FALL17_94X_ConvVetoDxyDz
 
-                    passMediumID = (eidCB >= 3)
-                    passVetoID = (eidCB >= 1)
-                else:
-                    passMediumID = False
-                    passVetoID = False
-
+                passMediumID = (eidCB >= 3)
+                passVetoID = (eidCB >= 1)
                 # Cuts for Anti-selected electrons
                 if not passMediumID:
                     # should always be true for LepOther
@@ -652,12 +643,12 @@ class EventVars1L_base:
 
         # Apply JEC up/down variations if needed (only MC!)
         if event.isData == False:
-            if corrJEC == "central":
+            if self.corrJEC == "central":
                 pass # don't do anything
                 #for jet in jets: jet.pt = jet.rawPt * jet.corr
-            elif corrJEC == "up":
+            elif self.corrJEC == "up":
                 for jet in jets: jet.pt = jet.rawPt * jet.corr_JECUp
-            elif corrJEC == "down":
+            elif self.corrJEC == "down":
                 for jet in jets: jet.pt = jet.rawPt * jet.corr_JECDown
             else:
                 pass
@@ -1035,9 +1026,9 @@ class EventVars1L_base:
             metp4.SetPtEtaPhiM(event.met_pt,event.met_eta,event.met_phi,event.met_mass)
 
         # recalc MET
-        if corrJEC != "central" or smearJER!= "None":
+        if self.corrJEC != "central" or smearJER!= "None":
             ## get original jet collection
-            metp4 = getRecalcMET(metp4,event,corrJEC,smearJER)
+            metp4 = getRecalcMET(metp4,event,self.corrJEC,smearJER)
         
         Genmetp4 = ROOT.TLorentzVector(0,0,0,0)
         

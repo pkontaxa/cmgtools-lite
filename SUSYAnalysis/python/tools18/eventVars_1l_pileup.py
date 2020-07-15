@@ -31,14 +31,13 @@ def getPUdict(fname, puHistName = "pileup"):
 
     return puDict
 
-# 2017 Data/MC
-puFileName_up = "../python/tools17/pileup/PU_minBiasUP17.root"
-puFileName_norm = "../python/tools17/pileup/PU_Central17.root"
-puFileName_down = "../python/tools17/pileup/PU_minBiasDOWN17.root"
 
-puNorm =  getPUdict(puFileName_norm)
-puUp =  getPUdict(puFileName_up)
-puDown =  getPUdict(puFileName_down)
+# 2016 UL
+puFileName = "../python/PileupWeights/puWeights_Run2.root"
+
+puNorm =  getPUdict(puFileName,puHistName = "puWeight2018" )
+puUp =  getPUdict(puFileName,puHistName = "puWeight2018Up")
+puDown =  getPUdict(puFileName,puHistName = "puWeight2018Down")
 
 print 80*"#"
 print "Loaded PU weights!"

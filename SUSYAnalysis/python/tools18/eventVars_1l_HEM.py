@@ -15,7 +15,7 @@ class EventVars1L_HEM:
     def __init__(self):
 
         self.branches = [
-            "nHEMJetVeto","nHEMEleVeto","etaHEMJetVeto","etaHEMEleVeto","phiHEMJetVeto","phiHEMEleVeto","ptHEMJetVeto","ptHEMEleVeto","HEM_MC_SF"
+            "nHEMJetVeto","nHEMEleVeto","etaHEMJetVeto","etaHEMEleVeto","phiHEMJetVeto","phiHEMEleVeto","ptHEMJetVeto","ptHEMEleVeto","HEM_MC_SF","HEM_MC_SF2"
             ]
 
     def listBranches(self):
@@ -67,8 +67,10 @@ class EventVars1L_HEM:
             ret['nHEMJetVeto'] = 0 
         if (len(HEMJetVeto)+len(HEMEleVeto)) != 0 :
             ret["HEM_MC_SF"] = 1.0 - 0.655
+            ret["HEM_MC_SF2"] = 28.8
         else : 
             ret["HEM_MC_SF"] = 1.0
+            ret["HEM_MC_SF2"] = 1.0
         return ret
 
 # Main function for test

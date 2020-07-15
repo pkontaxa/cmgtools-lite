@@ -42,5 +42,6 @@ if [ -d "$CMSSW_BASE/python/PhysicsTools/PatUtils" ]; then
 fi
 
 #ls -lR 
+export USER='amohamed'
 
 python heppy_crab_script.py $@

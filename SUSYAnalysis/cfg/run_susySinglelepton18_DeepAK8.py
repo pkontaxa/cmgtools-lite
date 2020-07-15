@@ -17,8 +17,8 @@ run94X = getHeppyOption("run94X",True)
 run104X = getHeppyOption("run104X",False)
 
 runData = getHeppyOption("runData",False)
-runMC = getHeppyOption("runMC",True)
-runSig = getHeppyOption("runSig",False)
+runMC = getHeppyOption("runMC",False)
+runSig = getHeppyOption("runSig",True)
 
 runFastsim = getHeppyOption("runFastS",False)
 
@@ -33,9 +33,9 @@ selectedEvents=getHeppyOption("selectEvents","")
 keepGenPart=getHeppyOption("keepGenPart",False)
 
 sample = "main"
-test = 3    
-multib = True
-zerob = False
+test = 0   
+multib = False
+zerob = True
 
 # Lepton Skimming
 ttHLepSkim.minLeptons = 0
@@ -194,7 +194,7 @@ anyLepSkim = cfg.Analyzer(
 from CMGTools.TTHAnalysis.analyzers.ttHSTSkimmer import ttHSTSkimmer
 ttHSTSkimmer = cfg.Analyzer(
   ttHSTSkimmer, name='ttHSTSkimmer',
-  minST = 0,
+  minST = 150,
   )
 
 from CMGTools.TTHAnalysis.analyzers.nIsrAnalyzer import NIsrAnalyzer
@@ -212,7 +212,7 @@ if not run104X :
 from CMGTools.TTHAnalysis.analyzers.ttHHTSkimmer import ttHHTSkimmer
 ttHHTSkimmer = cfg.Analyzer(
   ttHHTSkimmer, name='ttHHTSkimmer',
-  minHT = 0,
+  minHT = 350,
   )
 
 
@@ -456,8 +456,10 @@ if runMC:
 #  [TTJets_SingleLeptonFromTbar,TTJets_SingleLeptonFromTbar_ext,TTJets_SingleLeptonFromT,TTJets_DiLepton,TTJets_DiLepton_ext,
   if test==1:
     # test a single component, using a single thread.
-    comp = selectedComponents[0]
-    comp.files = comp.files[:1]
+    #selectedComponents = dav_
+    comp = selectedComponents[0]#selectedComponents[0]
+    #comp.files = comp.files[0]
+    comp.files = ['root://cms-xrd-global.cern.ch///store/mc/RunIIFall17MiniAODv2/TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/00000/32E8147E-49C9-E811-A3F5-0242AC1C0506.root']
     selectedComponents = [comp]
     comp.splitFactor = 1
   elif test==2:
@@ -581,10 +583,7 @@ elif runSig:
        NTupleVariable("prefireWdwn", lambda ev: ev.prefiringweightdown, help="get the prefire weight down in Heppy prefireanalyzer"),
 
     ]
-  if zerob:
-      treeProducer.globalVariables+=[NTupleVariable("GenSusyMChargino", lambda ev : ev.genSusyMChargino, int, mcOnly=True, help="Susy Chargino mass")]
-
-
+  
 if runData : # For running on data
 
   print 'Going to process DATA'
@@ -607,8 +606,9 @@ if runData : # For running on data
       sequence.remove(jsonAna)
   if test==1:
     # test one component (2 thread)
-    comp = selectedComponents[1]
-#    comp.files = comp.files[:1]
+    #comp = selectedComponents[1]
+    comp = dav_data
+    #comp.files = ['/pnfs/desy.de/cms/tier2/store/data/Run2017B/SingleMuon/MINIAOD/31Mar2018-v1/80000/12503579-2639-E811-9A52-0025905B85FC.root']
     comp.files = comp.files[10:11]
     print comp.files 
     selectedComponents = [comp]
@@ -636,6 +636,7 @@ if runData : # For running on data
   sequence.remove(ttHSTSkimmer)
   sequence.remove(PrefiringAnalyzer)
   sequence.remove(susyScanAna)
+  
 
 if removeJetReCalibration:
     jetAna.recalibrateJets = False
