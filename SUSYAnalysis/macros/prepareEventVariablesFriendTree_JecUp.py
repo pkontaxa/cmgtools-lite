@@ -7,7 +7,7 @@ import shutil
 MODULES = []
 
 from CMGTools.SUSYAnalysis.tools.eventVars_1l_base import EventVars1L_base
-MODULES.append( ('1l_Basics', EventVars1L_base(corrJEC = "central")) )#["central","up","down"]
+MODULES.append( ('1l_Basics', EventVars1L_base(corrJEC = "up")) )#["central","up","down"]
 # triggers
 from CMGTools.SUSYAnalysis.tools.eventVars_1l_triggers import EventVars1L_triggers
 MODULES.append( ('1l_Triggers', EventVars1L_triggers()) )
@@ -40,9 +40,6 @@ MODULES.append( ('1l_isoMT2', EventVars1L_isoMT2()) )
 
 from CMGTools.SUSYAnalysis.tools.Weight_for_Scale_with_Pickle_File import Weight_for_Scale
 MODULES.append( ('Weight_Scale',  Weight_for_Scale()) )
-
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_HEM import EventVars1L_HEM
-MODULES.append( ('1l_HEM',  EventVars1L_HEM()) )
 
 #from CMGTools.SUSYAnalysis.tools.eventVars_1l_genLevel import EventVars1LGenLevel
 #MODULES.append( ('1l_BasicsGen', EventVars1LGenLevel()) )
@@ -151,7 +148,7 @@ for D in glob(args[0]+"/*"):
         treename = "tree"
         fname    = "%s/%s/tree.root" % (D,options.tree)
         fname    = open(fname+".url","r").readline().strip()
-    #if  not ("/SMS_T5qqqqVV" in fname) : continue 
+    if  ( ("/DoubleEG" in fname) or("/DoubleMuon" in fname)) : continue 
     if os.path.exists(fname) or (os.path.exists("%s/%s/tree.root.url" % (D,options.tree))):
         short = os.path.basename(D)
         if options.datasets != []:
@@ -260,15 +257,18 @@ if options.naf:
             jobList.write("{base} -d {data} {post}".format(base=basecmd, data=name, chunk=chunk, post=friendPost)+'\n')
     jobList.close()
     # check log dir
-    JDir = os.path.join(outdir,"jobs")
-    if os.path.exists(JDir):
-        shutil.rmtree(JDir)
-    logdir = os.path.join(outdir,'Logs')
+    logdir = 'logs'
     if not os.path.exists(logdir): os.system("mkdir -p "+logdir)
+    if  os.path.exists('submit_Friends.sh'):
+        os.remove('submit_Friends.sh')
+	
+    if  os.path.exists('condor.sub_all'):
+        os.remove('condor.sub_all')
+
     print "batch Mode is on NAF is selected"
     print jobListName
     listtxt = open(str(jobListName),"r")
-    for i,line in enumerate(listtxt): 
+    for line in listtxt: 
         line = line.strip()
         if line.startswith('#') : 
             print "commented line continue!"
@@ -281,48 +281,40 @@ if options.naf:
 			exten = exten.split(" ")[0]+"_"+exten.split(" ")[-1]
         if os.path.exists(outdir+'/'+exten):
             shutil.rmtree(outdir+'/'+exten)
-        confDir = os.path.join(JDir,exten)
-        if not os.path.exists(confDir): 
-            os.makedirs(confDir)    
-        
-        exec_ = open(confDir+"/exec.sh","w+")
-        exec_.write("#"+"!"+"/bin/bash"+"\n")
-        exec_.write("source /etc/profile"+"\n")
-        exec_.write("source /cvmfs/cms.cern.ch/cmsset_default.sh"+"\n")
-        exec_.write("workdir="+os.environ['CMSSW_BASE']+"/src"+"\n")
-        exec_.write("melalibdir=${CMSSW_BASE}/lib/slc6_amd64_gcc630/"+"\n")
-        exec_.write("exedir=`echo "+str(os.getcwd())+"`"+"\n")
-        exec_.write("export LD_LIBRARY_PATH=${melalibdir}:$LD_LIBRARY_PATH"+"\n")
-        exec_.write("cd ${workdir}"+"\n")
-        exec_.write("eval `scramv1 runtime -sh`"+"\n")
-        exec_.write("cd ${exedir}"+"\n")
-        exec_.write("echo 'running job' >> "+confDir+"/processing"+"\n")
-        exec_.write(line)
-        exec_.write("\n")
-        # let the script deletes itself after finishing the job
-        exec_.write("rm -rf "+confDir)
-        exec_.close()
-    subFilename = os.path.join(JDir,"submitFRs.conf")
-    subFile = open(subFilename,"w+")
-    subFile.write("executable = $(DIR)/exec.sh"+"\n")
-    subFile.write("universe =  vanilla")
-    subFile.write("\n")
-    subFile.write("should_transfer_files = YES")
-    subFile.write("\n")
-    subFile.write("log = "+"{}/job_$(Cluster)_$(Process).log".format(os.path.abspath(logdir)))
-    subFile.write("\n")
-    subFile.write("output = "+"{}/job_$(Cluster)_$(Process).out".format(os.path.abspath(logdir)))
-    subFile.write("\n")
-    subFile.write("error = "+"{}/job_$(Cluster)_$(Process).err".format(os.path.abspath(logdir)))
-    subFile.write("\n")
-    subFile.write("when_to_transfer_output   = ON_EXIT")
-    subFile.write("\n")
-    subFile.write('Requirements  = (OpSysAndVer == "SL6")')
-    subFile.write("\n")
-    subFile.write("materialize_max_idle = 1000"+"\n")
-    subFile.write("queue DIR matching dirs "+JDir+"/*/")
-    subFile.close()
-    os.system("condor_submit "+subFilename)
+        os.mkdir(outdir+'/'+exten)
+        condsub = outdir+'/'+exten+"/submit.condor"
+        wrapsub = outdir+'/'+exten+"/wrapnanoPost.sh"
+        os.system("cp templates/wrapnanoPost.sh "+wrapsub)
+        tempW = open(wrapsub).read()
+        tempW = tempW.replace('@WORKDIR',os.environ['CMSSW_BASE']+"/src").replace('@EXEDIR',str(os.getcwd())).replace('@CMDBINS',line)
+        tempW_roRun = open(wrapsub, 'w')
+        tempW_roRun.write(tempW)
+        tempW_roRun.close()
+        if not options.bulk : 
+            os.system("cp templates/submit.condor "+condsub)
+            temp = open(condsub).read()
+            temp = temp.replace('@EXESH',str(os.getcwd())+"/"+wrapsub).replace('@LOGS',str(logdir)).replace('@time','60*60*2')
+            temp_toRun =  open(condsub, 'w')
+            temp_toRun.write(temp)
+            subCmd = 'condor_submit '+condsub
+            print 'Going to submit', line.split("-d ")[-1] , 'jobs with', subCmd
+            file = open('submit_Friends.sh','a')
+            file.write("\n") 
+            file.write(subCmd)
+            file.close() 
+    if options.bulk : 
+        os.system("cp templates/submit.condor ./condor.sub_all")
+        temp = open('condor.sub_all').read()
+        temp = temp.replace('@EXESH',str(os.getcwd())+'/$(Chunk)/wrapnanoPost.sh').replace('@LOGS',str(logdir)).replace('@time','60*60*2').replace('Queue 1','queue Chunk matching dirs '+outdir+'/*')
+        temp_toRun =  open('condor.sub_all', 'w')
+        temp_toRun.write(temp)
+        temp_toRun.close()
+    if  os.path.exists('condor.sub_all'):
+        os.system('condor_submit condor.sub_all')
+    if  os.path.exists('submit_Friends.sh'):
+        os.system('chmod a+x submit_Friends.sh')
+        print " ===== the script submit_Friends.sh os now created for your job list please use ./submit_Friends.sh to have them running now ======"
+
     listtxt.close()
     # submit job array on list
 #    subCmd = 'condor_qsub -t 1-%s -o logs nafbatch_runner.sh %s' %(len(jobs),jobListName)

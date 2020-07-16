@@ -22,18 +22,10 @@ eleEta = 2.4
 # Jets
 ###########
 
-corrJEC = "central"  # can be "central","up","down"
-JECAllowedValues = ["central","up","down"]
-assert any(val==corrJEC for val in JECAllowedValues)
 
 smearJER = "None"# can be "None","central","up","down"
 JERAllowedValues = ["None","central","up","down"]
 assert any(val==smearJER for val in JERAllowedValues)
-
-print
-print 30*'#'
-print 'Going to use', corrJEC , 'JEC and', smearJER, 'JER!'
-print 30*'#'
 
 def getRecalcMET(metp4, event, corrJEC = "central", smearJER = "None"):
     ## newMETp4 = oldMETp4 - (Sum(oldJetsP4) - Sum(newJetsP4))
@@ -165,8 +157,14 @@ goodEl_sip3d = 4
 goodMu_sip3d = 4
 
 class EventVars1L_base:
-    def __init__(self):
-
+    def __init__(self,corrJEC = "central" ): # can be "central","up","down"):
+        self.corrJEC = corrJEC
+        JECAllowedValues = ["central","up","down"]
+        assert any(val==self.corrJEC for val in JECAllowedValues)
+        print
+        print 30*'#'
+        print 'Going to use', self.corrJEC , 'JEC and', smearJER, 'JER!'
+        print 30*'#'
         self.branches = [
             ## general event info
             'Run','Lumi','Xsec',("Event","l"),'genWeight','isData',
@@ -189,13 +187,16 @@ class EventVars1L_base:
             "DeltaPhiLepW", 'dPhi','Lp',
             "GendPhi","GenLT","GenMET",
             # no HF stuff
-#            'METNoHF', 'LTNoHF', 'dPhiNoHF',
+            #'METNoHF', 'LTNoHF', 'dPhiNoHF',
             ## jets
             'HT','nJets',('nBJet','I'), 'nBJetDeep',
-            ("nJets30","I"),("Jets30Idx","I",50,"nJets30"),'nBJets30','nJets30Clean',
+            ("nJets30","I"),("Jets30Idx","I",50,"nJets30"),'nBJets30',('nJets30Clean',"I"),
             'Jet_pt','Jet_eta','Jet_phi',
 
-            ('Jet_pt_arr','F',20,20),
+            ('Jet_pt_arr','F',20,"nJets30Clean"),
+            ('Jet_eta_arr','F',20,"nJets30Clean"),
+            ('Jet_phi_arr','F',20,"nJets30Clean"),
+            
             ('ISRJet_pt_arr','F',20,20),
 
 
@@ -233,7 +234,16 @@ class EventVars1L_base:
             "prefireW","prefireWup","prefireWdwn",
 ################################################### to get all the variables in the FR rather than trees ##############################################
             "met_caloPt","lheHTIncoming","genTau_grandmotherId","genTau_motherId","genLep_grandmotherId","genLep_motherId","DiLep_Flag","semiLep_Flag",
-            "nWLoose","nWMedium","nWTight","nWVeryTight"
+            "nWLoose","nWMedium","nWTight","nWVeryTight",
+################################################### 2018 HEM 15/16 issue ##############################################
+            ("nHEMJetVeto","I"),("nHEMEleVeto","I"),
+            ('etaHEMJetVeto','F',20,"nHEMJetVeto"),
+            ('phiHEMJetVeto','F',20,"nHEMJetVeto"),
+            ('ptHEMJetVeto','F',20,"nHEMJetVeto"),
+            ('etaHEMEleVeto','F',10,"nHEMEleVeto"),
+            ('phiHEMEleVeto','F',10,"nHEMEleVeto"),
+            ('ptHEMEleVeto','F',10,"nHEMEleVeto"),
+            "HEM_MC_SF","HEM_MC_SF2",
             ]
 
     def listBranches(self):
@@ -417,14 +427,13 @@ class EventVars1L_base:
                 passIso = False
                 passConv = False
 
-                if eleID == 'CB':
-                    # ELE CutBased ID
-                    eidCB = lep.eleCBID_FALL17_94X_ConvVetoDxyDz
+                # ELE CutBased ID
+                eidCB = lep.eleCBID_FALL17_94X_ConvVetoDxyDz
 
-                    passTightID = (eidCB == 4)
-                    passMediumID = (eidCB >= 3)
-                    #passLooseID = (eidCB >= 2)
-                    passVetoID = (eidCB >= 1)
+                passTightID = (eidCB == 4)
+                passMediumID = (eidCB >= 3)
+                #passLooseID = (eidCB >= 2)
+                passVetoID = (eidCB >= 1)
 
                 # selected
                 if passTightID:
@@ -435,8 +444,7 @@ class EventVars1L_base:
                     # Iso check:
                     if lep.miniRelIso < ele_miniIsoCut: passIso = True
                     # conversion check
-                    elif eleID == 'CB':
-                        passConv = True # cuts already included in POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_X
+                    passConv = True # cuts already included in POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_X
 
 
                     passPostICHEPHLTHOverE = True # comment out again if (lep.hOverE < 0.04 and abs(lep.eta)>1.479) or abs(lep.eta)<=1.479 else False
@@ -519,16 +527,10 @@ class EventVars1L_base:
                 if lep.miniRelIso > Lep_miniIsoCut: continue
 
                 ## Set Ele IDs
-                if eleID == 'CB':
-                    # ELE CutBased ID
-                    eidCB = lep.eleCBID_FALL17_94X_ConvVetoDxyDz
-
-                    passMediumID = (eidCB >= 3)
-                    passVetoID = (eidCB >= 1)
-                else:
-                    passMediumID = False
-                    passVetoID = False
-
+                # ELE CutBased ID
+                eidCB = lep.eleCBID_FALL17_94X_ConvVetoDxyDz
+                passMediumID = (eidCB >= 3)
+                passVetoID = (eidCB >= 1)
                 # Cuts for Anti-selected electrons
                 if not passMediumID:
                     # should always be true for LepOther
@@ -639,6 +641,26 @@ class EventVars1L_base:
         if len(tightLeps) > 1:
             ret['Lep2_pt'] = tightLeps[1].pt
 
+        HEMEleVeto = []
+        HEMLep_pt  = []#[-999 for i in range(0,10)]
+        HEMLep_phi = []#[-999 for i in range(0,10)]
+        HEMLep_eta = []#[-999 for i in range(0,10)]
+        if len(tightEl) > 0:
+            for lep in tightEl:
+                if lep.pt > 30 and  lep.eta > -3.0  and  lep.eta < -1.4 and lep.phi > -1.57 and lep.phi < -0.87 : 
+                    HEMEleVeto.append(lep)
+
+        if len(HEMEleVeto) > 0 : 
+            for hemele in HEMEleVeto : 
+                HEMLep_pt.append(hemele.pt)
+                HEMLep_phi.append(hemele.phi)
+                HEMLep_eta.append(hemele.eta)
+        
+        ret["nHEMEleVeto"]  = len(HEMEleVeto)
+        ret["etaHEMEleVeto"] = HEMLep_pt
+        ret["phiHEMEleVeto"] = HEMLep_phi
+        ret["ptHEMEleVeto"] = HEMLep_eta
+
         ########
         ### Jets
         ########
@@ -647,12 +669,12 @@ class EventVars1L_base:
 
         # Apply JEC up/down variations if needed (only MC!)
         if event.isData == False:
-            if corrJEC == "central":
+            if self.corrJEC == "central":
                 pass # don't do anything
                 #for jet in jets: jet.pt = jet.rawPt * jet.corr
-            elif corrJEC == "up":
+            elif self.corrJEC == "up":
                 for jet in jets: jet.pt = jet.rawPt * jet.corr_JECUp
-            elif corrJEC == "down":
+            elif self.corrJEC == "down":
                 for jet in jets: jet.pt = jet.rawPt * jet.corr_JECDown
             else:
                 pass
@@ -749,8 +771,6 @@ class EventVars1L_base:
               ret['FatJet1_phi'] = fatJets[0].phi
               ret['FatJet1_mass'] = fatJets[0].mass
 
-
-
         if nfatjet>=2:
               ret['FatJet2_pt'] = fatJets[1].pt
               ret['FatJet2_eta'] = fatJets[1].eta
@@ -818,18 +838,61 @@ class EventVars1L_base:
         
 
         jetp4 = ROOT.TLorentzVector(0,0,0,0) 
-        Jet_pt_arr = [-999 for i in range(0,20)]
-
-        if len(cJet30Clean) != 0 : 
-            Jet_pt_arr = []
+        #Jet_pt_arr = [-999 for i in range(0,20)]
+        #Jet_eta_arr = [-999 for i in range(0,20)]
+        #Jet_phi_arr = [-999 for i in range(0,20)]
+        
+        HEMJetVeto = []
+        Jet_pt_arr = []
+        Jet_eta_arr = []
+        Jet_phi_arr = []
+        HEMJet_pt  = [] 
+        HEMJet_phi = [] 
+        HEMJet_eta = [] 
+        #HEMJet_pt  = [-999 for i in range(0,20)]
+        #HEMJet_phi = [-999 for i in range(0,20)]
+        #HEMJet_eta = [-999 for i in range(0,20)]
+        
+        #print("initial array for HEM Jets",HEMJetVeto,len(HEMJetVeto))
+        if len(cJet30Clean) != 0 :     
             for j in cJet30Clean : 
+                #print("all jets array has a jet with :",j.eta, j.phi )
                 jetp4 += j.p4()
                 Jet_pt_arr.append(j.pt)
+                Jet_eta_arr.append(j.eta)
+                Jet_phi_arr.append(j.phi)
+                if ((j.eta > -3.2) and (j.eta < -1.2) and (j.phi > -1.77) and (j.phi < -0.67) ) :
+                    #print("founded a HEM Jet with:",j.eta, j.phi )
+                    HEMJetVeto.append(j)
 
+        if len(HEMJetVeto) > 0 : 
+            #print( " HEM Jet array is filled", HEMJetVeto)
+            for j in HEMJetVeto : 
+                #print("HEM array is filled with a Jet with:",j.eta, j.phi )
+                HEMJet_pt.append(j.pt)
+                HEMJet_phi.append(j.phi)
+                HEMJet_eta.append(j.eta)
+        
+        
+        ret["nHEMJetVeto"]  = len(HEMJetVeto)
+        ret["etaHEMJetVeto"] = HEMJet_eta
+        ret["phiHEMJetVeto"] = HEMJet_phi
+        ret["ptHEMJetVeto"] = HEMJet_pt
+        
         ret['Jet_pt']  = jetp4.Pt()
         ret['Jet_eta'] = jetp4.Eta()
         ret['Jet_phi'] = jetp4.Phi()
         ret['Jet_pt_arr'] = Jet_pt_arr
+        ret['Jet_eta_arr'] = Jet_eta_arr
+        ret['Jet_phi_arr'] = Jet_phi_arr
+
+        if (len(HEMJetVeto)+len(HEMEleVeto)) > 0 :
+            #print("HEM array is filled with jet or lepton", "nHEMjets",len(HEMJetVeto),"nHEM Elctrons",len(HEMEleVeto)," SF = ",1.0 - 0.655)
+            ret["HEM_MC_SF"] = 1.0 - 0.655
+            ret["HEM_MC_SF2"] = 28.8
+        else : 
+            ret["HEM_MC_SF"] = 1.0
+            ret["HEM_MC_SF2"] = 1.0
 
         ## B tagging WPs for CSVv2 (CSV-IVF)
         ## from: https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideBTagging#Preliminary_working_or_operating
@@ -996,6 +1059,7 @@ class EventVars1L_base:
         
         ISRjetp4 = ROOT.TLorentzVector(0,0,0,0) 
         ISRJet_pt_arr = [-999 for i in range(0,20)]
+
         cISRJet30Clean =  [ j for j in cJet30Clean if j.btagDeepCSV <= btagWP ] 
         if len(cISRJet30Clean) != 0 : 
             ISRJet_pt_arr = []
@@ -1003,12 +1067,11 @@ class EventVars1L_base:
                 ISRjetp4 += j.p4()
                 ISRJet_pt_arr.append(j.pt)
 
+
         ret['ISR_HT']  = sum([j.pt for j in cISRJet30Clean])
         ret['ISR_N' ] = len(cISRJet30Clean)
         ret['ISR_pT']  = ISRjetp4.Pt()
         ret['ISRJet_pt_arr'] = ISRJet_pt_arr
-
-
 
 #####################################################################################
 
@@ -1038,9 +1101,9 @@ class EventVars1L_base:
             metp4.SetPtEtaPhiM(event.met_pt,event.met_eta,event.met_phi,event.met_mass)
 
         # recalc MET
-        if corrJEC != "central" or smearJER!= "None":
+        if self.corrJEC != "central" or smearJER!= "None":
             ## get original jet collection
-            metp4 = getRecalcMET(metp4,event,corrJEC,smearJER)
+            metp4 = getRecalcMET(metp4,event,self.corrJEC,smearJER)
 
         Genmetp4 = ROOT.TLorentzVector(0,0,0,0)
 

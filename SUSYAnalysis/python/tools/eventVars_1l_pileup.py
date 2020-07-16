@@ -60,14 +60,13 @@ puFileName_down = "../python/tools/pileup/pu_ratio_65p55mb.root"
 #puFileName_norm = "../python/tools/pileup/h_ratio_63.root"
 #puFileName_down = "../python/tools/pileup/h_ratio_59p85.root"
 
-# 2017 Moriond
-puFileName_up = "../python/tools/pileup/h_ratio_Moriond2017_72380.root"
-puFileName_norm = "../python/tools/pileup/h_ratio_Moriond2017_69200.root"
-puFileName_down = "../python/tools/pileup/h_ratio_Moriond2017_66010.root"
 
-puNorm =  getPUdict(puFileName_norm)
-puUp =  getPUdict(puFileName_up)
-puDown =  getPUdict(puFileName_down)
+# 2016 UL
+puFileName = "../python/PileupWeights/puWeights_Run2.root"
+
+puNorm =  getPUdict(puFileName,puHistName = "puWeight2016" )
+puUp =  getPUdict(puFileName,puHistName = "puWeight2016Up")
+puDown =  getPUdict(puFileName,puHistName = "puWeight2016Down")
 
 print 80*"#"
 print "Loaded PU weights!"

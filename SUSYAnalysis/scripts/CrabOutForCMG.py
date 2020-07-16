@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-########### author : Ashraf Kasem Mohamed ##########
-########### institute : DESY #######################
-########### Email : ashraf.mohamed@desy.de #########
-########### Date : April 2018#######################
 import sys,os, re, pprint
 import re
 from os import listdir
@@ -37,6 +33,13 @@ if __name__ == '__main__':
 	indire = args.indir
 	outdire = args.outdir
 
+	JDir = os.path.join(outdire,"jobs")
+	if  not os.path.exists(JDir):
+		os.makedirs(str(JDir))
+	logdir = os.path.join(outdire,"logs")
+	if  not os.path.exists(logdir):
+		os.makedirs(str(logdir))
+
 	if  os.path.exists(outdire):
 		des = raw_input(" this dir is already exist : "+str(outdire)+" do you want to remove it [y/n]: ")
 		if ( "y" in des or "Y" in des or "Yes" in des) :
@@ -47,11 +50,11 @@ if __name__ == '__main__':
 			raise ValueError( "do not understand your potion")
 	else : os.makedirs(str(outdire))
 	pattern = os.listdir(indire)
-	for pat in pattern :
-		#if not ('SingleElectron' in pat or 'MET_' in pat  or 'SingleMuon' in pat): continue
+	for i,pat in enumerate(pattern) :
+		#if not ('SingleElectron_Run2018D' in pat or 'SingleMuon_Run2018D' in pat): continue
 		#if not ('MET_Run2017C' in pat or 'SingleMuon_Run2017E' in pat):
 		#   continue
-		if not 'MET_Run2017F_31Mar2018' in pat : continue
+		#if not 'MET_Run2017F_31Mar2018' in pat : continue
 		print pat
 		patout = outdire+'/'+pat
 		os.makedirs(str(patout))
@@ -72,46 +75,47 @@ if __name__ == '__main__':
 				cmd = cmd = 'tar -zxvf '+tar+' -C '+newChunk+' ; mv '+ newChunk+'/Output/* '+newChunk+'; rm -rf '+ newChunk+'/Output/ ; rm -rf '+newChunk+'/heppyOutput_*'
 				cmd_list.append(cmd)
 		if batch :
-			cmd_list.append('heppy_hadd.py .')
-			cmd_list.append('rm -rf '+pat+'*_Chunk*')
+			#cmd_list.append('heppy_hadd.py .')
+			#cmd_list.append('rm -rf '+pat+'*_Chunk*')
 			#cmd_list.append('gfal-copy '+pat+' srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/user/amohamed/heppy_final_trees/'+pat)
 			#cmd_list.append('rm -rf '+pat)
 			cmd_list.append('echo `DONE DONE DONE`')
-			scriptFileName = patout+'/batchScript.sh'
-			scriptFile = open(scriptFileName,'w')
-			scriptFile.writelines("%s\n" % item for item in cmd_list )
-			os.system('chmod +x '+patout+'/batchScript.sh')
-			scriptFile.close()
-			condorFileName = patout+'/condor.sub'
-			condorFile = open(condorFileName,'w')
-			condorFile.write("Universe = vanilla")
-			condorFile.write("\n")
-			condorFile.write("Executable ="+os.path.abspath(patout)+'/batchScript.sh')
-			condorFile.write("\n")
-			condorFile.write("Log  ="+os.path.abspath(patout)+"/condor_job_$(Cluster)_$(Process).log")
-			condorFile.write("\n")
-			condorFile.write("Output ="+os.path.abspath(patout)+"/condor_job_$(Cluster)_$(Process).out")
-			condorFile.write("\n")
-			condorFile.write("Error  ="+os.path.abspath(patout)+"/condor_job_$(Cluster)_$(Process).error")
-			condorFile.write("\n")
-			condorFile.write("getenv      = True")
-			condorFile.write("\n")
-			condorFile.write("+RequestRuntime = 60*60*3")
-			condorFile.write("\n")
-			condorFile.write("Queue 1")
-			condorFile.write("\n")
-			condorFile.close()
-			#os.system('condor_submit '+condorFileName)
-			file = open('submit_all_to_batch_HTC.sh','a')
-			file.write("\n")
-			file.write("condor_submit "+condorFileName)
-			file.close()
+			confDir = os.path.join(JDir,"job_"+str(i))
+			if os.path.exists(confDir):
+				shutil.rmtree(str(confDir))
+			else : os.makedirs(confDir)
+			exec_ = open(confDir+"/exec.sh","w+")
+			exec_.write("echo 'running job' >> "+os.path.abspath(confDir)+"/processing"+"\n")
+			exec_.writelines("%s\n" % item for item in cmd_list )
+			exec_.write("\n")
+			exec_.write("rm -rf "+os.path.abspath(confDir))		
+			exec_.close()
+			os.system('chmod +x '+confDir+"/exec.sh")
 		else :
 			pwd = os.getcwd()
 			os.chdir(patout)
 			os.system('heppy_hadd.py .')
 			os.chdir(pwd)
 	if batch:
-		os.system('chmod a+x submit_all_to_batch_HTC.sh')
-		print 'submit_all_to_batch_HTC.sh Created for you - you can run it now with ./'
+		subFilename = os.path.join(JDir,"submitAllhadds.conf")
+		subFile = open(subFilename,"w+")
+		subFile.write("executable = $(DIR)/exec.sh"+"\n")
+		subFile.write("universe =  vanilla")
+		subFile.write("\n")
+		subFile.write("should_transfer_files = YES")
+		subFile.write("\n")
+		subFile.write("log = "+"{}/job_$(Cluster)_$(Process).log".format(os.path.abspath(logdir)))
+		subFile.write("\n")
+		subFile.write("output = "+"{}/job_$(Cluster)_$(Process).out".format(os.path.abspath(logdir)))
+		subFile.write("\n")
+		subFile.write("error = "+"{}/job_$(Cluster)_$(Process).err".format(os.path.abspath(logdir)))
+		subFile.write("\n")
+		subFile.write("when_to_transfer_output   = ON_EXIT")
+		subFile.write("\n")
+		subFile.write('Requirements  = (OpSysAndVer == "SL6")')
+		subFile.write("\n")
+		subFile.write("queue DIR matching dirs "+JDir+"/job_*/")
+		subFile.close()
+		#os.system("condor_submit "+subFilename)
+
 

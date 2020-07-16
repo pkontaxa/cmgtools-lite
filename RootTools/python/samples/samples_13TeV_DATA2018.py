@@ -61,6 +61,8 @@ dataSamples_17Sep2018_1l = dataSamples_Run2018B_17Sep2018_1l + dataSamples_Run20
 dataSamples = dataSamples_17Sep2018
 dataSamples_1l = dataSamples_17Sep2018_1l
 
+dataSamples_17Sep2018_1l_trig = [JetHT_Run2018A_17Sep2018,JetHT_Run2018B_17Sep2018,JetHT_Run2018C_17Sep2018,JetHT_Run2018D_17Sep2018]
+
 samples = dataSamples
 
 # ---------------------------------------------------------------------

@@ -117,7 +117,7 @@ class EventVars1L_signal:
             global cntsSusy
             global C_ISRweightsSusy 
 
-            if len(xsecGlu) == 0: loadSUSYparams(cntFileT1) if "T1tttt" in self.sample else loadSUSYparams(cntFileT5)
+            if len(xsecGlu) == 0: loadSUSYparams(cntFileT1) if "T1tttt" in self.sample else loadSUSYparams(cntFileT5qqqqMVA)
                 #elif "0p4" in self.sample :
                 #    loadSUSYparams(cntFileT5op4)
                 #elif "0p5" in self.sample :

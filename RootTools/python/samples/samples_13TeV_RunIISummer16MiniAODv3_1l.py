@@ -119,7 +119,7 @@ TBar_tWch_noFullyHad,
 #TBar_tWch,
 #T_tWch,
 T_tWch_noFullyHad_ext,
-T_tWch_noFullyHad
+T_tWch_noFullyHad,
 #T_tWch_noFullyHad,
 T_tch_powheg,
 TBar_tch_powheg,

@@ -182,9 +182,9 @@ def crabAutoTool(reset=False, regTasks="crab_*/*"):
 
     #get permanent counters
     if reset:
-        os.system("rm "+cmsswBase+"/src/CMGTools/TTHAnalysis/cfg/crab/.counterCrab")
-    elif os.system("ls "+cmsswBase+"/src/CMGTools/TTHAnalysis/cfg/crab/.counterCrab > /dev/null")==0:
-        cntFile=open(cmsswBase+"/src/CMGTools/TTHAnalysis/cfg/crab/.counterCrab",'r')
+        os.system("rm "+cmsswBase+"/src/CMGTools/SUSYAnalysis/cfg/crab/.counterCrab")
+    elif os.system("ls "+cmsswBase+"/src/CMGTools/SUSYAnalysis/cfg/crab/.counterCrab > /dev/null")==0:
+        cntFile=open(cmsswBase+"/src/CMGTools/SUSYAnalysis/cfg/crab/.counterCrab",'r')
         lines=cntFile.read().splitlines()
         for line in lines:
             cnts[ line.split()[0] ]=[0, "run"]
@@ -196,7 +196,7 @@ def crabAutoTool(reset=False, regTasks="crab_*/*"):
     sendMailTo(report)
     #print report
 
-    outCnt = open(cmsswBase+'/src/CMGTools/TTHAnalysis/cfg/crab/.counterCrab','w')
+    outCnt = open(cmsswBase+'/src/CMGTools/SUSYAnalysis/cfg/crab/.counterCrab','w')
     for task in cnts.keys():
         outCnt.write(task+'\t'+str(cnts[task][0])+'\t'+cnts[task][1]+"\n") # python will convert \n to os.linesep
     outCnt.close()

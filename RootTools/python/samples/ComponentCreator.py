@@ -182,6 +182,17 @@ class ComponentCreator(object):
         component.splitFactor = 100
         return component
 
+    def makeDataComponentFromLocal(self,name,dataset,path,pattern=".*root"):
+        component = cfg.DataComponent(
+            #dataset = dataset,
+            name = name,
+            files = self.getFilesFromLocal(name,dataset,path,pattern),
+            intLumi = 1,
+            )
+        component.dataset = dataset
+        component.splitFactor = 100
+        return component
+
     def getFiles(self, dataset, user, pattern, useAAA=False, run_range=None, json=None, unsafe = False):
         # print 'getting files for', dataset,user,pattern
         ds = createDataset( user, dataset, pattern, readcache=True, run_range=run_range, json=json, unsafe = unsafe )

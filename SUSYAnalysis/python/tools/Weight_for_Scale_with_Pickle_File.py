@@ -46,11 +46,12 @@ class Weight_for_Scale:
         if "_ext" in self.sample : 
             nom = self.sample.replace(self.sample[self.sample.find("_ext"):],'')
             for sam in othersamples : 
-                if nom in sam : smaller_list.append(sam)
+                if nom == sam : smaller_list.append(sam)
         else : 
             nom = self.sample
-            for sam in othersamples : 
-                if nom+"_ex" in sam : smaller_list.append(sam)
+        
+        for sam in othersamples : 
+            if nom+"_ex" in sam : smaller_list.append(sam)
         
         for samp in smaller_list : 
             pckfile =self.path+"/"+samp+"/skimAnalyzerCount/SkimReport.pck" 

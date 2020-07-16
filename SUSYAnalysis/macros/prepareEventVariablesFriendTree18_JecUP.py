@@ -6,46 +6,54 @@ import time
 import shutil
 MODULES = []
 
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_base import EventVars1L_base
-MODULES.append( ('1l_Basics', EventVars1L_base(corrJEC = "central")) )#["central","up","down"]
+from CMGTools.SUSYAnalysis.tools18.eventVars_1l_base import EventVars1L_base
+MODULES.append( ('1l_Basics', EventVars1L_base(corrJEC = "up")) )#["central","up","down"]
 # triggers
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_triggers import EventVars1L_triggers
+from CMGTools.SUSYAnalysis.tools18.eventVars_1l_triggers import EventVars1L_triggers
 MODULES.append( ('1l_Triggers', EventVars1L_triggers()) )
 ## DATA only
-# for Filters
-#from CMGTools.SUSYAnalysis.tools.eventVars_1l_filters import EventVars1L_filters
+# for Filters not needed anymore since added to the base module
 #MODULES.append( ('1l_Filters', EventVars1L_filters()) )
-### MC only
+#### MC only
 # for pileup
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_pileup import EventVars1L_pileup
+from CMGTools.SUSYAnalysis.tools18.eventVars_1l_pileup import EventVars1L_pileup
 MODULES.append( ('1l_Pileup', EventVars1L_pileup()) )
 # for signal masses
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_signal import EventVars1L_signal
+from CMGTools.SUSYAnalysis.tools18.eventVars_1l_signal import EventVars1L_signal
 MODULES.append( ('1l_Signal', EventVars1L_signal()) )
 # for LeptonSF
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_leptonSF import EventVars1L_leptonSF
+from CMGTools.SUSYAnalysis.tools18.eventVars_1l_leptonSF import EventVars1L_leptonSF
 MODULES.append( ('1l_LeptonSF', EventVars1L_leptonSF()) )
 # for BtagSF
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_btagSF import EventVars1L_btagSF
+from CMGTools.SUSYAnalysis.tools18.eventVars_1l_btagSF import EventVars1L_btagSF
 MODULES.append( ('1l_btagSF', EventVars1L_btagSF()) )
 # Top pt reweighting
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_WeightsForSystematics import EventVars1LWeightsForSystematics
+from CMGTools.SUSYAnalysis.tools18.eventVars_1l_WeightsForSystematics import EventVars1LWeightsForSystematics
 MODULES.append( ('1l_SysWeights', EventVars1LWeightsForSystematics()) )
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_bkgDilep import EventVars1L_bkgDilep
+from CMGTools.SUSYAnalysis.tools18.eventVars_1l_bkgDilep import EventVars1L_bkgDilep
 MODULES.append( ('1l_bkgDilep', EventVars1L_bkgDilep()) )
 
 # iso track MT2 and MT2W
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_isoMT2 import EventVars1L_isoMT2
+from CMGTools.SUSYAnalysis.tools18.eventVars_1l_isoMT2 import EventVars1L_isoMT2
 MODULES.append( ('1l_isoMT2', EventVars1L_isoMT2()) )
 
-from CMGTools.SUSYAnalysis.tools.Weight_for_Scale_with_Pickle_File import Weight_for_Scale
+
+from CMGTools.SUSYAnalysis.tools18.Weight_for_Scale_with_Pickle_File import Weight_for_Scale
 MODULES.append( ('Weight_Scale',  Weight_for_Scale()) )
 
-from CMGTools.SUSYAnalysis.tools.eventVars_1l_HEM import EventVars1L_HEM
-MODULES.append( ('1l_HEM',  EventVars1L_HEM()) )
+#from CMGTools.SUSYAnalysis.tools18.eventVars_1l_HEM import EventVars1L_HEM
+#MODULES.append( ('1l_HEM',  EventVars1L_HEM()) )
+
+
 
 #from CMGTools.SUSYAnalysis.tools.eventVars_1l_genLevel import EventVars1LGenLevel
 #MODULES.append( ('1l_BasicsGen', EventVars1LGenLevel()) )
+
+# ISR study
+#from CMGTools.SUSYAnalysis.tools18.eventVars_1l_ISR_study import EventVars1L_ISR
+#MODULES.append( ('1l_ISR', EventVars1L_ISR()) )
+
+
 '''
 from CMGTools.SUSYAnalysis.tools.eventVars_1l_top import EventVars1L_Top
 MODULES.append( ('1l_TopVars', EventVars1L_Top()) )
@@ -55,14 +63,8 @@ from CMGTools.SUSYAnalysis.tools.resolvedTopTagVars_1l import resolvedTopTagVars
 MODULES.append( ('1l_resolvedTopTagVars', resolvedTopTagVars1l()) )
 
 '''
-
-
-
 from CMGTools.TTHAnalysis.tools.BDT_resolvedTopTagger_cpp_V10_1lep_dPhi import BDT_resolvedTopTagger
 MODULES.append( ('BDT_rTT',  BDT_resolvedTopTagger(os.environ["CMSSW_BASE"]+"/src/CMGTools/TTHAnalysis/data/kinMVA/tth/resTop_xGBoost_v0.weights.xml")) )
-
-#from CMGTools.SUSYAnalysis.tools.eventVars_1l_DNN import EventVars1L_dnn
-#MODULES.append( ('1l_dnn', EventVars1L_dnn()) )
 
 class VariableProducer(Module):
     def __init__(self,name,booker,modules):
@@ -151,7 +153,6 @@ for D in glob(args[0]+"/*"):
         treename = "tree"
         fname    = "%s/%s/tree.root" % (D,options.tree)
         fname    = open(fname+".url","r").readline().strip()
-    #if  not ("/SMS_T5qqqqVV" in fname) : continue 
     if os.path.exists(fname) or (os.path.exists("%s/%s/tree.root.url" % (D,options.tree))):
         short = os.path.basename(D)
         if options.datasets != []:
@@ -164,6 +165,8 @@ for D in glob(args[0]+"/*"):
         data = ("DoubleMu" in short or "MuEG" in short or "DoubleElectron" in short or "SingleMu" in short or "SingleEl" in short or "JetHT" in short or "MET" in short)
         print "opening", fname
         f = ROOT.TFile.Open(fname);
+        if not f or f.IsZombie() : 
+			continue
         t = f.Get(treename)
         entries = t.GetEntries()
         f.Close()
@@ -319,7 +322,7 @@ if options.naf:
     subFile.write("\n")
     subFile.write('Requirements  = (OpSysAndVer == "SL6")')
     subFile.write("\n")
-    subFile.write("materialize_max_idle = 1000"+"\n")
+    subFile.write("materialize_max_idle = 500"+"\n")
     subFile.write("queue DIR matching dirs "+JDir+"/*/")
     subFile.close()
     os.system("condor_submit "+subFilename)
@@ -401,4 +404,3 @@ fulltime = maintimer.RealTime()
 totev   = sum([ev   for (ev,time) in ret.itervalues()])
 tottime = sum([time for (ev,time) in ret.itervalues()])
 print "Done %d tasks in %.1f min (%d entries, %.1f min)" % (len(jobs),fulltime/60.,totev,tottime/60.)
-

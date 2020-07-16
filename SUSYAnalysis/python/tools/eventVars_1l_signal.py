@@ -17,7 +17,7 @@ C_ISRweightsSusy = {}
 cntFileT1 = "../python/tools/t1ttt_scan_counts.txt"
 ISRweightFile = "../python/tools/ISRnormWeightsT1tttt.txt"
 
-cntFileT5 = "../python/tools18/t5qqqq_scan_counts.txt"
+cntFileT5 = "../python/tools/t5qqqq_scan_counts.txt"
 
 def loadSUSYparams(cntFile):
 
