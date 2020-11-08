@@ -282,6 +282,9 @@ class EventVars1L_base:
         if hasattr(event, 'isData'):
             ret['isData'] = event.isData
 
+        if hasattr(event,'met_caloPt'):
+            ret["met_caloPt"] = event.met_caloPt
+
         '''
         # make python lists as Collection does not support indexing in slices
         genleps = [l for l in Collection(event,"genLep","ngenLep")]
@@ -300,7 +303,6 @@ class EventVars1L_base:
                 if  Gj.pdgId == 5 : genbJets.append(Gj)
                 if  Gj.pdgId == 5 and Gj.pt > 30 : genbJets30.append(Gj)
             
-            if hasattr(event,'met_caloPt')           : ret["met_caloPt"]           = event.met_caloPt
             if hasattr(event,'lheHTIncoming')        : ret["lheHTIncoming"]        = event.lheHTIncoming
             genpTaus = [l for l in Collection(event,"genTau")]
             genpLeps = [l for l in Collection(event,"genLep")]
