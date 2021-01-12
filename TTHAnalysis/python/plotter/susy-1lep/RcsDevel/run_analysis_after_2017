@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+
+# Stop when an error occurs
+set -e -o pipefail
+
+# User needs to specify input folder
+if [ -z "${1}" ]; then
+    echo Please specify input folder as positional argument.
+    exit
+fi
+
+# Pipe all output also to logfile
+exec > >(tee -i log.out)
+exec 2>&1
+
+# Input folder is first positional argument, need to strip possible trailing "/"
+# to prevent problems later
+inputfolder="${1%/}"
+
+# Remove pickle files (is this a good idea?)
+#rm -rf pickles
+
+# Create necessary folders
+mkdir -p pickles_2017 BinPlots_2017 FracPlots_2017 FracPlots_TT_2017 RCSplots_2017
+
+## Merge bins
+echo Run mergeBins_Pantelis_2017.py
+for folder in "${inputfolder}"/*; do
+    # If merged folder already exists, skip
+    if [[ -d "${folder}"/merged/ ]]; then
+        continue
+    fi
+    ./mergeBins_Pantelis_2017.py "${folder}"
+done
+
+# Append Rcs kappa
+echo Run appendRcsKappa_2017.py
+for folder in "${inputfolder}"/*/merged*; do 
+    if [[ "${folder}" == */scan/* ]]; then
+       continue
+    fi
+    ./appendRcsKappa_2017.py "${folder}"
+done
+
+
+# Calculate the systematic variations
+# Takes up and down histograms and creates syst histograms
+echo Run calcSyst_2017.py
+for folder in "${inputfolder}"/*/merged*; do
+    if [[ "${folder}" == */scan/* ]] \
+        || [[ "${folder}" == */grid/* ]] \
+        || [[ "${folder}" == */grid-dilep/* ]] \
+        || [[ "${folder}" == */signal_MET/* ]]; then
+        continue
+    fi
+    ./calcSyst_2017.py "${folder}"
+done
+
+# Write table with systematic variations that is used by makeYieldTables.py
+echo Run tableSyst_2017.py
+./tableSyst_2017.py "${inputfolder}"
+
+## Write tables
+#echo Run makeYieldTables.py
+#./makeYieldTables.py "${inputfolder}"
+
+# Plot data with prediction, but no systematics
+echo Run plotDataPredict_2017.py
+for folder in "${inputfolder}"/grid-dilep/merged*; do
+    ./plotDataPredict_2017.py -b "${folder}"/LT
+done
+
+# Plot data with prediction, with systematics
+echo Run plotDataPredictWithSyst_2017.py
+#Pantelis for folder in merged merged4f5 mergedFew; do
+for folder in merged; do
+    ./plotDataPredictWithSyst_2017.py -b "${inputfolder}" "${folder}"
+done
+
+################# Pantelis (For Check) ######################
+#echo Run plotDataPredictWithSyst_2017_Check.py
+##Pantelis for folder in merged merged4f5 mergedFew; do
+#for folder in merged; do
+#    ./plotDataPredictWithSyst_2017_Check.py -b "${inputfolder}" "${folder}"
+#done
+
+################################################
+
+# Plot Rcs and kappa without systematics
+echo Run plotRcsKappa_2017.py
+for folder in "${inputfolder}"/grid-dilep/merged*; do
+    ./plotRcsKappa_2017.py -b "${folder}"/LT
+done
+
+# Plot with uncertainties with kappa in the bottom panel
+echo Run plotSyst_2017.py
+./plotSyst_2017.py -b "${inputfolder}"
+
+## Plot signal uncertainties with yields in bottom panel
+#echo Run plotSigSyst.py
+#./plotSigSyst.py -b "${inputfolder}"
+#
+## Compare something
+##python plotCompare.py LT
+#
+##python makeRCSplots.py indir/grid 
+##python averageSig.py LT

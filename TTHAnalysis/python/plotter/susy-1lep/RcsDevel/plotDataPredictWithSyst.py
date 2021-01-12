@@ -2,7 +2,7 @@
 
 import sys,os
 
-import makeYieldPlots as yp
+import makeYieldPlots_Pantelis as yp
 
 from glob import glob
 
@@ -146,7 +146,8 @@ if __name__ == "__main__":
     ydsSig.addFromFiles('{}/scan/{}/LT'.format(pattern, mergeFolder), ("lep","sele"))
     ydsSig.showStats()
 
-    mcSamps = ['DY','TTV','SingleT','WJets','TTsemiLep','TTdiLep']
+    #Pantelis mcSamps = ['DY','TTV','SingleT','WJets','TTsemiLep','TTdiLep']
+    mcSamps = ['VV','DY','TTV','SingleT','WJets','TTsemiLep','TTdiLep']
     #mcSamps = ['EWK']
 
     # update colors
@@ -172,8 +173,10 @@ if __name__ == "__main__":
     # Signal
     hSig1 = yp.makeSampHisto(ydsSig, "T1tttt_Scan_mGo1900_mLSP100", "SR_MB", "T1tttt (1.9/0.1)")
     hSig1.SetTitle("T1tttt (1.9/0.1)")
-    hSig2 = yp.makeSampHisto(ydsSig, "T1tttt_Scan_mGo1400_mLSP1100", "SR_MB", "T1tttt (1.4/1.1)")
-    hSig2.SetTitle("T1tttt (1.4/1.1)")
+    #Pantelis hSig2 = yp.makeSampHisto(ydsSig, "T1tttt_Scan_mGo1400_mLSP1100", "SR_MB", "T1tttt (1.4/1.1)")
+    #Pantelis hSig2.SetTitle("T1tttt (1.4/1.1)")
+    hSig2 = yp.makeSampHisto(ydsSig, "T1tttt_Scan_mGo1500_mLSP1000", "SR_MB", "T1tttt (1.5/1.0)")
+    hSig2.SetTitle("T1tttt (1.5/1.0)")   
 
     ## Append Systematics to prediction
     print "Appending syst. unc. to prediction and total MC"
@@ -186,7 +189,8 @@ if __name__ == "__main__":
     #hTotal = yp.getTotal(mcHists)
     #hTotal = yp.getHistWithError(hTotal, hMCSysts, new = False)
     hUncert = hDataPred.Clone("uncert")
-    hUncert.SetTitle("Pred. Uncertainty")
+    #Pantelis hUncert.SetTitle("Pred. Uncertainty")
+    hUncert.SetTitle("Systematic Uncertainty (Pred.)")
     yp.setUnc(hUncert)
 
     # test MC
@@ -238,8 +242,11 @@ if __name__ == "__main__":
     ratios = [hPredUnc,ratioPois]
     #ratios = pull
 
+    width = 2000
+    height = 600
+
     #canv = yp.plotHists("SR_MB_Prediction",[mcStack,hTotal,hDataPred,hDataPois],[hPredUnc,ratioPois],'TM', 1200, 600, logY = logY)
-    canv = yp.plotHists("SR_MB_Prediction",hists,ratios,'TRC', 1000, 600, logY = logY, nCols = 2, mergeFolder = mergeFolder)
+    canv = yp.plotHists("SR_MB_Prediction",hists,ratios,'TRC', width, height, logY = logY, nCols = 2, mergeFolder = mergeFolder)
 
     canv.SetName(cname + canv.GetName())
 

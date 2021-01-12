@@ -4,15 +4,15 @@ import sys,os
 from glob import glob
 
 #from makeYieldPlots import *
-import makeYieldPlots as yp
+import makeYieldPlots_Pantelis as yp
 
 yp._batchMode = False
 yp._alpha = 0.8
 
 if __name__ == "__main__":
 
-    yp.CMS_lumi.lumi_13TeV = str(36) + " fb^{-1}"
-    yp.CMS_lumi.extraText = "Simulation"
+    yp.CMS_lumi.lumi_13TeV = str(35.9) + " fb^{-1}"
+    yp.CMS_lumi.extraText = " Simulation"
 
     ## remove '-b' option
     if '-b' in sys.argv:
@@ -145,12 +145,13 @@ if __name__ == "__main__":
     #sysCols = [2,4,7,8,3,9,6] + range(40,50)#[1,2,3] + range(4,10)
     #sysCols = [50] + range(49,0,-2)#range(30,50,2)
     #sysCols = range(40,100,1)#range(30,50,2)
-    #sysCols = range(35,100,3)
+    sysCols = range(35,100,3)
     #sysCols = range(28,100,2)
     #sysCols = range(49,1,-2)
     #sysCols = range(30,40,4) + range(40,100,3)
     #sysCols = range(49,40,-2) + range(40,30,-3) + range(50,100,5)
-    sysCols = [40, 20, 30, 45, 36, 24, 29, 38, 28, 39, 32, 47, 49, 43]
+    #Pantelis sysCols = [40, 20, 30, 45, 36, 24, 29, 38, 28, 39, 32, 47, 49, 43]
+
 
     # Sample and variable
     #samp = "EWK"
@@ -190,8 +191,7 @@ if __name__ == "__main__":
         hist.GetYaxis().SetTitleOffset(0.8)
 
         #yp.prepKappaHist(hist)
-        #yp.prepRatio(hist)
-
+        #yp.prepRatio(hist)10
         # normalize to central value
         #hist.Divide(hCentral)
 
@@ -216,7 +216,7 @@ if __name__ == "__main__":
     '''
 
     #canv = yp.plotHists(var+"_"+samp+"_Syst",[stack,sqHist],[hCentral,hCentralUncert],"TM", 1200, 600, nCols = 5)
-    canv = yp.plotHists(var+"_"+samp+"_Syst",[stack,sqHist],[hCentral,hCentralUncert],"TLC", 1000, 600, nCols = 2)
+    canv = yp.plotHists(var+"_"+samp+"_Syst",[stack,sqHist],[hCentral,hCentralUncert],"TLC", 2000, 600, nCols = 2)
 #    canv = yp.plotHists(var+"_"+samp+"_Syst",[sqHist]+hists,[hCentral,hCentralUncert],"TM", 1200, 600)
 #    canv = yp.plotHists(var+"_"+samp+"_Stat",[stack,sqHist],hCentral,"TM", 1200, 600)
 

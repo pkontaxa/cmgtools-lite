@@ -1,0 +1,6 @@
+T1tttt_Scan+: SMS_T1tttt_TuneCUETP8M1_1 :susyXsec*4956730/susyNgen*lepSF*btagSF*nISRweight;
+T1tttt_Scan+: SMS_T1tttt_TuneCUETP8M1_2 :susyXsec*5158369/susyNgen*lepSF*btagSF*nISRweight;
+T1tttt_Scan+: SMS_T1tttt_TuneCUETP8M1_3 :susyXsec*5042768/susyNgen*lepSF*btagSF*nISRweight;
+T1tttt_Scan+: SMS_T1tttt_TuneCUETP8M1_4 :susyXsec*5175229/susyNgen*lepSF*btagSF*nISRweight;
+T1tttt_Scan+: SMS_T1tttt_TuneCUETP8M1_5 :susyXsec*5270680/susyNgen*lepSF*btagSF*nISRweight;
+T1tttt_Scan+: SMS_T1tttt_TuneCUETP8M1_6 :susyXsec*6758947/susyNgen*lepSF*btagSF*nISRweight;

@@ -2,12 +2,12 @@
 
 import sys,os
 
-import makeYieldPlots as yp
+import makeYieldPlots_Pantelis as yp
 
 yp._batchMode = False
 yp._alpha = 0.8
 
-lum = "36"
+lum = "35.9"
 yp.CMS_lumi.lumi_13TeV = lum +  " fb^{-1}"
 yp.CMS_lumi.extraText = "Preliminary"
 
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     yds.showStats()
 
   #  mcSamps = ['DY','TTV','SingleT','WJets','TT']#
-    mcSamps = ['DY','TTV','SingleT','WJets','TTJets']#
+    mcSamps = ['QCD','VV','DY','TTV','SingleT','WJets','TTJets']#
     #mcSamps = ['WJets','TT','QCD']
 
     # update colors
@@ -115,7 +115,7 @@ if __name__ == "__main__":
         yp.setUnc(hUncert)
 
         #canv = plotHists("DataNJ45_"+cat,[stack,hMCpred,hDataPred,hData,total],ratio)
-        width = 1200
+        width = 2000 #Previous 1200 Pantelis
         height = 600
         legPos = "TM"
 

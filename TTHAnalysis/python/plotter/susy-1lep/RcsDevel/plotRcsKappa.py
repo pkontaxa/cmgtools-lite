@@ -3,7 +3,7 @@
 import sys,os
 
 #from makeYieldPlots import *
-import makeYieldPlots as yp
+import makeYieldPlots_Pantelis as yp
 
 #yp.gStyle.SetPadLeftMargin(0.075)
 yp.gStyle.SetPadLeftMargin(0.12)
@@ -13,8 +13,8 @@ yp._alpha = 0.35
 
 if __name__ == "__main__":
 
-    yp.CMS_lumi.lumi_13TeV = str(36) + " fb^{-1}"
-    yp.CMS_lumi.lumi_13TeV = ""
+    #yp.CMS_lumi.lumi_13TeV = str(36) + " fb^{-1}"
+    yp.CMS_lumi.lumi_13TeV = "35.9 fb^{-1}"
     yp.CMS_lumi.extraText = "Simulation"
 
 
@@ -65,17 +65,19 @@ if __name__ == "__main__":
                 for samp in samps:
 
                     # RCS MB
-                    yp.colorDict[samp+"_Rcs_MB"] = yp.kBlue
+                    #Pantelis yp.colorDict[samp+"_Rcs_MB"] = yp.kBlue
+                    yp.colorDict[samp+"_Rcs_MB"] = yp.kCyan-1
                     hRcsMB = yp.makeSampHisto(yds,samp,"Rcs_MB",samp+"_Rcs_MB")
                     #hRcsMB.SetTitle("R_{CS} (MB)")
-                    hRcsMB.SetTitle("R_{CS}^{MC}(n_{b-tag}, n_{jet}^{SR}, EWK)")
+                    hRcsMB.SetTitle("R_{CS}^{MC}(n_{b-tag}, n_{top-tag} , n_{jet}^{SR}, EWK)")
 #                    hRcsMB.SetTitle("R_{CS}^{MC}(n_{b-tag}, n_{jet}#in [5], EWK)")
 
                     # RCS SB
-                    yp.colorDict[samp+"_Rcs_SB"] = yp.kRed
+                    #Pantelis yp.colorDict[samp+"_Rcs_SB"] = yp.kRed
+		    yp.colorDict[samp+"_Rcs_SB"] = yp.kOrange+9
                     hRcsSB = yp.makeSampHisto(yds,samp,"Rcs_SB",samp+"_Rcs_SB")
                     #hRcsSB.SetTitle("R_{CS} (SB)")
-                    hRcsSB.SetTitle("R_{CS}^{MC}(n_{b-tag}, n_{jet}#in [4,5], EWK)")
+                    hRcsSB.SetTitle("R_{CS}^{MC}(n_{b-tag}, n_{top-tag}, n_{jet}#in [4,5], EWK)")
 #                    hRcsSB.SetTitle("R_{CS}^{MC}(n_{b-tag}, n_{jet}#in [4], EWK)")
 
                     # Kappa
@@ -92,7 +94,7 @@ if __name__ == "__main__":
                     #hKappa.SetLineColor(yp.kViolet-5)
 
                     hRcsMB.GetYaxis().SetRangeUser(0,0.14)
-                    width = 1200
+                    width = 2000 #Previous 1200 (Pantelis)
                     height = 600
                     legPos = "TM"
 

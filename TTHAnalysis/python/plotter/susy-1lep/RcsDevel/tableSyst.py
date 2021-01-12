@@ -59,11 +59,13 @@ if __name__ == "__main__":
         yds.addFromFiles(path+'/*NJ68*',("lep","sele"))
         yds9.addFromFiles(path+'/*NJ9i*',("lep","sele"))
 
+    '''Pantelis 
     paths = glob.glob('{}/syst_*/mergedFew/'.format(pattern))
 
     for path in paths:
         ydsFew6.addFromFiles(path+'/*NJ6i*', ('lep', 'sele'))
         ydsFew9.addFromFiles(path+'/*NJ9*', ('lep', 'sele'))
+    Pantelis'''
 
     del paths
 
@@ -85,7 +87,7 @@ if __name__ == "__main__":
     yds.showStats()
 
     f =  open('sysTable.tex','w')
-    caption = 'Multi-b analysis: Systematic uncertainties on $\kappa$ for different sources'
+    caption = 'Multi-b analysis: Systematic uncertainties on $\kappa$ for different sources (2016)'
     samps = [('EWK_'+syst+'_syst','Kappa')  for syst in systs]
     printSamps = [syst  for syst in systsprint]
     samps = [('EWK_'+syst+'_syst','Kappa')  for syst in systs]
@@ -103,7 +105,9 @@ if __name__ == "__main__":
     yds9.printTable(samps, systs, label,f)
     f.close()
 
+    '''Pantelis
     f =  open('sysTable_fewbins.dat','w')
     ydsFew6.printTable(samps, systs, label,f)
     ydsFew9.printTable(samps, systs, label,f)
     f.close()
+    Pantelis'''

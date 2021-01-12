@@ -8,13 +8,13 @@ import time
 
 ## Trees -- skimmed with trig_base
 
-Tdir = ["SampLinks/"] #important needs this format
+Tdir = ["SampLinks2017/"] #important needs this format
 # MC
-mcFTdir = "SampLinks/friends_v1_wBDT/"
-sigFTdir = "SampLinks/friends_v1_wBDT/"
+mcFTdir = "SampLinks2017/Friends/"
+sigFTdir = "SampLinks2017/Friends/"
 
 # new data
-dataFTdir = "SampLinks/friends_v1_wBDT/"
+dataFTdir = "SampLinks2017/Friends/"
 
 
 
@@ -46,7 +46,8 @@ def addOptions(options):
         #options.bins = "60,-1500,1500,30,0,1500"
         #options.bins = "34,-1700,1700,10,0,1500"
         #options.bins = "161,-2012.5,2012.5,81,-12.5,2012.5"
-        options.bins = "185,-2312.5,2312.5,93,-12.5,2312.5"
+        #Pantelis options.bins = "185,-2312.5,2312.5,93,-12.5,2312.5"
+        options.bins = "225,-2812.5,2812.5,113,-12.5,2812.5"
 
         options.friendTreesMC = [("sf/t",sigFTdir+"/evVarFriend_{cname}.root")]
         options.cutsToAdd += [("base","Selected","Selected == 1")] # make always selected for signal
@@ -262,7 +263,8 @@ def writeYields(options):
             if options.verbose > 0 and options.signal:
                 print "\t%s (%8.3f total events)" % (h.GetName(),h.Integral())
 
-            workspace.WriteTObject(h,h.GetName())
+            #Pantelis workspace.WriteTObject(h,h.GetName())
+            workspace.WriteTObject(h.raw(),h.GetName())
     workspace.Close()
 
     return 1
@@ -337,7 +339,7 @@ def getBTagWstring(cuts, options):
         print "Going to use weights", mca
 
     return (cuts,mca)
-
+'''
 def submitJobs(args, nchunks,options):
 
     outdir=options.outdir
@@ -375,7 +377,7 @@ def submitJobs(args, nchunks,options):
 		print jobListName
 		listtxt = open(str(jobListName),"r")
 		for line in listtxt:
-			print line
+			#Pantelis print line
 			line = line.strip()
 			if line.startswith('#') :
 				print "commented line continue!"
@@ -397,7 +399,7 @@ def submitJobs(args, nchunks,options):
 			tempW_roRun = open(wrapsub, 'w')
 			tempW_roRun.write(tempW)
 			subCmd = 'condor_submit '+condsub
-			print 'Going to submit', line.split("-c")[-1] , 'jobs with', subCmd
+			#Pantelis print 'Going to submit', line.split("-c")[-1] , 'jobs with', subCmd
 			file = open('submit_Bins.sh','a')
 			file.write("\n")
 			file.write(subCmd)
@@ -405,7 +407,52 @@ def submitJobs(args, nchunks,options):
 		os.system('chmod a+x submit_Bins.sh')
 		#
     return 1
+'''
+def submitJobs(args, nchunks,options):
 
+    outdir=options.outdir
+    if not os.path.exists(outdir): os.makedirs(outdir)
+
+    # make unique name for jobslist
+    import time
+    itime = int(time.time())
+    jobListName = outdir+"/"+'jobList_%i.txt' %(itime)
+    jobList = open(jobListName,'w')
+    lxbatchJobList = []
+    print 'Filling %s with job commands' % (jobListName)
+
+    # not to run again
+    if '-b' in args: args.remove('-b')
+    if '--lxbatch' in args: args.remove('--lxbatch')
+
+    # execute only one thread
+    args += ['-j','1']
+
+    for chunk in range(nchunks):
+        chargs = args + ['-c',str(chunk)]
+        runcmd = " ".join(str(arg) for arg in chargs )
+        jobList.write(runcmd + '\n')
+        lxbatchJobList.append(runcmd)
+
+    # check log dir
+    logdir = 'logs'
+    if not os.path.exists(logdir): os.system("mkdir -p "+logdir)
+
+    if options.batch:
+        # submit job array on list
+        subCmd = 'condor_qsub -t 1-%s -o logs nafbatch_runner.sh %s' %(nchunks,jobListName)
+        print 'Going to submit', nchunks, 'jobs with', subCmd
+        os.system(subCmd)
+    elif options.lxbatch:
+        for job in lxbatchJobList:
+            basecmd = "bsub -q 8nh -o logs {cmssw}/src/CMGTools/SUSYAnalysis/macros/lxbatch_runner.sh {dir} {cmssw} {jobcmd}".format(
+                dir = os.getcwd(), cmssw = os.environ['CMSSW_BASE'], jobcmd=job
+            )
+            os.system(basecmd)
+            time.sleep(0.1)
+
+    jobList.close()
+    return 1
 
 if __name__ == "__main__":
 
@@ -460,8 +507,13 @@ if __name__ == "__main__":
     # pick analysis period i.e. ICHEP16, Moriond17 (determines which binning is used)
     parser.add_option("--conference", dest="conference", type="string", default="Moriond17", help="pick which binning to use ICHEP16 or Moriond17")
 
+    parser.add_option("-B", "--bulk", action="store_true", dest="bulk", default=True,help="Do bulk submission (works only for NAF HTC at the moment).")
+
     # Read options and args
     (options,args) = parser.parse_args()
+
+    #if options.bulk and not options.naf:
+    #    raise RuntimeError("Bulk submission currently implemented only for NAF HTC only")
 
     if options.verbose > 0 and len(args) > 0:
         print 'Arguments', args
@@ -470,9 +522,11 @@ if __name__ == "__main__":
 
     print options.conference
     if options.conference == "Moriond17":
-        from searchBinsMoriond17 import *
-    else:
-        from searchBins import *
+        #from searchBinsMoriond17_Pantelis_CombinedTopTagging_June3_2019_V2 import *
+        from searchBinsMoriond17_Pantelis_CombinedTopTagging_Jan9_2021_V2 import *
+    else:         
+        #from searchBinsMoriond17_Pantelis_CombinedTopTagging_June3_2019_V2 import *
+        from searchBinsMoriond17_Pantelis_CombinedTopTagging_Jan9_2021_V2 import *
 
     # make cut list
     cDict = {}
@@ -493,13 +547,13 @@ if __name__ == "__main__":
         if doDLCR: cDict.update(cutDictDLCRf9)
 
 
-    doNjet5 = True
+    doNjet5 = False
     if doNjet5:
         cDict.update(cutDictSRf5)
         cDict.update(cutDictCRf5)
 
 
-    doFew = True
+    doFew = False
     if doFew and options.conference == "Moriond17":
         cDict.update(cutDictSRfFew)
         cDict.update(cutDictCRfFew)
@@ -534,8 +588,10 @@ if __name__ == "__main__":
     if options.batch or options.lxbatch:
         print "Going to prepare batch jobs..."
         subargs =  sys.argv
+        #Pantelis submitJobs(subargs, len(binList),options)
+        #Pantelis os.system("./submit_Bins.sh")
         submitJobs(subargs, len(binList),options)
-        os.system("./submit_Bins.sh")
+
         exit(0)
 
     print "Beginning processing locally..."

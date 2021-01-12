@@ -1,0 +1,26 @@
+# Nominal
+
+T1tttt_Scan: SMS_T1tttt_TuneCP2_1 :susyXsec*6506523/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan: SMS_T1tttt_TuneCP2_2 :susyXsec*5586768/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan: SMS_T1tttt_TuneCP2_3 :susyXsec*5736918/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan: SMS_T1tttt_TuneCP2_4 :susyXsec*6717208/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan: SMS_T1tttt_TuneCP2_5 :susyXsec*5808350/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan: SMS_T1tttt_TuneCP2_6 :susyXsec*5469388/susyNgen*btagSF*lepSF*nISRweight;
+
+# JEC variation up
+
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_1 :susyXsec*6506523/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_2 :susyXsec*5586768/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_3 :susyXsec*5736918/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_4 :susyXsec*6717208/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_5 :susyXsec*5808350/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_6 :susyXsec*5469388/susyNgen*btagSF*lepSF*nISRweight;
+
+# JEC variation down
+
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_1 :susyXsec*6506523/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_2 :susyXsec*5586768/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_3 :susyXsec*5736918/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_4 :susyXsec*6717208/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_5 :susyXsec*5808350/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_6 :susyXsec*5469388/susyNgen*btagSF*lepSF*nISRweight;

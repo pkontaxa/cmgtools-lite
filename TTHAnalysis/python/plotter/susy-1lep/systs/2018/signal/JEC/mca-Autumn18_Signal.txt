@@ -1,0 +1,29 @@
+# Nominal
+
+T1tttt_Scan: SMS_T1tttt_TuneCP2_1 :susyXsec*5412491/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan: SMS_T1tttt_TuneCP2_2 :susyXsec*8158264/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan: SMS_T1tttt_TuneCP2_3 :susyXsec*5901049/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan: SMS_T1tttt_TuneCP2_4 :susyXsec*8330170/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan: SMS_T1tttt_TuneCP2_5 :susyXsec*9964202/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan: SMS_T1tttt_TuneCP2_6 :susyXsec*11432061/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF;
+T1tttt_Scan: SMS_T1tttt_TuneCP2_7 :susyXsec*2662762/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+
+# JEC variation up
+
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_1 :susyXsec*5412491/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_2 :susyXsec*8158264/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_3 :susyXsec*5901049/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_4 :susyXsec*8330170/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_5 :susyXsec*9964202/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_6 :susyXsec*11432061/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF;
+T1tttt_Scan_JEC-Up: JECUp_SMS_T1tttt_TuneCP2_7 :susyXsec*2662762/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+
+# JEC variation down
+
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_1 :susyXsec*5412491/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_2 :susyXsec*8158264/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_3 :susyXsec*5901049/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_4 :susyXsec*8330170/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_5 :susyXsec*9964202/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_6 :susyXsec*11432061/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF;
+T1tttt_Scan_JEC-Down: JECDown_SMS_T1tttt_TuneCP2_7 :susyXsec*2662762/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
