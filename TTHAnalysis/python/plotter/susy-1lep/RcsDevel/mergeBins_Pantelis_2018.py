@@ -106,9 +106,24 @@ def matchSBMoriond17(bname):
             name = name.replace('NB2_','NB1i_')
             name = name.replace('NB2i_','NB1i_')
             name = name.replace('NB3i','NB1i')
+
+          
+
         elif 'HT4i' not in name:
             name = name.replace('NB2_','NB2i_')
             name = name.replace('NB3i','NB2i')
+
+
+        if  'NT1_' in name:
+	    name = name.replace('NT1_','NT1i_')
+        elif 'NT2i_' in name:	
+            name = name.replace('NT2i_','NT1i_')
+
+        if 'LT4i' in name:
+           name = name.replace('NB2_','NB1i_')  
+           name = name.replace('NB2i_','NB1i_')
+           name = name.replace('NB3i_','NB1i_')
+
     elif 'NJ9' in name:
         # match for NJ9i
         name = name.replace('NJ9i','NJ45f9')
@@ -116,9 +131,21 @@ def matchSBMoriond17(bname):
             name = name.replace('NB1_','NB1i_')
             name = name.replace('NB2_','NB1i_')
             name = name.replace('NB3i_','NB1i_')
+
         else:
             name = name.replace('NB2_','NB2i_')
             name = name.replace('NB3i_','NB2i_')
+
+        if  'NT1_' in name:
+            name = name.replace('NT1_','NT1i_')
+        elif 'NT2i_' in name:
+            name = name.replace('NT2i_','NT1i_')
+
+        if 'LT4i' in name:             
+           name = name.replace('NB2_','NB1i_')
+           name = name.replace('NB2i_','NB1i_')
+           name = name.replace('NB3i_','NB1i_')
+
 
     elif 'NJ5' in name:
         name = name.replace('NJ5','NJ4f5')
@@ -285,12 +312,15 @@ def mergeBins(fileList, pattern = 'NJ68', outdir = None):
             print 'File bin name is', binname
             print 'Matching bins are:', matchbins
 
+        #print binname
         # strip off "SR" ending
         if 'Few' in binname:
             binname = binname[:binname.find("_SR")] + '_Few'
         else:
             binname = binname[:binname.find("_SR")]
 
+        #print binname 
+        #print ""
         ofname = outdir+'/'+binname+'.merge.root'
 
         writeBins(ofname, srcdir, matchbins)
