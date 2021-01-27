@@ -44,3 +44,6 @@ base: 1
 #nDeepTop_loose >= 1 : nDeepTop_loose >= 1
 
 #dPhi >= 0.75 : dPhi >= 0.75
+
+# Apply HEM (only for 2018)
+#HEM: (!isData || ((Run >= 319077) && (nHEMJetVeto == 0 && nHEMEleVeto == 0)) || (Run < 319077))
