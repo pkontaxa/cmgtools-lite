@@ -96,7 +96,7 @@ def matchSBMoriond17(bname):
             if 'HT4i' in name:
                 name = name.replace('NB3i_','NB1i_')
                 name = name.replace('NB2i_','NB1i_')
-           
+
 
     elif 'NJ68' in name:
         # match for NJ68
@@ -169,6 +169,8 @@ def findMatchBins(binname):
         njSB = 'NJ5'
     elif 'NJ67' in binname:
         njSB = 'NJ67'
+    elif 'NJ34' in binname:
+        njSB = 'NJ34'
     else:
         print "No match found:", binname
         exit(0)
@@ -178,7 +180,7 @@ def findMatchBins(binname):
         SBname = matchSBMoriond17(binname)
     else:
         SBname = matchSB(binname)
-    SBname = SBname[:SBname.find('_NJ')] + '_' + njSB
+    SBname = SBname[:SBname.find('_NJ')] + '_' + njSB + '_' + SBname.split("_")[-2]
     SR_SBname = SBname + '_SR'
     CR_SBname = SBname + '_CR'
     DLCR_SBname = SBname + '_DLCR'
@@ -315,15 +317,19 @@ if __name__ == "__main__":
     fileList = glob.glob(pattern+"*.root")
 
     #Pantelis bins = ['NJ0i_BDT','NJ4i','NJ5','NJ68','NJ9i','NJ6i']
-    bins = ['NJ5','NJ67','NJ8i']
+    #bins = ['NJ5','NJ67','NJ8i']
+    jetBins = ['NJ34', 'NJ5','NJ67','NJ8i']
+    wBins = ['NW0', 'NW1i', 'NW0i']
 
-    for bin in bins:
-        print "Merging bin:", bin
-        mergeBins(fileList,bin)
+    for jBin in jetBins:
+        for wBin in wBins:
+            bin = jBin + "_" + wBin
+            print "Merging bin:", bin
+            mergeBins(fileList,bin)
 
 
     #clean up a bit and create separate folders for 4,5 jet cross check and aggregate SR
-        
+
     patternList = pattern.split("/")
     listMerged = glob.glob(patternList[0]+"/"+patternList[1]+"/merged/*.root")
 
