@@ -3,6 +3,7 @@
 from CMGTools.TTHAnalysis.plotter.tree2yield import *
 from CMGTools.TTHAnalysis.plotter.projections import *
 from CMGTools.TTHAnalysis.plotter.figuresOfMerit import FOM_BY_NAME
+from CMGTools.TTHAnalysis.plotter.histoWithNuisances import *
 import pickle, re, random, time
 
 #_T0 = long(ROOT.gSystem.Now())
@@ -226,6 +227,13 @@ class MCAnalysis:
                             cnm_tot = cnames_tot[i][1]
                             if (nom == cnm_tot[0] or nom+"_ex" in cnm_tot[0]):
 				smaller_list.append(cnm_tot[0])                	
+                    ##New 6Feb2021
+                    if (len(smaller_list)==4 or len(smaller_list)==6):
+                         smaller_list = smaller_list[:2]     
+                    elif (len(smaller_list)==3 and (smaller_list[0] in smaller_list[1])):
+                         smaller_list = smaller_list[:1]
+                    ###                                            
+ 
                     print smaller_list 
                     for i, x in enumerate(smaller_list):
                          if (cname!=smaller_list[i]):
