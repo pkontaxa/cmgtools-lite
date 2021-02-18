@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from CMGTools.TTHAnalysis.plotter.mcAnalysis import *
+from CMGTools.TTHAnalysis.plotter.mcAnalysis_after_ext_scale import *
 import sys, os, os.path
 
 
@@ -520,16 +520,11 @@ if __name__ == "__main__":
 
     if not os.path.exists(options.outdir): os.makedirs(options.outdir)
 
-    #The following lines are taken from makeBinYields_T5qqqqWW.py
     print options.conference
     if options.conference == "Moriond17":
-        #from searchBinsMoriond17_Pantelis_BaseLine_T5qqqqWW_wo_NW import *
-        #from searchBinsMoriond17_Pantelis_BaseLine_T5qqqqWW_with_NW_V4 import *
-        from searchBinsMoriond17_Pantelis_BaseLine_T5qqqqWW_with_NW_V5 import *
-
+        from searchBins_0b_with_NW import *
     else:
-        #from searchBinsMoriond17_Pantelis_BaseLine_T5qqqqWW_wo_NW import *
-        from searchBinsMoriond17_Pantelis_BaseLine_T5qqqqWW_with_NW_V5 import *
+        from searchBins_0b_with_NW import *
 
     # make cut list
     cDict = {}
@@ -542,6 +537,16 @@ if __name__ == "__main__":
         cDict.update(cutDictSR34)
         if doDLCR: cDict.update(cutDictDLCR)
 
+    doNjet45 = True
+    if doNjet45:
+        cDict.update(cutDictCR45)
+        cDict.update(cutDictSR45)
+        if doDLCR: cDict.update(cutDictDLCR)
+
+    doNjet5 = True
+    if doNjet5:
+        cDict.update(cutDictSR5)
+        cDict.update(cutDictCR5)
 
     doNjet67 = True
     if doNjet67:
@@ -549,86 +554,11 @@ if __name__ == "__main__":
         cDict.update(cutDictSR67)
         if doDLCR: cDict.update(cutDictDLCR)
 
-
     doNjet8 = True
     if doNjet8:
         cDict.update(cutDictSR8)
         cDict.update(cutDictCR8)
         if doDLCR: cDict.update(cutDictDLCRf9)
-
-
-    doNjet5 = True
-    if doNjet5:
-        cDict.update(cutDictSR5)
-        cDict.update(cutDictCR5)
-
-
-    doFew = False
-    if doFew and options.conference == "Moriond17":
-        cDict.update(cutDictSRfFew)
-        cDict.update(cutDictCRfFew)
-
-    ### The Standard Lines
-    ### print options.conference
-    ### if options.conference == "Moriond17":
-    ###     #from searchBinsMoriond17_Pantelis_CombinedTopTagging_June3_2019_V2 import *
-    ###     from searchBinsMoriond17_Pantelis_CombinedTopTagging_Jan9_2021_V2 import *
-    ### else:
-    ###     #from searchBinsMoriond17_Pantelis_CombinedTopTagging_June3_2019_V2 import *
-    ###     from searchBinsMoriond17_Pantelis_CombinedTopTagging_Jan9_2021_V2 import *
-
-    ### # make cut list
-    ### cDict = {}
-
-    ### doDLCR = False
-
-    ### doNjet6 = True
-    ### if doNjet6:
-    ###     cDict.update(cutDictCR)
-    ###     cDict.update(cutDictSR)
-    ###     if doDLCR: cDict.update(cutDictDLCR)
-
-
-    ### doNjet9 = True
-    ### if doNjet9:
-    ###     cDict.update(cutDictSRf9)
-    ###     cDict.update(cutDictCRf9)
-    ###     if doDLCR: cDict.update(cutDictDLCRf9)
-
-
-    ### doNjet5 = False
-    ### if doNjet5:
-    ###     cDict.update(cutDictSRf5)
-    ###     cDict.update(cutDictCRf5)
-
-
-    ### doFew = False
-    ### if doFew and options.conference == "Moriond17":
-    ###     cDict.update(cutDictSRfFew)
-    ###     cDict.update(cutDictCRfFew)
-
-#    print cutDict
-    #cDict = cutQCDsyst #QCD
-
-    #cDict = cutIncl #Inclusive
-    #print sorted([k for k in cDict.keys() if "NB0i" in k])
-    #print sorted([k for k in cDict.keys() if "NB1" in k])
-    #exit(0)
-
-    # for LT/HT plots
-    #cDict = cutLTbinsSR
-    #cDict.update(cutLTbinsCR)
-
-    #print cDict.keys(); exit(0)
-
-    '''
-    d = {}
-
-    for bin in cDict:
-        if "NB1i" in bin: d[bin] = cDict[bin]
-    cDict = d
-    print cDict
-    '''
 
     binList = sorted(cDict.keys())
 

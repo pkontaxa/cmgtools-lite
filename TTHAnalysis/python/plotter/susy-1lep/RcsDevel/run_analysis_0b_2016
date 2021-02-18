@@ -1,0 +1,247 @@
+#!/usr/bin/env bash
+
+if [ -z "${1}" ]; then
+    echo Please specify outputfolder as positional argument.
+    exit
+fi
+
+lumi=35.9
+outputdir="${1}"
+
+
+## Signal
+#./makeBinYields_0b.py \
+#    --mca mca/2016/mca-Spring16_Signal.txt \
+#    --signal \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/scan
+
+# Background
+./makeBinYields_0b.py \
+    --mca mca/2016_EXT/mca-Summer16.txt \
+    --grid \
+    -v 2 \
+    -l "${lumi}" \
+    -b \
+    --od "${outputdir}"/grid
+
+## Background with dilepton nJet correction
+#./makeBinYields.py \
+#    --mca mca/2016/mca-Summer16_dilep-corr.txt \
+#    --grid \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/grid-dilep
+#
+## Systematic: dilepton constant
+#./makeBinYields.py \
+#    --mca ../systs/2016/DLConst/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_DLConst
+#
+## Systematic: dilepton slope
+#./makeBinYields.py \
+#    --mca ../systs/2016/DLSlope/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_DLSlope
+#
+## Systematic: JEC
+#./makeBinYields.py \
+#    --mca ../systs/2016/JEC/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_JEC
+
+## Systematic: PDF
+#./makeBinYields.py \
+#    --mca ../systs/PDFUnc-RMS/mca-Summer16_Moriond17.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_PDFUnc-RMS
+
+## Systematic: scale match
+#./makeBinYields.py \
+#    --mca ../systs/ScaleMatchVar/mca-Summer16_Moriond17.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_ScaleMatchVar
+
+
+## Systematic: W polarization
+#./makeBinYields.py \
+#    --mca ../systs/2016/Wpol/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_Wpol
+#
+## Systematic: W cross section
+#./makeBinYields.py \
+#    --mca ../systs/2016/Wxsec/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_Wxsec
+#
+## Systematic: b-tagging heavy flavour
+#./makeBinYields.py \
+#    --mca ../systs/2016/btagHF/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_btagHF
+#
+## Systematic: b-tagging
+#./makeBinYields.py \
+#    --mca ../systs/2016/btagLF/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_btagLF
+#
+## Systematic: lepton SF
+#./makeBinYields.py \
+#    --mca ../systs/2016/lepSF/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_lepSF
+#
+## Systematic: pileup
+#./makeBinYields.py \
+#    --mca ../systs/2016/PU/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_PU
+#
+## Systematic: TTV cross section
+#./makeBinYields.py \
+#    --mca ../systs/2016/TTVxsec/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_TTVxsec
+#
+## Systematic: TT cross section
+#./makeBinYields.py \
+#    --mca ../systs/2016/TTxsec/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_TTxsec
+#
+## Systematic: nISR reweighting
+#./makeBinYields.py \
+#    --mca ../systs/2016/nISR/mca-Summer16.txt \
+#    --grid \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/syst_nISR
+#
+## Signal systematic: Gluino ISR
+#./makeBinYields.py \
+#    --mca ../systs/2016/signal/ISR/mca-Spring16_Signal.txt \
+#    --signal \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/signal_ISR
+#
+## Signal systematic: JEC
+#./makeBinYields.py \
+#    --mca ../systs/2016/signal/JEC/mca-Spring16_Signal.txt  \
+#    --signal \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/signal_JEC
+#
+## Signal systematic: btag heavy flavour
+#./makeBinYields.py \
+#    --mca ../systs/2016/signal/btagHF/mca-Spring16_Signal.txt  \
+#    --signal \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/signal_btagHF
+# 
+## Signal systematic: btag light flavour
+#./makeBinYields.py \
+#    --mca ../systs/2016/signal/btagLF/mca-Spring16_Signal.txt  \
+#    --signal \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/signal_btagLF
+ 
+
+
+
+
+
+# does not work out of the box, because the new signal samples are not in 
+# the same place as the old ones (yet) and the paths are hardcoded in 
+# makeBinYields
+## Signal systematic: scale variation
+#./makeBinYields.py \
+#    --mca ../systs/signal/scale/mca-Spring16_Signal_forMoriond17.txt  \
+#    --signal \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/signal_scale
+
+## Signal systematic: pileup
+#./makeBinYields.py \
+#    --mca ../systs/signal/PU/mca-Spring16_Signal_forMoriond17.txt  \
+#    --signal \
+#    --systs True \
+#    -v 2 \
+#    -l "${lumi}" \
+#    -b \
+#    --od "${outputdir}"/signal_PU
+
