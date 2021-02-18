@@ -14,7 +14,6 @@ Merge search bins from yield files
 
 # extra options for tty
 parser.add_option("-v","--verbose",  dest="verbose",  default=0,  type="int",    help="Verbosity level (0 = quiet, 1 = verbose, 2+ = more)")
-parser.add_option("--conference", dest="conference", type="string", default="Moriond17", help="pick which binning to use ICHEP16 or Moriond17")
 
 (options,args) = parser.parse_args()
 
@@ -23,51 +22,23 @@ def matchSB(bname):
 
     name = bname+'_'
 
-    if 'Few' in name:
-        #name = name.replace('SR','SR_Few')
-        #name = name.replace('CR','CR_Few')
-        if 'NJ68' in name:
-            name = name.replace('NJ68','NJ45f6')
-            name = name.replace('NB3i_','NB2i_')
-        if 'NJ9i' in name:
-            name = name.replace('NJ9i','NJ45f9')
+    if 'NJ5_forWJets' in name:
+        name = name.replace('NJ5_forWJets','NJ34_forWJets')
+    elif 'NJ67_forWJets' in name:
+        name = name.replace('NJ67_forWJets','NJ34_forWJets')
+    elif 'NJ8i_forWJets' in name:
+        name = name.replace('NJ8i_forWJets','NJ34_forWJets')
+    elif 'NJ5_forTTJets' in name:
+        name = name.replace('NJ5_forTTJets','NJ45_forTTJets')
+        name = name.replace('NB0_','NB1i_')
+    elif 'NJ67_forTTJets' in name:
+        name = name.replace('NJ67_forTTJets','NJ45_forTTJets')
+        name = name.replace('NB0_','NB1i_')
+    elif 'NJ8i_forTTJets' in name:
+        name = name.replace('NJ8i_forTTJets','NJ45_forTTJets')
+        name = name.replace('NB0_','NB1i_')
 
-    elif 'NJ68' in name:
-        # match for NJ68
-        name = name.replace('NJ68','NJ45f6')
-        if 'HT2i' in name:
-            name = name.replace('NB1_','NB1i_')
-            name = name.replace('NB2_','NB1i_')
-            name = name.replace('NB2i_','NB1i_')
-            name = name.replace('NB3i','NB1i')
-        elif 'HT2i' not in name:
-            name = name.replace('NB2_','NB2i_')
-            name = name.replace('NB3i','NB2i')
-    elif 'NJ9' in name:
-        # match for NJ9i
-        name = name.replace('NJ9i','NJ45f9')
-        if 'HT2i' in name:
-            name = name.replace('NB1_','NB1i_')
-            name = name.replace('NB2_','NB1i_')
-            name = name.replace('NB3i_','NB1i_')
-        else:
-            name = name.replace('NB21','NB1i_')
-            name = name.replace('NB2_','NB2i_')
-            name = name.replace('NB3i_','NB2i_')
-    elif 'NJ5' in name:
-        name = name.replace('NJ5','NJ4f5')
-        if 'HT2i' in name or 'HT1i' in name:
-            name = name.replace('NB1_','NB1i_')
-            name = name.replace('NB2_','NB1i_')
-            name = name.replace('NB2i_','NB1i_')
-            name = name.replace('NB3i','NB1i')
-        else:
-            name = name.replace('NB2_','NB2i_')
-            name = name.replace('NB3i','NB2i')
-
-
-
-    name = name[:-1]
+    name = name[:-1] #to remove the trailing _
 
     if options.verbose > 0:
         if name!= bname:
@@ -75,66 +46,8 @@ def matchSB(bname):
         else:
             print 'No replace: %s with %s' %(bname,name)
 
-    return name #to remove the trailing _
+    return name 
 
-def matchSBMoriond17(bname):
-    # Matching main band (MB) bins to side band (SB)
-
-    name = bname+'_'
-    if 'Few' in name:
-        #name = name.replace('SR','SR_Few')
-        #name = name.replace('CR','CR_Few')
-        if 'NJ6i' in name:
-            name = name.replace('NJ6i','NJ45f6')
-            name = name.replace('NB3i_','NB2i_')
-            name = name.replace('NB1i_','NB1i_')
-            if 'HT4i' in name:
-                name = name.replace('NB3i_','NB1i_')
-        if 'NJ9i' in name:
-            name = name.replace('NJ9i','NJ45f9')
-            name = name.replace('NB3i_','NB2i_')
-            if 'HT4i' in name:
-                name = name.replace('NB3i_','NB1i_')
-                name = name.replace('NB2i_','NB1i_')
-
-
-    elif 'NJ68' in name:
-        # match for NJ68
-        name = name.replace('NJ68','NJ45f6')
-        if 'HT4i' in name:
-            name = name.replace('NB1_','NB1i_')
-            name = name.replace('NB2_','NB1i_')
-            name = name.replace('NB2i_','NB1i_')
-            name = name.replace('NB3i','NB1i')
-        elif 'HT4i' not in name:
-            name = name.replace('NB2_','NB2i_')
-            name = name.replace('NB3i','NB2i')
-    elif 'NJ9' in name:
-        # match for NJ9i
-        name = name.replace('NJ9i','NJ45f9')
-        if 'HT4i' in name:
-            name = name.replace('NB1_','NB1i_')
-            name = name.replace('NB2_','NB1i_')
-            name = name.replace('NB3i_','NB1i_')
-        else:
-            name = name.replace('NB2_','NB2i_')
-            name = name.replace('NB3i_','NB2i_')
-
-    elif 'NJ5' in name:
-        name = name.replace('NJ5','NJ4f5')
-        name = name.replace('NB1_','NB1i_')
-        name = name.replace('NB2i_','NB1i_')
-        name = name.replace('NB3i','NB2i')
-
-    name = name[:-1]
-
-    if options.verbose > 0:
-        if name!= bname:
-            print 'Replaced %s with %s' %(bname,name)
-        else:
-            print 'No replace: %s with %s' %(bname,name)
-
-    return name #to remove the trailing _
 
 def findMatchBins(binname):
 
@@ -161,26 +74,33 @@ def findMatchBins(binname):
 
     #print 'replace', purebname, 'to', matchSB(purebname)
 
-    if 'NJ68' in binname or 'NJ6i' in binname:
-        njSB = 'NJ45f6'
-    elif 'NJ8i' in binname:
-        njSB = 'NJ8i'
-    elif 'NJ5' in binname:
-        njSB = 'NJ5'
-    elif 'NJ67' in binname:
-        njSB = 'NJ67'
-    elif 'NJ34' in binname:
-        njSB = 'NJ34'
+    if 'NJ5_forTTJets' in binname:
+        njSB = 'NJ45_forTTJets'
+    elif 'NJ67_forTTJets' in binname:
+        njSB = 'NJ45_forTTJets'
+    elif 'NJ8i_forTTJets' in binname:
+        njSB = 'NJ45_forTTJets'
+    elif 'NJ5_forWJets' in binname:
+        njSB = 'NJ34_forWJets'
+    elif 'NJ67_forWJets' in binname:
+        njSB = 'NJ34_forWJets'
+    elif 'NJ8i_forWJets' in binname:
+        njSB = 'NJ34_forWJets'
+    elif 'NJ34_forWJets' in binname:
+        njSB = 'NJ34_forWJets'
+    elif 'NJ45_forTTJets' in binname:
+        njSB = 'NJ45_forTTJets'
     else:
         print "No match found:", binname
         exit(0)
 
-    SBname = ""
-    if options.conference == "Moriond17":
-        SBname = matchSBMoriond17(binname)
+    SBname = matchSB(binname)
+
+    if 'forWJets' in binname:
+        SBname = SBname[:SBname.find('_NJ')] + '_' + njSB + '_' + SBname.split("_")[-3] + '_' + SBname.split("_")[-2]
     else:
-        SBname = matchSB(binname)
-    SBname = SBname[:SBname.find('_NJ')] + '_' + njSB + '_' + SBname.split("_")[-2]
+        SBname = SBname[:SBname.find('_NJ')] + '_' + njSB + '_' + SBname.split("_")[-2]
+
     SR_SBname = SBname + '_SR'
     CR_SBname = SBname + '_CR'
     DLCR_SBname = SBname + '_DLCR'
@@ -316,37 +236,37 @@ if __name__ == "__main__":
     # find files matching pattern
     fileList = glob.glob(pattern+"*.root")
 
-    #Pantelis bins = ['NJ0i_BDT','NJ4i','NJ5','NJ68','NJ9i','NJ6i']
-    #bins = ['NJ5','NJ67','NJ8i']
-    jetBins = ['NJ34', 'NJ5','NJ67','NJ8i']
+    jetBins = ['NJ34_forWJets', 'NJ5_forWJets', 'NJ67_forWJets', 'NJ8i_forWJets', 'NJ45_forTTJets', 'NJ5_forTTJets','NJ67_forTTJets','NJ8i_forTTJets']
     wBins = ['NW0', 'NW1i', 'NW0i']
-
+    lepCharges = ['_pos', '_neg', '']
+    
     for jBin in jetBins:
         for wBin in wBins:
-            bin = jBin + "_" + wBin
-            print "Merging bin:", bin
-            mergeBins(fileList,bin)
+	    for charge in lepCharges:
+	        bin = jBin + "_" + wBin + charge
+		print "Merging bin:", bin
+		mergeBins(fileList,bin)
 
 
-    #clean up a bit and create separate folders for 4,5 jet cross check and aggregate SR
+    ##clean up a bit and create separate folders for 4,5 jet cross check and aggregate SR
 
-    patternList = pattern.split("/")
-    listMerged = glob.glob(patternList[0]+"/"+patternList[1]+"/merged/*.root")
+    #patternList = pattern.split("/")
+    #listMerged = glob.glob(patternList[0]+"/"+patternList[1]+"/merged/*.root")
 
-    if not os.path.exists(patternList[0]+"/"+patternList[1]+"/merged4f5"):
-        os.system("mkdir -p "+patternList[0]+"/"+patternList[1]+"/merged4f5")
+    #if not os.path.exists(patternList[0]+"/"+patternList[1]+"/merged4f5"):
+    #    os.system("mkdir -p "+patternList[0]+"/"+patternList[1]+"/merged4f5")
 
-    if not os.path.exists(patternList[0]+"/"+patternList[1]+"/mergedFew"):
-        os.system("mkdir -p "+patternList[0]+"/"+patternList[1]+"/mergedFew")
-    for f in listMerged:
-        cmd =""
-        if "NJ9" in f:
-            cmd = "mv " + f + " " +patternList[0]+"/"+patternList[1]+"/merged4f5/."
-        elif "Few" in f:
-            cmd = "mv " + f + " " + patternList[0]+"/"+patternList[1]+"/mergedFew/."
-        else:
-            continue
-        print cmd
-        os.system(cmd)
+    #if not os.path.exists(patternList[0]+"/"+patternList[1]+"/mergedFew"):
+    #    os.system("mkdir -p "+patternList[0]+"/"+patternList[1]+"/mergedFew")
+    #for f in listMerged:
+    #    cmd =""
+    #    if "NJ9" in f:
+    #        cmd = "mv " + f + " " +patternList[0]+"/"+patternList[1]+"/merged4f5/."
+    #    elif "Few" in f:
+    #        cmd = "mv " + f + " " + patternList[0]+"/"+patternList[1]+"/mergedFew/."
+    #    else:
+    #        continue
+    #    print cmd
+    #    os.system(cmd)
 
     print 'Finished'
