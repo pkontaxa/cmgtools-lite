@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #from mcAnalysis import *
-from CMGTools.TTHAnalysis.plotter.mcAnalysis import *
+from CMGTools.TTHAnalysis.plotter.mcAnalysis_after_ext_scale import *
 import CMGTools.TTHAnalysis.plotter.CMS_lumi as CMS_lumi
 import itertools, math
 

@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Script to make plots
+# This needs to be called from $CMSSW_BASE/src/CMGTools/TTHAnalysis/python/plotter
+# You need to have symbolic links called "trees" and "friends", pointing to your
+# trees and friend trees, resp.
+
+lumi=35.9
+
+mca=susy-1lep/mca/mca-Spring16_forQCD_estimation_with_Ext.txt
+cuts=susy-1lep/1l_basicCutsFullCutFlow_qcd-est_2016.txt
+
+trees=/nfs/dust/cms/user/pakontax/CMSSW/Full_Run_II_Analysis_FINAL_FINAL_FINAL_17July2020/CMSSW_10_4_0/src/CMGTools/TTHAnalysis/python/plotter/susy-1lep/Softlinks/trees_2016_from_dCache_FINAL/
+
+friends=/nfs/dust/cms/user/pakontax/CMSSW/Full_Run_II_Analysis_FINAL_FINAL_FINAL_17July2020/CMSSW_10_4_0/src/CMGTools/TTHAnalysis/python/plotter/susy-1lep/Softlinks/FRIENDS_2016_FINAL/evVarFriend_{cname}.root
+
+# QCD estimation, define QCD as signal
+python mcPlots.py \
+    "${mca}" \
+    "${cuts}" \
+    susy-1lep/qcd-est/txtconfigs/Lp_LTbins_forFit_0b.txt \
+    -P "${trees}" \
+    -F sf/t "${friends}" \
+    -l "${lumi}" \
+    -j $(nproc) \
+    --tree treeProducerSusySingleLepton \
+    -G \
+    -f \
+    --showRatio \
+    --maxRatioRange 0.05 1.95 \
+    --fixRatioRange \
+    --noErrorBandOnRatio \
+    --noStackSig \
+    --showIndivSigs \
