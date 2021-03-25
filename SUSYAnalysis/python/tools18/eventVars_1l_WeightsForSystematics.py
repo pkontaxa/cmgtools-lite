@@ -145,6 +145,9 @@ class EventVars1LWeightsForSystematics:
             # DiLepton
             "DilepNJetCorr", #to shift central value 
             "DilepNJetWeightConstUp", "DilepNJetWeightSlopeUp", "DilepNJetWeightConstDn", "DilepNJetWeightSlopeDn",
+            # DiLepton (0-b)
+            "DilepNJetCorr_0b", #to shift central value 
+            "DilepNJetWeightConstUp_0b", "DilepNJetWeightSlopeUp_0b", "DilepNJetWeightConstDn_0b", "DilepNJetWeightSlopeDn_0b",
             # W polarisation
             "WpolWup","WpolWdown",
             'nISRtt','nISRttweight','nISRttweightsyst_up', 'nISRttweightsyst_down','nISRttweight2'
@@ -257,60 +260,58 @@ class EventVars1LWeightsForSystematics:
 
         ####################################
         ### For DiLepton systematics
-        # values in sync with AN2015_207_v3
-        #        Const weight
-        # const: 0.85 +-0.06
-        #        16%
 
-        '''
-        constVariation=0.16
-        wmean = 5.82 - 0.5
-        # slope: 0.03 +/-0.05
-        slopevariation = sqrt(0.03*0.03 +0.05*0.05)
+        #2018 for full RunII Analysis
+        #https://indico.cern.ch/event/1019064/contributions/4276809/attachments/2209444/3739024/SUSY_1Lep_multib_DiLeptonCRStudies_16March2021_PK.pdf (multi-b)
+        #https://indico.cern.ch/event/1020325/contributions/4282596/attachments/2212473/3745069/SUSY_1Lep_0b_DiLeptonCRStudies_19March2021_PK.pdf (zero-b)
 
-        #2016 update
-        constVariation=0.16
-        slopevariation = sqrt(0.05*0.05 +0.04*0.04)
-        wmean = 5.54 - 0.5
+        ### for multi-b
+        constVariation= sqrt(0.01*0.01 + 0.01*0.01)
+        slopevariation = sqrt(0.02*0.02 + 0.01*0.01)
+        wmean = 5.68 - 0.5
+        ###############
 
-        #2016 update with 4/fb
-        constVariation= sqrt(0.06*0.06 +0.03*0.03)
-        slopevariation = sqrt(0.06*0.06 +0.02*0.02)
-        wmean = 5.62 - 0.5
+        ### for 0-b
+        constVariation_0b= sqrt(0.17*0.17 + 0.01*0.01)
+        slopevariation_0b = sqrt(0.09*0.09 + 0.01*0.01)
+        wmean_0b = 5.05 - 0.5
+        ###############
 
-        #2016 update with 7.7/fb
-        constVariation= sqrt(0.04*0.04 +0.02*0.02)
-        slopevariation = sqrt(0.07*0.07 +0.02*0.02)
-        wmean = 5.67 - 0.5
-        '''
-
-        #2016 update with 35.9/fb
-        #https://indico.cern.ch/event/611061/contributions/2464202/attachments/1406419/2149049/diLepStudy.pdf
-        constVariation= sqrt(0.030*0.030 +0.023*0.023)
-        slopevariation = sqrt(0.017*0.017 +0.014*0.014)
-        wmean = 6.93 - 0.5
 
         if "nJets30Clean" in base: nJets30Clean = base["nJets30Clean"]
         else: nJets30Clean = event.nJet
 
         sumnGenLepTau=0
         for i in range(0,event.ngenTau):
-            if abs(event.genTau_grandmotherId[i])==6 and abs(event.genTau_motherId[i])==24: sumnGenLepTau+=1
+            if ((abs(event.genTau_grandmotherId[i])==6 or abs(event.genTau_grandmotherId[i])==24) and abs(event.genTau_motherId[i])==24): sumnGenLepTau+=1
         for i in range(0,event.ngenLep):
-            if abs(event.genLep_grandmotherId[i])==6 and abs(event.genLep_motherId[i])==24: sumnGenLepTau+=1
+            if ((abs(event.genLep_grandmotherId[i])==6 or abs(event.genLep_grandmotherId[i])==24) and abs(event.genLep_motherId[i])==24): sumnGenLepTau+=1
 #        if (event.ngenLep+event.ngenTau)==2: #would like to restore this behavior...
         if sumnGenLepTau==2:
-            ret['DilepNJetCorr']          = 1.030-0.017*(nJets30Clean-wmean)
+            ret['DilepNJetCorr']          = 1.01+0.02*(nJets30Clean-wmean)
             ret['DilepNJetWeightConstUp'] = 1-constVariation
             ret['DilepNJetWeightSlopeUp'] = 1+ (nJets30Clean-wmean)*slopevariation
             ret['DilepNJetWeightConstDn'] = 1+constVariation
             ret['DilepNJetWeightSlopeDn'] = 1- (nJets30Clean-wmean)*slopevariation
+
+            ret['DilepNJetCorr_0b']          = 1.17-0.09*(nJets30Clean-wmean_0b)
+            ret['DilepNJetWeightConstUp_0b'] = 1-constVariation_0b
+            ret['DilepNJetWeightSlopeUp_0b'] = 1+ (nJets30Clean-wmean_0b)*slopevariation_0b
+            ret['DilepNJetWeightConstDn_0b'] = 1+constVariation_0b
+            ret['DilepNJetWeightSlopeDn_0b'] = 1- (nJets30Clean-wmean_0b)*slopevariation_0b
+
         else:
             ret['DilepNJetCorr']          = 1.
             ret['DilepNJetWeightConstUp'] = 1.
             ret['DilepNJetWeightSlopeUp'] = 1.
             ret['DilepNJetWeightConstDn'] = 1.
             ret['DilepNJetWeightSlopeDn'] = 1.
+
+            ret['DilepNJetCorr_0b']          = 1.
+            ret['DilepNJetWeightConstUp_0b'] = 1.
+            ret['DilepNJetWeightSlopeUp_0b'] = 1.
+            ret['DilepNJetWeightConstDn_0b'] = 1.
+            ret['DilepNJetWeightSlopeDn_0b'] = 1.
 
 
         ret['GenTopPt'] = GenTopPt
