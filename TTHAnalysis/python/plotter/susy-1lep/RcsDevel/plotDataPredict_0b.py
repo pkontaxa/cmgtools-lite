@@ -55,28 +55,34 @@ if __name__ == "__main__":
     #BinMask LTX_HTX_NBX_NJX for canvas names
     basename = os.path.basename(pattern)
     signalBasename = os.path.basename(pattern2)
-    #basename = basename.replace("_SR","")
     mask = basename.replace("*","X_")
     signalMask = signalBasename.replace("*","X_")
 
     ## Create Yield Storage
     yds = yp.YieldStore("lepYields")
     yds.addFromFiles(pattern,("lep","sele"))
-    yds.showStats()
+    #yds.showStats()
+
+    ydsMuon = yp.YieldStore("MuonYields")
+    ydsMuon.addFromFiles(pattern,("mu","sele"))
+    #ydsMuon.showStats()
+
+    ##TESTING
+    #storeDict = True
+    #pckname = "pickles_{}/allSigCentral.pckz".format(year)
 
     signalYds = yp.YieldStore("Signal")
     pathSig = pattern2
     signalYds.addFromFiles(pathSig,("lep","sele"))
 
-    #mcSamps = ['VV','DY','TTV','SingleT','WJets','TTJets']
-    mcSamps = ['VV','DY','TTV','SingleT','TTJets','WJets']
-    #mcSamps = ['VV','DY','TTV','SingleT','WJets','TTsemiLep', 'TTdiLep']
+    mcSamps = ['VV','DY','TTV','SingleT']#,'WJets','TTJets']#
+    #mcSamps = ['VV','DY','TTV','SingleT','WJets','TTJets']#
     signalSamples = ['T5qqqqWW_Scan_mGo1500_mLSP1000', 'T5qqqqWW_Scan_mGo1900_mLSP100']
-    #signalSamples = ['T5qqqqWW_Scan_mGo1500_mLSP1000', 'T5qqqqWW_Scan_mGo1900_mLSP100', 'T5qqqqWW_Scan_mGo2100_mLSP1800', 'T5qqqqWW_Scan_mGo1050_mLSP900']
-    #signalSamples = ['T5qqqqWW_Scan_mGo1500_mLSP1000', 'T5qqqqWW_Scan_mGo1900_mLSP100', 'T5qqqqWW_Scan_mGo2150_mLSP1750', 'T5qqqqWW_Scan_mGo2100_mLSP1800', 'T5qqqqWW_Scan_mGo2150_mLSP1800', 'T5qqqqWW_Scan_mGo1050_mLSP900', 'T5qqqqWW_Scan_mGo1800_mLSP200', 'T5qqqqWW_Scan_mGo2400_mLSP1400', 'T5qqqqWW_Scan_mGo2550_mLSP200']
+
+    # update colors
 
     # Category
-    cat = "CR_MB"
+    cat = "SR_MB"
     if len(sys.argv) > 3:
         cat = sys.argv[3]
 
@@ -85,25 +91,58 @@ if __name__ == "__main__":
     #for cat in cats:
 
     # Totals
-    hDataPred = yp.makeSampHisto(yds,"data_QCDsubtr",cat,"Data_prediction"); hDataPred.SetTitle("Data (Pred)")
-
     hData = yp.makeSampHisto(yds,"data_QCDsubtr",cat,"Data"); hData.SetTitle("Data")
-    hMCPred = yp.makeSampHisto(yds,"background_QCDsubtr",cat,"MC_expectation"); hMCPred.SetTitle("MC (Exp)")
+
+    hWnegPred = yp.makeSampHisto(yds,"WJets_pred_neg", "SR_MB", "W+jets (Pred)", useRcs = True); hWnegPred.SetTitle("WJets (Pred)");
+    hWposPred = yp.makeSampHisto(yds,"WJets_pred_pos", "SR_MB", "Wpos+jets (Pred)", useRcs = True); hWposPred.SetTitle("WJets (Pred)");
+
+    hWPred = hWnegPred.Clone(hWnegPred.GetTitle().replace("neg", "Jets"))
+    hWPred.SetTitle("WJets (Pred)")
+    hWPred.Add(hWposPred)
+
+    hTTJetsPred = yp.makeSampHisto(ydsMuon,"TTJets_pred", "SR_MB", "TTJets (Pred)", useRcs = True); hTTJetsPred.SetTitle("TTJets (Pred)");
+
+    ##### MC samps
+    samps = [(samp,cat) for samp in mcSamps]
+    mcHists = yp.makeSampHists(yds,samps)
+    #mcHists = mcHists + [hTTsemiLepPred, hTTdiLepPred, hWPred]
+    mcHists = mcHists + [hTTJetsPred, hWPred]
+
+    #signalSamps = [(samp,"SR_MB") for samp in signalSamples]
+    #signalHists = yp.makeSampHists(signalYds,signalSamps)
+    #signalStack = yp.getStack(signalHists)
+
+    signalCat = cat.replace("_pos", "").replace("_neg", "")
+    signalSamps = [(samp,signalCat) for samp in signalSamples]
+    signalHists = yp.makeSampHists(signalYds,signalSamps)
+    signalStack = yp.getStack(signalHists)
+
+    # Scale MC hists to Prediction
+    #scaleToHist(mcHists,hDataPred)
+
+    mcStack = yp.getStack(mcHists)
+    hMCPred = mcHists[0].Clone()
+    if len(mcHists) > 1:
+        for hist in mcHists[1:]:
+            hMCPred.Add(hist)
+
+
+    #hMCPred = sum(mcHists)
+    hUncert = hMCPred.Clone("uncert")
+    hUncert.SetTitle("Stat. Unc.")
+    yp.setUnc(hUncert)
 
     # Ratio
-    #ratio = yp.getRatio(hTotal,hDataPred)
     ratio = yp.getRatio(hData,hMCPred)
-
-    #ratio.GetYaxis().SetRangeUser(0,5)
 
     doPoisErr = True
     if doPoisErr:
         from CMGTools.TTHAnalysis.plotter.mcPlots import getDataPoissonErrors
-        hDataPois = getDataPoissonErrors(hDataPred,True,True)
+        hDataPois = getDataPoissonErrors(hData,True,True)
         hDataPois.SetName("DataPois")
         hDataPois.SetTitle("Data")
 
-        hMCPois = getDataPoissonErrors(hDataPred,True,True)
+        hMCPois = getDataPoissonErrors(hData,True,True)
         hMCPois.SetName("DataPois")
         hMCPois.SetTitle("Data")
 
@@ -128,52 +167,27 @@ if __name__ == "__main__":
             except ZeroDivisionError:
                 hPredUnc.SetBinError(i, 0.)
 
-    # MC samps
-    samps = [(samp,cat) for samp in mcSamps]
-    mcHists = yp.makeSampHists(yds,samps)
-
-    signalCat = cat.replace("_pos", "").replace("_neg", "")
-    signalSamps = [(samp,signalCat) for samp in signalSamples]
-    signalHists = yp.makeSampHists(signalYds,signalSamps)
-    signalStack = yp.getStack(signalHists)
-    #signalLabel = ["T5qqqqWW (1.5, 1.0)", "T5qqqqWW (1.5, 1.0)"]
-    #for hist, sample in zip(signalHists, signalSamples):
-        #print "TEST"
-        #print hist
-        #print sample.replace("_Scan_", " ")
-
-    # Scale MC hists to Prediction
-    #scaleToHist(mcHists,hDataPred)
-
-    mcStack = yp.getStack(mcHists)
-    hUncert = hMCPred.Clone("uncert")
-    hUncert.SetTitle("Stat. Unc.")
-    yp.setUnc(hUncert)
-
     width = 2000 #Previous 1200 Pantelis
     height = 600
     legPos = "Long"
 
     doPoisErr = True
     if doPoisErr:
-        if "SR_MB" in cat:
+        if "SR" in cat:
             histsToPlot = [mcStack] + signalHists + [hUncert]
             ratio = None
         else:
             histsToPlot = [mcStack]  + signalHists + [hUncert,hDataPois]
             ratio = [hPredUnc,ratioPois]
-        print(histsToPlot)
-        canv = yp.plotHists(cat + "_Expectation_",histsToPlot,ratio,legPos, width, height, logY = True, nCols = len(mcSamps) + 4)
+        canv = yp.plotHists(cat + "_Prediction_",histsToPlot,ratio,legPos, width, height, logY = True, nCols = len(mcSamps) + 4)
     else:
-        if "SR_MB" in cat:
+        if "SR" in cat:
             histsToPlot = [mcStack] + signalHists
             ratio = None
         else:
             histsToPlot = [mcStack] + signalHists + [hData]
             ratio = [ratio]
-        canv = yp.plotHists(cat + "_Expectation_",histsToPlot,ratio,legPos, width, height, logY = True, nCols = len(mcSamps) + 2)
-        #canv = yp.plotHists(cat + "_Prediction",[mcStack,hData],ratio,legPos, width, height, logY = True, nCols = len(mcSamps) + 1)
-        #canv = yp.plotHists(cat,[mcStack],None,legPos, width, height, logY = True, nCols = len(mcSamps))
+        canv = yp.plotHists(cat + "_Prediction_",histsToPlot,ratio,legPos, width, height, logY = True, nCols = len(mcSamps) + 2)
 
     cname = "MC_" + cat + "_" +lum.replace('.','p')+"_"+mask
 
@@ -181,24 +195,19 @@ if __name__ == "__main__":
 
     canv.SetName(cname + canv.GetName())
 
-    #canvs.append(canv)
-
-    #print canv.GetName()
-
-    #if not yp._batchMode:
-    #    if "q" in raw_input("Enter any key to exit (or 'q' to stop): "): exit(0)
-
     # Save canvases
     exts = [".pdf",".png",".root"]
     #exts = [".pdf"]
-#    print pattern
     if len(sys.argv) > 4:
         odir = sys.argv[4]
         if odir[-1] != "/": odir+="/"
     else:
         odir = "BinPlots/"
 
-    if not os.path.isdir(odir): os.makedirs(odir)
+    if not os.path.exists(odir):
+        os.makedirs(odir)
+
+    ###if not os.path.isdir(odir): os.makedirs(odir)
 
     #for canv in canvs:
     for ext in exts:
