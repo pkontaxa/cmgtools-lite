@@ -166,7 +166,8 @@ if __name__ == "__main__":
         vmx=[]; vmy = []; vxsec = []; vobs = [];  vobsup = []; vobsdown = []; vexp = []; vup = []; vdown = []; vlim = [];
         for x in fileList:
             mGo = int(x[x.find('_mGo')+4:x.find('_mLSP')])
-            mLSP = int(x[x.find('_mLSP')+5:x.find('.As')])
+            #mLSP = int(x[x.find('_mLSP')+5:x.find('.As')])
+            mLSP = int(x[x.find('_mLSP')+5:x.find('_Shape')])      
             f = TFile.Open(x, 'read')
             t = f.Get('limit')
             xsec = xsecGlu[mGo][0]
