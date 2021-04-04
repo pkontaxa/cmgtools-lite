@@ -19,4 +19,7 @@ DLMS_ST>250: DLMS_ST>250
 #Nb >= 1 : nBJet >= 1
 Nb = 0 : nBJet == 0
 
+# Apply HEM
+HEM: (!isData || ((Run >= 319077) && (nHEMJetVeto == 0 && nHEMEleVeto == 0)) || (Run < 319077))
+
 base: 1

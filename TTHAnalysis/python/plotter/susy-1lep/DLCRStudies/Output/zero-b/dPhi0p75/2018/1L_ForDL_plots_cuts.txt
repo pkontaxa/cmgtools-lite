@@ -1,0 +1,15 @@
+Trigger : !isData || (HLT_EleOR || HLT_MuOR || HLT_MetOR)
+Trigger XOR : !isData || ( (PD_SingleEle && HLT_EleOR) || (PD_SingleMu && (HLT_MuOR) && !(HLT_EleOR) ) || (PD_MET && (HLT_MetOR) && !(HLT_EleOR) && !(HLT_MuOR) )  )
+== 1 hard lep : nLep == 1 && Selected == 1 && Lep_pt > 25
+veto : nVeto == 0
+Filters : !isData || METfilters == 1
+Iso veto : !iso_Veto
+MET/met_caloPt <= 5 : MET/met_caloPt <= 5
+Mu jet filter : RA2_muJetFilter == 1
+nJets30Clean >= 3 : nJets30Clean >= 3
+2.JetPt > 80 : Jet2_pt > 80
+HT > 500 : HT > 500
+LT > 250 : LT > 250
+Nb = 0 : nBJet == 0
+DPhi<0.75 : dPhi<0.75
+HEM : (!isData || ((Run >= 319077) && (nHEMJetVeto == 0 && nHEMEleVeto == 0)) || (Run < 319077))

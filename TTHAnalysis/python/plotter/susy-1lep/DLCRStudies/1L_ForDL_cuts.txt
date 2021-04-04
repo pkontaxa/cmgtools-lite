@@ -1,16 +1,28 @@
-Trigger: !isData || (isData && (HLT_EleHT350 || HLT_EleHT400 || HLT_Ele105 || HLT_MuHT400 || HLT_MuHT350))
-XOR : !isData || (isData && ((PD_SingleEle && nEl==1) || (PD_SingleMu && nMu==1)))
+Trigger: !isData || (HLT_EleOR || HLT_MuOR || HLT_MetOR)
+
+# Prevent double counting from different datasets
+Trigger XOR: !isData || ( (PD_SingleEle && HLT_EleOR) || (PD_SingleMu && (HLT_MuOR) && !(HLT_EleOR) ) || (PD_MET && (HLT_MetOR) && !(HLT_EleOR) && !(HLT_MuOR) )  )
+
 == 1 hard lep : nLep == 1 && Selected == 1 && Lep_pt > 25
 veto : nVeto == 0
 #use this flag for now
 Filters: !isData || METfilters == 1
 
+# Isolated track veto
+Iso veto: !iso_Veto
+
+# Ghost Muon filters
+MET/met_caloPt <= 5: MET/met_caloPt <= 5
+Mu jet filter: RA2_muJetFilter == 1
+
 nJets30Clean >= 3 : nJets30Clean >= 3
+#nJets30Clean >= 4 : nJets30Clean >= 4
+
 2.JetPt > 80 : Jet2_pt > 80
 HT > 500 : HT > 500
 LT > 250 : LT > 250
 #Nb >= 1 : nBJet >= 1
 Nb = 0 : nBJet == 0
-DPhi<0.5 : dPhi<0.5
+DPhi<0.75 : dPhi<0.75
 #Filters : !isData || (isData && passFilters)
 

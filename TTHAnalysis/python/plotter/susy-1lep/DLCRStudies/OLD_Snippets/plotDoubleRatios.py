@@ -64,7 +64,6 @@ class DoubleRatioPlotter:
 
         ratioHist.Draw("same")
         
-       
         ypoints = graph.band68.GetY()
         ypoints2 = graph.band68.GetEYhigh()
 
@@ -84,15 +83,10 @@ class DoubleRatioPlotter:
             sumwtimesx += w*x
         wmean = sumwtimesx/sumw
         print "wmean", wmean
-        #fitTGraph(graph,order=1,wMean=wmean)    
-                  
-        orthonormLinear = TF1("orthonormLinear","[0] +(x-{})*[1]".format(wmean),3.,10.)
+
+        orthonormLinear = TF1("orthonormLinear","[0] +(x-{})*[1]".format(wmean),0,10)
         print "[0] +(x-{})*[1]".format(wmean)
         fitresult = decorrFitGraph.Fit(orthonormLinear,"SN0 EX0")
-        '''
-        orthonormLinear = TF1("orthonormLinear","pol1",4.,10.)
-        fitresult = decorrFitGraph.Fit(orthonormLinear,"QN0S EX0")
-        '''  
 
         orthonormLinear.SetLineColor(1)
         orthonormLinear.SetLineStyle(2)
@@ -157,21 +151,6 @@ class DoubleRatioPlotter:
         if extraLabel!="": printExtraLabel(extraLabel+"\\n"+fitresult,'TR')
         else: printExtraLabel(fitresult,'TR')        
 #        doCMSlumi(c1)
-        ### Print CMS Lumi ### 
-        import CMS_lumi
-  
-        CMS_lumi.writeExtraText = 1 
-#        CMS_lumi.lumi_13TeV = "35.9"+ " fb^{-1}"
-#        CMS_lumi.lumi_13TeV = "41.9"+ " fb^{-1}"
-#        CMS_lumi.lumi_13TeV = "59.74"+ " fb^{-1}"
-        CMS_lumi.lumi_13TeV = "137.0"+ " fb^{-1}"
-
-        CMS_lumi.extraText = "Preliminary"
-        iPos = 0
-        if( iPos==0 ): CMS_lumi.relPosX = 0.1
-
-        CMS_lumi.CMS_lumi(c1, 4, iPos)        
-        ######################              
         ROOT.gPad.Update()
         ROOT.gPad.RedrawAxis()
         c1.Print(".png")
@@ -233,15 +212,10 @@ if __name__ == "__main__":
     print "python -i plotDoubleRatios.py 2L_ForDL_plots.txt 1L_ForDL_plots.txt plots_2L/2L_ForDL_plots.root plots_1L/1L_ForDL_plots.root"
     print
     parser = OptionParser(usage="%prog [options] plotsDilepton.txt plotsSingleLepton.txt pathDiLeptonROOTFile pathSingleLeptonRootFile")
-    #rser.add_option("-o", "--out", dest="out", default="DefaultOutput", help="Output file name");
-    parser.add_option("-o", "--out", dest="out", default="./Plots_Ratio/", help="Output file name");
+    parser.add_option("-o", "--out", dest="out", default="DefaultOutput", help="Output file name");
     addPlotMakerOptions(parser)
     (options, args) = parser.parse_args()
-    options.lumi=35.9
-    #options.lumi=41.9
-    #options.lumi=59.74
-    #options.lumi=137.0
-
+    options.lumi=36
     plotsDiLepton      = PlotFile(args[0],options)
     plotsSingleLepton  = PlotFile(args[1],options)
 
