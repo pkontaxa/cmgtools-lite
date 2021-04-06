@@ -152,7 +152,7 @@ for nj_bin in ['NJ34_forWJets']:
                     nwbins = ["NW0", "NW0i"]
                 elif lt_bin == "LT3" and ht_bin == "HT3i":
                     nwbins = ["NW0", "NW0i"]
-                elif lt_bin == "LT4i" and ht_bin == "HT3i":
+                elif lt_bin == "LT4i" and (ht_bin == "HT03" or ht_bin == "HT3i"):
                     nwbins = ["NW0", "NW0i"]
                 else:
                     nwbins = ['NW0', 'NW1i']
@@ -211,7 +211,7 @@ for nj_bin in ['NJ45_forTTJets']:
                     nwbins = ["NW0", "NW0i", "NW1i"]
                 elif lt_bin == "LT3" and ht_bin == "HT3i":
                     nwbins = ["NW0", "NW0i", "NW1i"]
-                elif lt_bin == "LT4i" and ht_bin == "HT3i":
+                elif lt_bin == "LT4i" and (ht_bin == "HT03" or ht_bin == "HT3i"):
                     nwbins = ["NW0", "NW0i", "NW1i"]
                 else:
                     nwbins = ['NW0', 'NW1i']
@@ -433,8 +433,8 @@ for nj_bin in ['NJ8i_forWJets']:
                 ht_cut =binsHT[ht_bin][0]
 
                 nwbins = []
-                #if lt_bin in ['LT4i'] and (ht_bin == 'HT03' or ht_bin == "HT3i"):
-                if lt_bin in ['LT4i'] and (ht_bin == "HT3i"):
+                if lt_bin in ['LT4i'] and (ht_bin == 'HT03' or ht_bin == "HT3i"):
+                #if lt_bin in ['LT4i'] and (ht_bin == "HT3i"):
                     nwbins = ['NW0i']
                 else:
                     nwbins = ['NW0','NW1i']
@@ -478,7 +478,8 @@ for nj_bin in ['NJ8i_forTTJets']:
             ht_cut =binsHT[ht_bin][0]
 
             nwbins = []
-            if lt_bin in ['LT4i'] and (ht_bin == "HT3i"):
+            if lt_bin in ['LT4i'] and (ht_bin == 'HT03' or ht_bin == "HT3i"):
+            #if lt_bin in ['LT4i'] and (ht_bin == "HT3i"):
                 nwbins = ['NW0i']
             else:
                 nwbins = ['NW0','NW1i']
