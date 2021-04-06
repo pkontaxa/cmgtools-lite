@@ -55,7 +55,7 @@ binsLepCharge['neg'] = ('Lep_pdgId > 0', '-1')
 missingBins = [
 ]
 
-doMissingBinsOnly = True
+doMissingBinsOnly = False
 #filename = "missingBins_scan.md"
 filename = "missingBins_grid.md"
 #filename = "missingBins_grid-dilep.md"
