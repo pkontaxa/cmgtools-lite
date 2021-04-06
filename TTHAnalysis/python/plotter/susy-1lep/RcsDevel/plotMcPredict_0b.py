@@ -60,7 +60,15 @@ if __name__ == "__main__":
     signalMask = signalBasename.replace("*","X_")
 
     ## Create Yield Storage
-    yds = yp.YieldStore("lepYields")
+    lep = "lep"
+    dataString = "data_QCDsubtr"
+    print pattern.split("/")
+    print pattern.split("/")[2]
+    print "WJets" in pattern.split("/")[2]
+    if "WJets" in pattern.split("/")[2]:
+        lep = "mu"
+        data = "data"
+    yds = yp.YieldStore(lep + "Yields")
     yds.addFromFiles(pattern,("lep","sele"))
     yds.showStats()
 
@@ -72,8 +80,6 @@ if __name__ == "__main__":
     mcSamps = ['VV','DY','TTV','SingleT','TTJets','WJets']
     #mcSamps = ['VV','DY','TTV','SingleT','WJets','TTsemiLep', 'TTdiLep']
     signalSamples = ['T5qqqqWW_Scan_mGo1500_mLSP1000', 'T5qqqqWW_Scan_mGo1900_mLSP100']
-    #signalSamples = ['T5qqqqWW_Scan_mGo1500_mLSP1000', 'T5qqqqWW_Scan_mGo1900_mLSP100', 'T5qqqqWW_Scan_mGo2100_mLSP1800', 'T5qqqqWW_Scan_mGo1050_mLSP900']
-    #signalSamples = ['T5qqqqWW_Scan_mGo1500_mLSP1000', 'T5qqqqWW_Scan_mGo1900_mLSP100', 'T5qqqqWW_Scan_mGo2150_mLSP1750', 'T5qqqqWW_Scan_mGo2100_mLSP1800', 'T5qqqqWW_Scan_mGo2150_mLSP1800', 'T5qqqqWW_Scan_mGo1050_mLSP900', 'T5qqqqWW_Scan_mGo1800_mLSP200', 'T5qqqqWW_Scan_mGo2400_mLSP1400', 'T5qqqqWW_Scan_mGo2550_mLSP200']
 
     # Category
     cat = "CR_MB"
@@ -85,10 +91,9 @@ if __name__ == "__main__":
     #for cat in cats:
 
     # Totals
-    hDataPred = yp.makeSampHisto(yds,"data_QCDsubtr",cat,"Data_prediction"); hDataPred.SetTitle("Data (Pred)")
-
-    hData = yp.makeSampHisto(yds,"data_QCDsubtr",cat,"Data"); hData.SetTitle("Data")
-    hMCPred = yp.makeSampHisto(yds,"background_QCDsubtr",cat,"MC_expectation"); hMCPred.SetTitle("MC (Exp)")
+    hDataPred = yp.makeSampHisto(yds,dataString,cat,"Data_prediction"); hDataPred.SetTitle("Data (Pred)")
+    hData = yp.makeSampHisto(yds,dataString,cat,"Data"); hData.SetTitle("Data")
+    hMCPred = yp.makeSampHisto(yds,"EWK",cat,"MC_expectation"); hMCPred.SetTitle("MC (Exp)")
 
     # Ratio
     #ratio = yp.getRatio(hTotal,hDataPred)

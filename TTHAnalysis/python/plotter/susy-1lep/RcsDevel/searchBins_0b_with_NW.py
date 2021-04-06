@@ -48,6 +48,20 @@ binsLepCharge = {}
 binsLepCharge['pos'] = ('Lep_pdgId < 0', '+1')
 binsLepCharge['neg'] = ('Lep_pdgId > 0', '-1')
 
+# List of missing bins to only reprocces remove all bins which do not match any substring given in missingBins
+# e.g. missingBins = ["LT3", "NJ34"] would include all bins that use LT3 or NJ34
+# if list is empty, all bins will be produced
+
+missingBins = [
+]
+
+doMissingBinsOnly = False
+#filename = "missingBins_scan.md"
+filename = "missingBins_grid.md"
+#filename = "missingBins_grid-dilep.md"
+if doMissingBinsOnly:
+    with open(filename) as missingBinsFile:
+        missingBins = missingBinsFile.read().splitlines()
 
 def getSRcut(nj_bin, lt_bin, sr_bin, blinded):
 
@@ -115,32 +129,36 @@ for nj_bin in ['NJ34_forWJets']:
     for lep_charge in ['neg', 'pos']:
         charge_sel = binsLepCharge[lep_charge][0]
 
-        for nw_bin in ['NW0','NW0i','NW1i']:
-            nw_cut = binsNW[nw_bin][0]
+        for lt_bin in ['LT1','LT2','LT3','LT4i']:
+            lt_cut = binsLT[lt_bin][0]
+            htbins = []
 
-            for lt_bin in ['LT1','LT2','LT3','LT4i']:
-                lt_cut = binsLT[lt_bin][0]
-                htbins = []
+            lt_tmp = lt_bin
+            lt_tmpCut = lt_cut
 
-                lt_tmp = lt_bin
-                lt_tmpCut = lt_cut
+            if lt_bin in ['LT1', 'LT2']:
+                htbins+= ['HT0', 'HT1i', 'HT02', 'HT2i']
 
-                if lt_bin in ['LT1', 'LT2']:
-                    htbins+= ['HT0', 'HT1i', 'HT02', 'HT2i']
+            elif lt_bin in ['LT3']:
+                htbins+= ['HT0', 'HT1', 'HT03', 'HT3i']
+            elif lt_bin in ['LT4i']:
+                htbins+= ['HT03', 'HT3i']
 
-                elif lt_bin in ['LT3', 'LT4i']:
-                    htbins+= ['HT0', 'HT1', 'HT03', 'HT3i']
+            for ht_bin in htbins:
+                ht_cut =binsHT[ht_bin][0]
 
-                for ht_bin in htbins:
-                    ht_cut =binsHT[ht_bin][0]
+                nwbins = []
+                if lt_bin == "LT2" and ht_bin == "HT2i":
+                    nwbins = ["NW0", "NW0i"]
+                elif lt_bin == "LT3" and ht_bin == "HT3i":
+                    nwbins = ["NW0", "NW0i"]
+                elif lt_bin == "LT4i" and ht_bin == "HT3i":
+                    nwbins = ["NW0", "NW0i"]
+                else:
+                    nwbins = ['NW0', 'NW1i']
 
-                    if lt_bin == 'LT3' and ht_bin == 'HT3i':
-                        lt_bin = 'LT3i'
-                        lt_cut = binsLT[lt_bin][0]
-                    elif lt_bin == 'LT4i' and ht_bin == 'HT0' and nw_bin == 'NW0':
-                        lt_bin = 'LT3i'
-                        lt_cut = binsLT[lt_bin][0]
-
+                for nw_bin in nwbins:
+                    nw_cut = binsNW[nw_bin][0]
 
                     binname = "%s_%s_%s_%s_%s_%s" %(lt_bin,ht_bin,nb_bin,nj_bin,nw_bin,lep_charge)
                     cutDictf34[binname] = [("base",lt_bin,lt_cut),("base",ht_bin,ht_cut),("base",nb_bin,nb_cut),("base",nj_bin,nj_cut),("base",nw_bin,nw_cut),("base",lep_charge,charge_sel)]
@@ -167,38 +185,42 @@ for nj_bin in ['NJ45_forTTJets']:
     for nb_bin in ['NB0', 'NB1i']:
         nb_cut = binsNB[nb_bin][0]
 
-        for nw_bin in ['NW0','NW0i','NW1i']:
-            nw_cut = binsNW[nw_bin][0]
 
-            for lt_bin in ['LT1','LT2','LT3','LT4i']:
-                lt_cut = binsLT[lt_bin][0]
-                htbins = []
+        for lt_bin in ['LT1','LT2','LT3','LT4i']:
+            lt_cut = binsLT[lt_bin][0]
+            htbins = []
 
-                lt_tmp = lt_bin
-                lt_tmpCut = lt_cut
+            lt_tmp = lt_bin
+            lt_tmpCut = lt_cut
 
-                if lt_bin in ['LT1', 'LT2']:
-                   htbins+= ['HT0', 'HT1i', 'HT02', 'HT2i']
+            if lt_bin in ['LT1', 'LT2']:
+               htbins+= ['HT0', 'HT1i', 'HT02', 'HT2i']
 
-                elif lt_bin in ['LT3', 'LT4i']:
-                    htbins+= ['HT0', 'HT1', 'HT03', 'HT3i']
+            elif lt_bin in ['LT3']:
+                htbins+= ['HT0', 'HT1', 'HT03', 'HT3i']
+            elif lt_bin in ['LT4i']:
+                htbins+= ['HT03', 'HT3i']
 
-                for ht_bin in htbins:
-                    ht_cut =binsHT[ht_bin][0]
+            for ht_bin in htbins:
+                ht_cut =binsHT[ht_bin][0]
+
+                nwbins = []
+                if lt_bin == "LT4i" and ht_bin == "HT3i" and nb_bin == "NB1i":
+                    nwbins = ["NW0", "NW0i"]
+                elif lt_bin == "LT2" and ht_bin == "HT2i":
+                    nwbins = ["NW0", "NW0i", "NW1i"]
+                elif lt_bin == "LT3" and ht_bin == "HT3i":
+                    nwbins = ["NW0", "NW0i", "NW1i"]
+                elif lt_bin == "LT4i" and ht_bin == "HT3i":
+                    nwbins = ["NW0", "NW0i", "NW1i"]
+                else:
+                    nwbins = ['NW0', 'NW1i']
+
+                for nw_bin in nwbins:
+                    nw_cut = binsNW[nw_bin][0]
 
                     binname = "%s_%s_%s_%s_%s" %(lt_bin,ht_bin,nb_bin,nj_bin,nw_bin)
                     cutDictf45[binname] = [("base",lt_bin,lt_cut),("base",ht_bin,ht_cut),("base",nb_bin,nb_cut),("base",nj_bin,nj_cut),("base",nw_bin,nw_cut)]
-
-                    if lt_bin == 'LT3' and ht_bin == 'HT3i':
-                        lt_bin = 'LT3i'
-                        lt_cut = binsLT[lt_bin][0]
-                        binname = "%s_%s_%s_%s_%s" %(lt_bin,ht_bin,nb_bin,nj_bin,nw_bin)
-                        cutDictf45[binname] = [("base",lt_bin,lt_cut),("base",ht_bin,ht_cut),("base",nb_bin,nb_cut),("base",nj_bin,nj_cut),("base",nw_bin,nw_cut)]
-                    elif lt_bin == 'LT4i' and ht_bin == 'HT0' and nw_bin == 'NW0':
-                        lt_bin = 'LT3i'
-                        lt_cut = binsLT[lt_bin][0]
-                        binname = "%s_%s_%s_%s_%s" %(lt_bin,ht_bin,nb_bin,nj_bin,nw_bin)
-                        cutDictf45[binname] = [("base",lt_bin,lt_cut),("base",ht_bin,ht_cut),("base",nb_bin,nb_cut),("base",nj_bin,nj_cut),("base",nw_bin,nw_cut)]
 
                     lt_bin = lt_tmp
                     lt_cut = lt_tmpCut
@@ -209,18 +231,6 @@ for nj_bin in ['NJ45_forTTJets']:
                         binname = "%s_%s_%s_%s_%s_%s" %(lt_bin,ht_bin,nb_bin,nj_bin,nw_bin,sr_bin)
                         cutDictSR45[binname] = [("base",lt_bin,lt_cut),("base",ht_bin,ht_cut),("base",nb_bin,nb_cut),("base",nj_bin,nj_cut),("base",nw_bin,nw_cut),("base",sr_bin,sr_cut)]
 
-                        #To account for missing WJets bins
-                        if lt_bin == 'LT3' and ht_bin == 'HT3i':
-                            lt_bin = 'LT3i'
-                            lt_cut = binsLT[lt_bin][0]
-                            binname = "%s_%s_%s_%s_%s_%s" %(lt_bin,ht_bin,nb_bin,nj_bin,nw_bin,sr_bin)
-                            cutDictSR45[binname] = [("base",lt_bin,lt_cut),("base",ht_bin,ht_cut),("base",nb_bin,nb_cut),("base",nj_bin,nj_cut),("base",nw_bin,nw_cut),("base",sr_bin,sr_cut)]
-                        elif lt_bin == 'LT4i' and ht_bin == 'HT0' and nw_bin == 'NW0':
-                            lt_bin = 'LT3i'
-                            lt_cut = binsLT[lt_bin][0]
-                            binname = "%s_%s_%s_%s_%s_%s" %(lt_bin,ht_bin,nb_bin,nj_bin,nw_bin,sr_bin)
-                            cutDictSR45[binname] = [("base",lt_bin,lt_cut),("base",ht_bin,ht_cut),("base",nb_bin,nb_cut),("base",nj_bin,nj_cut),("base",nw_bin,nw_cut),("base",sr_bin,sr_cut)]
-
                     lt_bin = lt_tmp
                     lt_cut = lt_tmpCut
 
@@ -228,18 +238,6 @@ for nj_bin in ['NJ45_forTTJets']:
                         cr_cut = getSRcut(nj_bin, lt_bin, cr_bin, blinded)[0]
                         binname = "%s_%s_%s_%s_%s_%s" %(lt_bin,ht_bin,nb_bin,nj_bin,nw_bin,cr_bin)
                         cutDictCR45[binname] = [("base",lt_bin,lt_cut),("base",ht_bin,ht_cut),("base",nb_bin,nb_cut),("base",nj_bin,nj_cut),("base",nw_bin,nw_cut),("base",cr_bin,cr_cut)]
-
-                        #To account for missing WJets bins
-                        if lt_bin == 'LT3' and ht_bin == 'HT3i':
-                            lt_bin = 'LT3i'
-                            lt_cut = binsLT[lt_bin][0]
-                            binname = "%s_%s_%s_%s_%s_%s" %(lt_bin,ht_bin,nb_bin,nj_bin,nw_bin,cr_bin)
-                            cutDictCR45[binname] = [("base",lt_bin,lt_cut),("base",ht_bin,ht_cut),("base",nb_bin,nb_cut),("base",nj_bin,nj_cut),("base",nw_bin,nw_cut),("base",cr_bin,cr_cut)]
-                        elif lt_bin == 'LT4i' and ht_bin == 'HT0' and nw_bin == 'NW0':
-                            lt_bin = 'LT3i'
-                            lt_cut = binsLT[lt_bin][0]
-                            binname = "%s_%s_%s_%s_%s_%s" %(lt_bin,ht_bin,nb_bin,nj_bin,nw_bin,cr_bin)
-                            cutDictCR45[binname] = [("base",lt_bin,lt_cut),("base",ht_bin,ht_cut),("base",nb_bin,nb_cut),("base",nj_bin,nj_cut),("base",nw_bin,nw_cut),("base",cr_bin,cr_cut)]
 
                     lt_bin = lt_tmp
                     lt_cut = lt_tmpCut
@@ -264,10 +262,10 @@ for nj_bin in ['NJ5_forWJets']:
                 if lt_bin in ['LT1', 'LT2']:
                     htbins+= ['HT0', 'HT1i']
 
-                elif lt_bin in ['LT3', 'LT4i']:
+                elif lt_bin in ['LT3']:
                     htbins+= ['HT0', 'HT1', 'HT3i']
-                #elif lt_bin in ['LT4i']:
-                    #htbins+= ['HT03', 'HT3i']
+                elif lt_bin in ['LT4i']:
+                    htbins+= ['HT03', 'HT3i']
 
                 for ht_bin in htbins:
                     ht_cut =binsHT[ht_bin][0]
@@ -305,10 +303,10 @@ for nj_bin in ['NJ5_forTTJets']:
             if lt_bin in ['LT1', 'LT2']:
                 htbins+= ['HT0', 'HT1i']
 
-            elif lt_bin in ['LT3', 'LT4i']:
+            elif lt_bin in ['LT3']:
                 htbins+= ['HT0', 'HT1', 'HT3i']
-            #elif lt_bin in ['LT4i']:
-                #htbins+= ['HT03', 'HT3i']
+            elif lt_bin in ['LT4i']:
+                htbins+= ['HT03', 'HT3i']
 
             for ht_bin in htbins:
                 ht_cut =binsHT[ht_bin][0]
@@ -435,7 +433,8 @@ for nj_bin in ['NJ8i_forWJets']:
                 ht_cut =binsHT[ht_bin][0]
 
                 nwbins = []
-                if lt_bin in ['LT4i'] and ht_bin == 'HT03':
+                #if lt_bin in ['LT4i'] and (ht_bin == 'HT03' or ht_bin == "HT3i"):
+                if lt_bin in ['LT4i'] and (ht_bin == "HT3i"):
                     nwbins = ['NW0i']
                 else:
                     nwbins = ['NW0','NW1i']
@@ -479,7 +478,7 @@ for nj_bin in ['NJ8i_forTTJets']:
             ht_cut =binsHT[ht_bin][0]
 
             nwbins = []
-            if lt_bin in ['LT4i'] and ht_bin == 'HT03':
+            if lt_bin in ['LT4i'] and (ht_bin == "HT3i"):
                 nwbins = ['NW0i']
             else:
                 nwbins = ['NW0','NW1i']
@@ -503,13 +502,8 @@ for nj_bin in ['NJ8i_forTTJets']:
                     binname = "%s_%s_%s_%s_%s_%s" %(lt_bin,ht_bin,nb_bin,nj_bin,nw_bin,cr_bin)
                     cutDictCR8[binname] = [("base",lt_bin,lt_cut),("base",ht_bin,ht_cut),("base",nb_bin,nb_cut),("base",nj_bin,nj_cut),("base",nw_bin,nw_cut),("base",cr_bin,cr_cut)]
 
-# List of missing bins to only reprocces remove all bins which do not match any substring given in missingBins
-# e.g. missingBins = ["LT3", "NJ34"] would include all bins that use LT3 or NJ34
-missingBins = [
-]
 
 if missingBins != []:
-
     for cutDictf, cutDictSR, cutDictCR in [(cutDictf34, cutDictSR34, cutDictCR34), (cutDictf45, cutDictSR45, cutDictCR45), (cutDictf5, cutDictSR5, cutDictCR5), (cutDictf67, cutDictSR67, cutDictCR67), (cutDictf8, cutDictSR8, cutDictCR8)]:
         for bin in cutDictf.keys():
             keepBin = False
@@ -556,9 +550,9 @@ if __name__=="__main__":
         print(bin)
 
     #print "NJ45 TTJets"
-    for bin in cutDictf45.keys():
+    for bin in cutDictSR45.keys():
         print(bin)
-    for bin in cutDictf45.keys():
+    for bin in cutDictCR45.keys():
         print(bin)
 
     #print "Main Band Bins!"
