@@ -8,13 +8,13 @@ import time
 
 ## Trees -- skimmed with trig_base
 
-Tdir = ["SampLinks2016/"] #important needs this format
+Tdir = ["SampLinks2016_V2/"] #important needs this format
 # MC
-mcFTdir = "SampLinks2016/Friends/"
-sigFTdir = "SampLinks2016/Friends/"
+mcFTdir = "SampLinks2016_V2/Friends/"
+sigFTdir = "SampLinks2016_V2/Friends/"
 
 # new data
-dataFTdir = "SampLinks2016/Friends/"
+dataFTdir = "SampLinks2016_V2/Friends/"
 
 
 
@@ -32,7 +32,7 @@ def addOptions(options):
     options.friendTreesData = [("sf/t",dataFTdir+"/evVarFriend_{cname}.root")]
     options.tree = "treeProducerSusySingleLepton"
 
-    print "????",options.path
+    #print "????",options.path
     # extra options
     options.doS2V = True
     options.weight = True

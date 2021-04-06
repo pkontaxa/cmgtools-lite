@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os, glob, sys, math
-from searchBinsMoriond17_Pantelis_BaseLine_T5qqqqWW_with_NW_V5 import *
+from searchBins_0b_with_NW import *
 from ROOT import *
 from readYields import getLepYield, getScanYields
 #helper function maybe move somewhere else
@@ -103,7 +103,6 @@ class YieldStore:
         binName = bfname[:bfname.find(".")]
         binName = binName.replace("_SR","")
         #binName = binName.replace(".merge.root","")
-        #print binName
 
         # get list of dirs
         dirList = [dirKey.ReadObj() for dirKey in gDirectory.GetListOfKeys() if dirKey.IsFolder() == 1]
@@ -185,6 +184,7 @@ class YieldStore:
 
         # find files matching pattern
         fileList = glob.glob(pattern+"*.root")
+
         nFiles = len(fileList)
 
         print "## Starting to add yields for %s from %i files like " %(self.name,nFiles) + pattern + ": ", ; sys.stdout.flush()
@@ -239,8 +239,13 @@ class YieldStore:
             return dct
             #return self.yields[samp][cat]
         else:
-            print 'Either {} is not in {} or {} is not in {}. Something\'s wrong here.'.format(samp, self.samples, cat, self.categories)
-            return 0
+            #print 'Either {} is not in {} or {} is not in {}. Something\'s wrong here.'.format(samp, self.samples, cat, self.categories)
+            print "While getting the sample dict, something went wrong!"
+            print "Your sample {} is not in the list of samples!".format(samp) * (samp not in self.samples)
+            print "Your category {} is not in the list of categories {}!".format(cat, self.categories) * (cat not in self.categories)
+            print "Exiting Now!"
+            #return 0
+            exit()
 
     def getSampsDict(self,samp,cats = []):
 
