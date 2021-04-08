@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Required arguments
+while getopts s:y:f:o: flag
+do
+    case "${flag}" in
+        s) systematic="${OPTARG}" ;;
+        y) year="${OPTARG}" ;;
+        f) fratio_file="${OPTARG}" ;;
+        o) out_dir="${OPTARG}" ;;
+    esac
+done
+
+base_path=$CMSSW_BASE/src/CMGTools/TTHAnalysis/python/plotter
+plots_path=$base_path/susy-1lep/nBJet_template_fits/nBJet_distributions/${year}/${systematic}
+
+inclusive_hists=$plots_path/inclusive/nBJets_${year}_${systematic}_inclusive.root
+positive_hists=$plots_path/positive/nBJets_${year}_${systematic}_positive.root
+negative_hists=$plots_path/negative/nBJets_${year}_${systematic}_negative.root
+antisel_hists=$plots_path/antiselected/nBJets_${year}_${systematic}_antiselected.root
+fratio_path=$base_path/susy-1lep/RcsDevel/${fratio_file}
+out_path=$base_path/susy-1lep/nBJet_template_fits/template_fit_out/${out_dir}
+
+python $base_path/susy-1lep/nBJet_template_fits/template_fit_nBJet.py \
+    --year "${year}" \
+    --syst "${systematic}" \
+    --inclusive "${inclusive_hists}" \
+    --positive "${positive_hists}" \
+    --negative "${negative_hists}" \
+    --antisel "${antisel_hists}" \
+    --f-ratios "${fratio_path}" \
+    --out "${out_path}" \
+    --verbose False
+
