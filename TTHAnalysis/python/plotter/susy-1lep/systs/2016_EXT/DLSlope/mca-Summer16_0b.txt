@@ -27,6 +27,9 @@ WJets    : WJetsToLNu_HT1200to2500 : Xsec*1*btagSF*puRatio*lepSF  ; Label="W+jet
 WJets    : WJetsToLNu_HT1200to2500_ext : Xsec*1*btagSF*puRatio*lepSF  ; Label="W+jets", FillColor=ROOT.kGreen-2
 WJets    : WJetsToLNu_HT2500toInf  : Xsec*1*btagSF*puRatio*lepSF  ; Label="W+jets", FillColor=ROOT.kGreen-2
 WJets    : WJetsToLNu_HT2500toInf_ext  : Xsec*1*btagSF*puRatio*lepSF  ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets : WWToLNuQQ      : Xsec*1*btagSF*puRatio*lepSF ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets : WWToLNuQQ_ext      : Xsec*1*btagSF*puRatio*lepSF ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets : WZTo1L1Nu2Q    : Xsec*1*btagSF*puRatio*lepSF ; Label="W+jets", FillColor=ROOT.kGreen-2
 
 
 # QCD
@@ -69,9 +72,6 @@ TTV : TTZToQQ       : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kOrange-3, La
 
 # DiBoson
 #VV : WWTo2L2Nu      : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
-VV : WWToLNuQQ      : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
-VV : WWToLNuQQ_ext      : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
-VV : WZTo1L1Nu2Q    : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
 VV : WZTo1L3Nu      : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
 VV : WZTo2L2Q       : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
 VV : ZZTo2L2Nu      : Xsec*1*btagSF*puRatio*lepSF ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
