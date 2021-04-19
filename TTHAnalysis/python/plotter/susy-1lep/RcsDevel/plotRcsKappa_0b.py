@@ -74,21 +74,11 @@ if __name__ == "__main__":
     hRcsMB_TT = yp.makeSampHisto(yds,"TTJets", "Rcs_MB_TT", "RCS_MB_TT_MC", useRcs = True);
     hKappaB = yp.makeSampHisto(yds,"TTJets", "KappaB", "kappaB", useRcs = True);
     hKappaTT = yp.makeSampHisto(yds,"TTJets", "KappaTT", "kappaTT", useRcs = True);
-    yp.colorDict["RCS_SB_NB1i_TT_MC"] = yp.kRed
-    #yp.colorDict["kappaB"] = yp.kBlue+3
-    #yp.colorDict["kappaTT"] = yp.kBlue+4
 
-    hRcsSB_dataWneg = yp.makeSampHisto(ydsMuon,"data", "Rcs_SB_Wneg", "RCS_MB_Wneg", useRcs = True);
-    hRcsSB_Wneg = yp.makeSampHisto(ydsMuon,"WJets", "Rcs_SB_Wneg", "RCS_SB_Wneg_MC", useRcs = True);
-    hRcsMB_Wneg = yp.makeSampHisto(ydsMuon,"WJets", "Rcs_MB_Wneg", "RCS_MB_Wneg_MC", useRcs = True);
-    hKappaWneg = yp.makeSampHisto(ydsMuon,"WJets", "KappaW_neg", "kappaW_neg", useRcs = True);
-    #yp.colorDict["Rcs_MB_Wneg"] = yp.kGreen-1
-    #yp.colorDict["kappaWneg"] = yp.kGreen+3
-
-    hRcsSB_dataWpos = yp.makeSampHisto(ydsMuon,"data", "Rcs_SB_Wpos", "RCS_MB_Wpos", useRcs = True);
-    hRcsSB_Wpos = yp.makeSampHisto(ydsMuon,"WJets", "Rcs_SB_Wpos", "RCS_SB_Wpos_MC", useRcs = True);
-    hRcsMB_Wpos = yp.makeSampHisto(ydsMuon,"WJets", "Rcs_MB_Wpos", "RCS_MB_Wpos_MC", useRcs = True);
-    hKappaWpos = yp.makeSampHisto(ydsMuon,"WJets", "KappaW_pos", "kappaW_pos", useRcs = True);
+    hRcsSB_dataW= yp.makeSampHisto(ydsMuon,"data", "Rcs_SB_W", "RCS_MB_W", useRcs = True);
+    hRcsSB_W= yp.makeSampHisto(ydsMuon,"WJets", "Rcs_SB_W", "RCS_SB_W", useRcs = True);
+    hRcsMB_W= yp.makeSampHisto(ydsMuon,"WJets", "Rcs_MB_W", "RCS_MB_W_MC", useRcs = True);
+    hKappaW= yp.makeSampHisto(ydsMuon,"WJets", "KappaW", "kappaW", useRcs = True);
 
     alpha = 0.7
     hRcsSB_dataTT.SetFillColorAlpha(yp.kBlue-4, alpha)
@@ -98,32 +88,12 @@ if __name__ == "__main__":
     hKappaB.SetFillColorAlpha(yp.kOrange-2, alpha)
     hKappaTT.SetFillColorAlpha(yp.kBlue-2, alpha)
 
-    hRcsSB_dataWneg.SetFillColorAlpha(yp.kGreen+2, alpha)
-    hRcsSB_Wneg.SetFillColorAlpha(yp.kMagenta-3, alpha)
-    hRcsMB_Wneg.SetFillColorAlpha(yp.kGreen+2, alpha)
-    hKappaWneg.SetFillColorAlpha(yp.kGreen+2, alpha)
-
-    hRcsSB_dataWpos.SetFillColorAlpha(yp.kGreen+2, alpha)
-    hRcsSB_Wpos.SetFillColorAlpha(yp.kMagenta-3, alpha)
-    hRcsMB_Wpos.SetFillColorAlpha(yp.kGreen+2, alpha)
-    hKappaWpos.SetFillColorAlpha(yp.kGreen+2, alpha)
-
     hRcsSB_dataTT.SetLineColor(yp.kBlue-4)
     hRcsSB_NB1i_TT.SetLineColor(yp.kMagenta-3)
     hRcsSB_NB0_TT.SetLineColor(yp.kOrange-2)
     hRcsMB_TT.SetLineColor(yp.kBlue-4)
     hKappaB.SetLineColor(yp.kOrange-2)
     hKappaTT.SetLineColor(yp.kBlue-2)
-
-    hRcsSB_dataWneg.SetLineColor(yp.kGreen+2)
-    hRcsSB_Wneg.SetLineColor(yp.kMagenta-3)
-    hRcsMB_Wneg.SetLineColor(yp.kGreen+2)
-    hKappaWneg.SetLineColor(yp.kGreen+2)
-
-    hRcsSB_dataWpos.SetLineColor(yp.kGreen+2)
-    hRcsSB_Wpos.SetLineColor(yp.kMagenta-3)
-    hRcsMB_Wpos.SetLineColor(yp.kGreen+2)
-    hKappaWpos.SetLineColor(yp.kGreen+2)
 
     hRcsSB_dataTT.SetMarkerColor(yp.kBlue-4)
     hRcsSB_NB1i_TT.SetMarkerColor(yp.kMagenta-3)
@@ -132,64 +102,27 @@ if __name__ == "__main__":
     hKappaB.SetMarkerColor(yp.kOrange-2)
     hKappaTT.SetMarkerColor(yp.kBlue-2)
 
-    hRcsSB_dataWneg.SetMarkerColor(yp.kGreen+2)
-    hRcsSB_Wneg.SetMarkerColor(yp.kMagenta-3)
-    hRcsMB_Wneg.SetMarkerColor(yp.kGreen+2)
-    hKappaWneg.SetMarkerColor(yp.kGreen+2)
+    hRcsSB_dataW.SetFillColorAlpha(yp.kGreen+2, alpha)
+    hRcsSB_dataW.SetLineColor(yp.kGreen+2)
+    hRcsSB_dataW.SetLineColor(yp.kGreen+2)
 
-    hRcsSB_dataWpos.SetMarkerColor(yp.kGreen+2)
-    hRcsSB_Wpos.SetMarkerColor(yp.kMagenta-3)
-    hRcsMB_Wpos.SetMarkerColor(yp.kGreen+2)
-    hKappaWpos.SetMarkerColor(yp.kGreen+2)
+    hRcsMB_W.SetFillColorAlpha(yp.kGreen+2, alpha)
+    hRcsMB_W.SetLineColor(yp.kGreen+2)
+    hRcsMB_W.SetLineColor(yp.kGreen+2)
 
+    hRcsSB_W.SetFillColorAlpha(yp.kMagenta+2, alpha)
+    hRcsSB_W.SetLineColor(yp.kMagenta+2)
+    hRcsSB_W.SetLineColor(yp.kMagenta+2)
 
-    width = 4000 #Previous 1200 Pantelis
+    hKappaW.SetFillColorAlpha(yp.kGreen+2, alpha)
+    hKappaW.SetLineColor(yp.kGreen+2)
+    hKappaW.SetLineColor(yp.kGreen+2)
+
+    width = 4000
     height = 1200
     legPos = "Long"
 
-    if '--log-y' in sys.argv:
-        canv4 = yp.plotHists("Rcs_KappaTT_log", [hRcsMB_TT, hRcsSB_NB0_TT, hRcsSB_NB1i_TT, hRcsSB_dataTT], [hKappaB, hKappaTT], legPos, width, height, logY = True, nCols = 4)
-        canv5 = yp.plotHists("Rcs_KappaWneg_log", [hRcsSB_Wneg, hRcsMB_Wneg, hRcsSB_dataWneg], [hKappaWneg], legPos, width, height, logY = True, nCols = 4)
-        canv6 = yp.plotHists("Rcs_KappaWpos_log", [hRcsSB_Wpos, hRcsMB_Wpos, hRcsSB_dataWpos], [hKappaWpos], legPos, width, height, logY = True, nCols = 4)
-
-        canv4_1 = yp.plotHists("RcsMC_KappaTT_log", [hRcsMB_TT, hRcsSB_NB0_TT], [hKappaTT], legPos, width, height, logY = True, nCols = 4)
-        canv4_2 = yp.plotHists("RcsMC_KappaB_log", [hRcsSB_NB0_TT, hRcsSB_NB1i_TT], [hKappaB], legPos, width, height, logY = True, nCols = 4)
-        #canv4_3MC = yp.plotHists("RcsMC_Kappa_log", [hRcsMB_TT, hRcsSB_NB0_TT, hRcsSB_NB1i_TT], [hKappaB, hKappaTT], legPos, width, height, logY = True, nCols = 4)
-        canv5_2 = yp.plotHists("RcsMC_KappaWneg_log", [hRcsSB_dataWneg, hRcsSB_Wneg, hRcsMB_Wneg], [hKappaWneg], legPos, width, height, logY = True, nCols = 4)
-        canv6_2 = yp.plotHists("RcsMC_KappaWpos_log", [hRcsSB_dataWpos, hRcsSB_Wpos, hRcsMB_Wpos], [hKappaWpos], legPos, width, height, logY = True, nCols = 4)
-
-        canv4_3 = yp.plotHists("RcsData_TT_log", [hRcsSB_dataTT], None, legPos, width, height, logY = True, nCols = 4)
-        canv5_3 = yp.plotHists("RcsData_Wneg_log", [hRcsSB_dataWneg], None, legPos, width, height, logY = True, nCols = 4)
-        canv6_3 = yp.plotHists("RcsData_Wpos_log", [hRcsSB_dataWpos], None, legPos, width, height, logY = True, nCols = 4)
-    else:
-        canv  = yp.plotHists("Rcs_KappaTT", [hRcsMB_TT, hRcsSB_NB0_TT, hRcsSB_NB1i_TT, hRcsSB_dataTT], [hKappaB, hKappaTT], legPos, width, height, logY = False, nCols = 4)
-        canv2 = yp.plotHists("Rcs_KappaWneg", [hRcsSB_Wneg, hRcsMB_Wneg, hRcsSB_dataWneg], [hKappaWneg], legPos, width, height, logY = False, nCols = 4)
-        canv3 = yp.plotHists("Rcs_KappaWpos", [hRcsSB_Wpos, hRcsMB_Wpos, hRcsSB_dataWpos], [hKappaWpos], legPos, width, height, logY = False, nCols = 4)
-
-        canv_1 = yp.plotHists("RcsMC_KappaTT", [hRcsMB_TT, hRcsSB_NB0_TT], [hKappaTT], legPos, width, height, logY = False, nCols = 4)
-        canv_2 = yp.plotHists("RcsMC_KappaB", [hRcsSB_NB0_TT, hRcsSB_NB1i_TT], [hKappaB], legPos, width, height, logY = False, nCols = 4)
-        #canv_3MC  = yp.plotHists("RcsMC_Kappa", [hRcsMB_TT, hRcsSB_NB0_TT, hRcsSB_NB1i_TT], [hKappaB, hKappaTT], legPos, width, height, logY = False, nCols = 4)
-        canv2_2 = yp.plotHists("RcsMC_KappaWneg", [hRcsSB_Wneg, hRcsMB_Wneg], [hKappaWneg], legPos, width, height, logY = False, nCols = 4)
-        canv3_2 = yp.plotHists("RcsMC_KappaWpos", [hRcsSB_Wpos, hRcsMB_Wpos], [hKappaWpos], legPos, width, height, logY = False, nCols = 4)
-
-        canv_3  = yp.plotHists("RcsData_TT", [hRcsSB_dataTT], None, legPos, width, height, logY = False, nCols = 4)
-        canv2_3 = yp.plotHists("RcsData_Wneg", [hRcsSB_dataWneg], None, legPos, width, height, logY = False, nCols = 4)
-        canv3_3 = yp.plotHists("RcsData_WPos", [hRcsSB_dataWpos], None, legPos, width, height, logY = False, nCols = 4)
-
-    # Save canvases
-    exts = [".pdf",".png",".root"]
-    if len(sys.argv) > 2:
-        odir = sys.argv[2]
-        if odir[-1] != "/": odir = odir + "/"
-    else:
-        odir = "BinPlots/"
-
-    if not os.path.exists(odir):
-        os.makedirs(odir)
-    if not os.path.exists(odir + "/log"):
-        os.makedirs(odir + "/log")
-
-    # Save canvases
+    # Prepare directories for saving canvas
     exts = [".pdf",".png",".root"]
     if len(sys.argv) > 2:
         odir = sys.argv[2]
@@ -201,62 +134,67 @@ if __name__ == "__main__":
         os.makedirs(odir)
     if not os.path.exists(odir + "/MC"):
         os.makedirs(odir + "/MC")
-    if not os.path.exists(odir + "/MC/inclusive"):
-        os.makedirs(odir + "/MC/inclusive")
+    #if not os.path.exists(odir + "/MC/inclusive"):
+        #os.makedirs(odir + "/MC/inclusive")
     if not os.path.exists(odir + "/MC/TTJets"):
         os.makedirs(odir + "/MC/TTJets")
-    if not os.path.exists(odir + "/MC/Wneg"):
-        os.makedirs(odir + "/MC/Wneg")
-    if not os.path.exists(odir + "/MC/Wpos"):
-        os.makedirs(odir + "/MC/Wpos")
+    if not os.path.exists(odir + "/MC/W"):
+        os.makedirs(odir + "/MC/W")
 
     if not os.path.exists(odir + "/Data"):
         os.makedirs(odir + "/Data")
+
     if not os.path.exists(odir + "/log"):
         os.makedirs(odir + "/log")
     if not os.path.exists(odir + "/log" + "/MC"):
         os.makedirs(odir + "/log/MC")
-    if not os.path.exists(odir + "/log/MC/inclusive"):
-        os.makedirs(odir + "/log/MC/inclusive")
+    #if not os.path.exists(odir + "/log/MC/inclusive"):
+        #os.makedirs(odir + "/log/MC/inclusive")
     if not os.path.exists(odir + "/log/MC/TTJets"):
         os.makedirs(odir + "/log/MC/TTJets")
-    if not os.path.exists(odir + "/log/MC/Wneg"):
-        os.makedirs(odir + "/log/MC/Wneg")
-    if not os.path.exists(odir + "/log/MC/Wpos"):
-        os.makedirs(odir + "/log/MC/Wpos")
-
+    if not os.path.exists(odir + "/log/MC/W"):
+        os.makedirs(odir + "/log/MC/W")
     if not os.path.exists(odir + "/log" + "/Data"):
         os.makedirs(odir + "/log/Data")
 
-    ###if not os.path.isdir(odir): os.makedirs(odir)
 
-    #for canv in canvs:
-    for ext in exts:
-        if '--log-y' in sys.argv:
-            canv4.SaveAs(odir + "/log/MC/inclusive/" +canv4.GetName() + "_" + str(year) + ext)
-            canv5.SaveAs(odir + "/log/MC/inclusive/" +canv5.GetName() + "_" + str(year) + ext)
-            canv6.SaveAs(odir + "/log/MC/inclusive/" +canv6.GetName() + "_" + str(year) + ext)
+    if '--log-y' in sys.argv:
+        canvKappaTTLog = yp.plotHists("RcsMC_KappaTT_log", [hRcsMB_TT, hRcsSB_NB0_TT], [hKappaTT], legPos, width, height, logY = True, nCols = 4)
+        canvKappaBLog = yp.plotHists("RcsMC_KappaB_log", [hRcsSB_NB0_TT, hRcsSB_NB1i_TT], [hKappaB], legPos, width, height, logY = True, nCols = 4)
+        canvKappaWLog = yp.plotHists("RcsMC_KappaW_log", [hRcsSB_W, hRcsMB_W], [hKappaW], legPos, width, height, logY = True, nCols = 4)
+        for ext in exts:
+                canvKappaTTLog.SaveAs(odir + "/log/MC/TTJets/" +canvKappaTTLog.GetName() + "_" + str(year) + ext)
+                canvKappaBLog.SaveAs(odir + "/log/MC/TTJets/" +canvKappaBLog.GetName() + "_" + str(year) + ext)
+                canvKappaWLog.SaveAs(odir + "/log/MC/W/" +canvKappaWLog.GetName() + "_" + str(year) + ext)
+        canvKappaTTLog.Close()
+        canvKappaBLog.Close()
+        canvKappaWLog.Close()
+        canvKappaWLog.Close()
 
-            canv4_1.SaveAs(odir + "/log/MC/TTJets/" +canv4_1.GetName() + "_" + str(year) + ext)
-            canv4_2.SaveAs(odir + "/log/MC/TTJets/" +canv4_2.GetName() + "_" + str(year) + ext)
-            #canv4_3MC.SaveAs(odir + "/log/MC/inclusive/" +canv4_3MC.GetName() + "_" + str(year) + ext)
-            canv5_2.SaveAs(odir + "/log/MC/Wneg/" +canv5_2.GetName() + "_" + str(year) + ext)
-            canv6_2.SaveAs(odir + "/log/MC/Wpos/" +canv6_2.GetName() + "_" + str(year) + ext)
+        canvRcsTTDataLog = yp.plotHists("RcsData_TT_log", [hRcsSB_dataTT], None, legPos, width, height, logY = True, nCols = 4)
+        canvRcsWDataLog = yp.plotHists("RcsData_W_log", [hRcsSB_dataW], None, legPos, width, height, logY = True, nCols = 4)
+        for ext in exts:
+                canvRcsTTDataLog.SaveAs(odir + "/log/Data/" +canvRcsTTDataLog.GetName() + "_" + str(year) + ext)
+                canvRcsWDataLog.SaveAs(odir + "/log/Data/" +canvRcsWDataLog.GetName() + "_" + str(year) + ext)
+        canvRcsTTDataLog.Close()
+        canvRcsWDataLog.Close()
 
-            canv4_3.SaveAs(odir + "/log/Data/" +canv4_3.GetName() + "_" + str(year) + ext)
-            canv5_3.SaveAs(odir + "/log/Data/" +canv5_3.GetName() + "_" + str(year) + ext)
-            canv6_3.SaveAs(odir + "/log/Data/" +canv6_3.GetName() + "_" + str(year) + ext)
-        else:
-            canv.SaveAs(odir + "/MC/inclusive/" +canv.GetName() + "_" + str(year) + ext)
-            canv2.SaveAs(odir + "/MC/inclusive/" +canv2.GetName() + "_" + str(year) + ext)
-            canv3.SaveAs(odir + "/MC/inclusive/" +canv3.GetName() + "_" + str(year) + ext)
+    else:
+        canvKappaTT = yp.plotHists("RcsMC_KappaTT", [hRcsMB_TT, hRcsSB_NB0_TT], [hKappaTT], legPos, width, height, logY = False, nCols = 4)
+        canvKappaB = yp.plotHists("RcsMC_KappaB", [hRcsSB_NB0_TT, hRcsSB_NB1i_TT], [hKappaB], legPos, width, height, logY = False, nCols = 4)
+        canvKappaW = yp.plotHists("RcsMC_KappaW", [hRcsSB_W, hRcsMB_W], [hKappaW], legPos, width, height, logY = False, nCols = 4)
+        for ext in exts:
+            canvKappaTT.SaveAs(odir + "/MC/TTJets/" +canvKappaTT.GetName() + "_" + str(year) + ext)
+            canvKappaB.SaveAs(odir + "/MC/TTJets/" +canvKappaB.GetName() + "_" + str(year) + ext)
+            canvKappaW.SaveAs(odir + "/MC/W/" +canvKappaW.GetName() + "_" + str(year) + ext)
+        canvKappaTT.Close()
+        canvKappaB.Close()
+        canvKappaW.Close()
 
-            canv_1.SaveAs(odir + "/MC/TTJets/" +canv_1.GetName() + "_" + str(year) + ext)
-            canv_2.SaveAs(odir + "/MC/TTJets/" +canv_2.GetName() + "_" + str(year) + ext)
-            #canv_3MC.SaveAs(odir + "/MC/" +canv.GetName() + "_" + str(year) + ext)
-            canv2_2.SaveAs(odir + "/MC/Wneg/" +canv2_2.GetName() + "_" + str(year) + ext)
-            canv3_2.SaveAs(odir + "/MC/Wpos/" +canv3_2.GetName() + "_" + str(year) + ext)
-
-            canv_3.SaveAs(odir + "/Data/" +canv_3.GetName() + "_" + str(year) + ext)
-            canv2_3.SaveAs(odir + "/Data/" +canv2_3.GetName() + "_" + str(year) + ext)
-            canv3_3.SaveAs(odir + "/Data/" +canv3_3.GetName() + "_" + str(year) + ext)
+        canvRcsTTData  = yp.plotHists("RcsData_TT", [hRcsSB_dataTT], None, legPos, width, height, logY = False, nCols = 4)
+        canvRcsWData = yp.plotHists("RcsData_W", [hRcsSB_dataW], None, legPos, width, height, logY = False, nCols = 4)
+        for ext in exts:
+            canvRcsTTData.SaveAs(odir + "/Data/" +canvRcsTTData.GetName() + "_" + str(year) + ext)
+            canvRcsWData.SaveAs(odir + "/Data/" +canvRcsWData.GetName() + "_" + str(year) + ext)
+        canvRcsTTData.Close()
+        canvRcsWData.Close()
