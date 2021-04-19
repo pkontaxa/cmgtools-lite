@@ -73,6 +73,8 @@ WJets_btagHF-Up    : WJetsToLNu_HT600to800   : Xsec*1*puRatio*lepSF*btagSF_b_up 
 WJets_btagHF-Up    : WJetsToLNu_HT800to1200  : Xsec*1*puRatio*lepSF*btagSF_b_up  ; Label="W+jets", FillColor=ROOT.kGreen-2
 WJets_btagHF-Up    : WJetsToLNu_HT1200to2500 : Xsec*1*puRatio*lepSF*btagSF_b_up  ; Label="W+jets", FillColor=ROOT.kGreen-2
 WJets_btagHF-Up    : WJetsToLNu_HT2500toInf  : Xsec*1*puRatio*lepSF*btagSF_b_up  ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets_btagHF-Up : WWToLNuQQ      : Xsec*1*puRatio*lepSF*btagSF_b_up ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets_btagHF-Up : WZTo1L1Nu2Q    : Xsec*1*puRatio*lepSF*btagSF_b_up ; Label="W+jets", FillColor=ROOT.kGreen-2
 
 # QCD
 QCD_btagHF-Up      : QCD_HT500to700          : Xsec*1*puRatio*lepSF*btagSF_b_up ; Label ="QCD", FillColor=ROOT.kCyan-6
@@ -103,8 +105,6 @@ TTV_btagHF-Up : TTZToQQ       : Xsec*1*puRatio*lepSF*btagSF_b_up ; FillColor=ROO
 
 # DiBoson
 VV_btagHF-Up : WWTo2L2Nu      : Xsec*1*puRatio*lepSF*btagSF_b_up ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
-VV_btagHF-Up : WWToLNuQQ      : Xsec*1*puRatio*lepSF*btagSF_b_up ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
-VV_btagHF-Up : WZTo1L1Nu2Q    : Xsec*1*puRatio*lepSF*btagSF_b_up ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
 VV_btagHF-Up : WZTo1L3Nu      : Xsec*1*puRatio*lepSF*btagSF_b_up ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
 VV_btagHF-Up : WZTo2L2Q       : Xsec*1*puRatio*lepSF*btagSF_b_up ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
 VV_btagHF-Up : ZZTo2L2Nu      : Xsec*1*puRatio*lepSF*btagSF_b_up ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
@@ -129,6 +129,8 @@ WJets_btagHF-Down    : WJetsToLNu_HT600to800   : Xsec*1*puRatio*lepSF*btagSF_b_d
 WJets_btagHF-Down    : WJetsToLNu_HT800to1200  : Xsec*1*puRatio*lepSF*btagSF_b_down  ; Label="W+jets", FillColor=ROOT.kGreen-2
 WJets_btagHF-Down    : WJetsToLNu_HT1200to2500 : Xsec*1*puRatio*lepSF*btagSF_b_down  ; Label="W+jets", FillColor=ROOT.kGreen-2
 WJets_btagHF-Down    : WJetsToLNu_HT2500toInf  : Xsec*1*puRatio*lepSF*btagSF_b_down  ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets_btagHF-Down : WWToLNuQQ      : Xsec*1*puRatio*lepSF*btagSF_b_down ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets_btagHF-Down : WZTo1L1Nu2Q    : Xsec*1*puRatio*lepSF*btagSF_b_down ; Label="W+jets", FillColor=ROOT.kGreen-2
 
 # QCD
 QCD_btagHF-Down      : QCD_HT500to700          : Xsec*1*puRatio*lepSF*btagSF_b_down ; Label ="QCD", FillColor=ROOT.kCyan-6
@@ -159,8 +161,6 @@ TTV_btagHF-Down : TTZToQQ       : Xsec*1*puRatio*lepSF*btagSF_b_down ; FillColor
 
 # DiBoson
 VV_btagHF-Down : WWTo2L2Nu      : Xsec*1*puRatio*lepSF*btagSF_b_down ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
-VV_btagHF-Down : WWToLNuQQ      : Xsec*1*puRatio*lepSF*btagSF_b_down ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
-VV_btagHF-Down : WZTo1L1Nu2Q    : Xsec*1*puRatio*lepSF*btagSF_b_down ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
 VV_btagHF-Down : WZTo1L3Nu      : Xsec*1*puRatio*lepSF*btagSF_b_down ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
 VV_btagHF-Down : WZTo2L2Q       : Xsec*1*puRatio*lepSF*btagSF_b_down ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
 VV_btagHF-Down : ZZTo2L2Nu      : Xsec*1*puRatio*lepSF*btagSF_b_down ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
