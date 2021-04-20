@@ -73,7 +73,6 @@ def getRcsCorrHist(tfile, hTTbarFraction, hname, band = "SB", merge = True):
 
     hRcs = hSR.Clone()
     hRcs.Add(hTTPredict, -1)
-    hRcs.Add(hTTPredict, -1)
     hRcs.Divide(hTTbarFractionInverse)
     hRcs.Divide(hCR)
 
@@ -515,22 +514,15 @@ def makeKappaHists(fileList, samples = []):
 
     return 1
 
-def makeKappaTTHists(fileList, samples = [], ttbarFractionCsv = "TemplateFit/templateFits_0b_2016_EXT_nominal.csv"):
+def makeKappaTTHists(fileList, samples = []):
     # get process names from file if not given
-    if samples == []: samples = getSamples(fileList[0],'SR_MB')
+    if samples == []: samples = [sample for sample in getSamples(fileList[0],'SR_MB') if "TTJets" in sample or "data" in sample]
 
     print "Making kappa_tt and Rcs tt for:", samples
 
     bindirs = ['SR_MB','CR_MB','SR_SB_NB0','CR_SB_NB0', 'SR_SB_NB1i', 'CR_SB_NB1i']
-    outDir = "RcsKappa"
-    outputDirName = fileList[0].split("/merged")[0] + "/" + outDir
-    if not os.path.exists(outputDirName):
-        os.makedirs(outputDirName)
-
-    ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin")
 
     for fname in fileList:
-        #tfile = TFile(fname.replace("merged", outDir), "RECREATE")
         tfile = TFile(fname, "UPDATE")
 
         #Create direcotry for RCS and Kappa
@@ -557,79 +549,50 @@ def makeKappaTTHists(fileList, samples = [], ttbarFractionCsv = "TemplateFit/tem
             tfile.cd("KappaB")
             mbname.Write()
 
-        hRcsSB_NB1i_data = getRcsHist(tfile, "data_QCDsubtr", 'SB_NB0')
+        for sample in samples:
+            if "data" in sample:
+                hRcsSB_NB1i_data = getRcsHist(tfile, "data_QCDsubtr", 'SB_NB0')
+                tfile.cd("Rcs_SB_NB1i_TT")
+                hRcsSB_NB1i_data.SetName("data_QCDsubtr")
+                hRcsSB_NB1i_data.Write()
+            else:
+                ewkSample = sample.replace("TTJets", "EWK")
 
-        hRcsMB = getRcsHist(tfile, "TTJets", 'MB', True)
-        hRcsSB_NB0 = getRcsHist(tfile, "TTJets", 'SB_NB0', True)
-        hRcsSB_NB1i = getRcsHist(tfile, "EWK", 'SB_NB1i', True)
+                hRcsMB = getRcsHist(tfile, sample, 'MB', True)
+                hRcsSB_NB0 = getRcsHist(tfile, sample, 'SB_NB0', True)
+                hRcsSB_NB1i = getRcsHist(tfile, ewkSample, 'SB_NB1i', True)
 
-        hKappaB = hRcsSB_NB0.Clone(hRcsSB_NB0.GetName().replace('Rcs','KappaB'))
-        hKappaB.Divide(hRcsSB_NB1i)
+                hKappaB = hRcsSB_NB0.Clone(hRcsSB_NB0.GetName().replace('Rcs','KappaB'))
+                hKappaB.Divide(hRcsSB_NB1i)
 
-        hKappaTT = hRcsMB.Clone(hRcsMB.GetName().replace('Rcs','KappaTT'))
-        hKappaTT.Divide(hRcsSB_NB0)
+                hKappaTT = hRcsMB.Clone(hRcsMB.GetName().replace('Rcs','KappaTT'))
+                hKappaTT.Divide(hRcsSB_NB0)
 
-        tfile.cd("Rcs_MB_TT")
-        hRcsMB.SetName("TTJets")
-        hRcsMB.Write()
+                tfile.cd("Rcs_MB_TT")
+                hRcsMB.SetName(sample)
+                hRcsMB.Write()
 
-        tfile.cd("Rcs_SB_NB0_TT")
-        hRcsSB_NB0.SetName("TTJets")
-        hRcsSB_NB0.Write()
+                tfile.cd("Rcs_SB_NB0_TT")
+                hRcsSB_NB0.SetName(sample)
+                hRcsSB_NB0.Write()
 
-        tfile.cd("Rcs_SB_NB1i_TT")
-        hRcsSB_NB1i.SetName("TTJets")
-        hRcsSB_NB1i.Write()
+                tfile.cd("Rcs_SB_NB1i_TT")
+                hRcsSB_NB1i.SetName(sample)
+                hRcsSB_NB1i.Write()
 
-        tfile.cd("KappaB")
-        hKappaB.SetName("TTJets")
-        hKappaB.Write()
+                tfile.cd("KappaB")
+                hKappaB.SetName(sample)
+                hKappaB.Write()
 
-        tfile.cd("KappaTT")
-        hKappaTT.SetName("TTJets")
-        hKappaTT.Write()
-
-        tfile.cd("Rcs_SB_NB1i_TT")
-        hRcsSB_NB1i_data.SetName("data_QCDsubtr")
-        hRcsSB_NB1i_data.Write()
-
-        tfile.cd("Rcs_SB_NB0_TT")
-        hRcsSB_NB0_data = hRcsSB_NB1i_data.Clone()
-        hRcsSB_NB0_data.Multiply(hKappaB)
-        hRcsSB_NB0_data.SetName("data_QCDsubtr")
-        hRcsSB_NB0_data.Write()
-
-        tfile.cd("Rcs_MB_TT")
-        hRcsMB_data = hRcsSB_NB1i_data.Clone()
-        hRcsMB_data.Multiply(hKappaB)
-        hRcsMB_data.Multiply(hKappaTT)
-        hRcsMB_data.SetName("data_QCDsubtr")
-        hRcsMB_data.Write()
-
-        binNameMB = tfile.Get("SR_MB/binName").GetTitle().replace("_SR", "")
-        ttbarFraction = ttbarFractionDf.loc[binNameMB, "TTJetsIncl_fraction"]
-        ttbarFractionErr = ttbarFractionDf.loc[binNameMB, "TTJetsIncl_fraction_err"]
-        hTTbarFraction = tfile.Get("CR_SB/TTJets")
-        hTTbarFraction.SetBinContent(1,2,ttbarFraction); hTTbarFraction.SetBinError(1,2,ttbarFractionErr) # mu sele
-        hTTbarFraction.SetBinContent(2,2,ttbarFraction); hTTbarFraction.SetBinError(2,2,ttbarFractionErr) # lep sele
-        hTTbarFraction.SetBinContent(3,2,ttbarFraction); hTTbarFraction.SetBinError(3,2,ttbarFractionErr) # ele sele
-
-        tfile.cd("SR_MB")
-        hTTJetsPred = tfile.Get("CR_MB/data_QCDsubtr")
-        hTTJetsPred.Multiply(hRcsSB_NB1i_data)
-        hTTJetsPred.Multiply(hKappaB)
-        hTTJetsPred.Multiply(hKappaTT)
-        hTTJetsPred.Multiply(hTTbarFraction)
-        hTTJetsPred.SetName("TTJets" + "_pred")
-        hTTJetsPred.Write()
-
+                tfile.cd("KappaTT")
+                hKappaTT.SetName(sample)
+                hKappaTT.Write()
         tfile.Close()
     return 1
 
 def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_2016_EXT_nominal.csv"):
-
     # get process names from file if not given
-    if samples == []: samples = getSamples(fileList[0],'SR_MB')
+    if samples == []: samples = [sample for sample in getSamples(fileList[0],'SR_MB') if "WJets" in sample or "data" in sample]
 
     print "Making Rcs W and KappaW hists for:", samples
 
@@ -677,56 +640,136 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
         hTTbarFraction.SetBinContent(2,1,ttbarFraction); hTTbarFraction.SetBinError(2,1,ttbarFractionErr) # lep sele
         hTTbarFraction.SetBinContent(3,1,ttbarFraction); hTTbarFraction.SetBinError(3,1,ttbarFractionErr) # ele sele
 
-        hRcsMB = getRcsHist(tfile, "WJets", 'MB', True)
-        hRcsSB = getRcsCorrHist(tfile, hTTbarFraction, "EWK", 'SB', True)
-        hRcsSB_data = getRcsCorrHist(tfile, hTTbarFraction, "data", 'SB', True)
+        for sample in samples:
+            if "data" in sample:
+                hRcsSB_data = getRcsCorrHist(tfile, hTTbarFraction, "data", 'SB', True)
+                tfile.cd("Rcs_MB_W")
+                hRcsMB_data = hRcsSB_data.Clone()
+                hRcsMB_data.Multiply(hKappa)
+                hRcsMB_data.SetName("data")
+                hRcsMB_data.Write()
 
-        hKappa = hRcsMB.Clone()
-        hKappa.Divide(hRcsSB)
-        hKappa.GetYaxis().SetTitle("KappaW")
+                tfile.cd("Rcs_SB_W")
+                hRcsSB_data.SetName("data")
+                hRcsSB_data.Write()
 
-        tfile.cd("Rcs_MB_W")
-        hRcsMB.SetName("WJets")
-        hRcsMB.Write()
+            else:
+                ewkSample = sample.replace("WJets", "EWK")
+                hRcsMB = getRcsHist(tfile, sample, 'MB', True)
+                hRcsSB = getRcsCorrHist(tfile, hTTbarFraction, "EWK", 'SB', True)
 
-        tfile.cd("Rcs_SB_W")
-        hRcsSB.SetName("WJets")
-        hRcsSB.Write()
+                hKappa = hRcsMB.Clone()
+                hKappa.Divide(hRcsSB)
+                hKappa.GetYaxis().SetTitle("KappaW")
 
-        tfile.cd("Rcs_SB_W")
-        hRcsSB_data.SetName("data")
-        hRcsSB_data.Write()
+                tfile.cd("Rcs_MB_W")
+                hRcsMB.SetName(sample)
+                hRcsMB.Write()
 
-        tfile.cd("KappaW")
-        hKappa.SetName("WJets")
-        hKappa.Write()
+                tfile.cd("Rcs_SB_W")
+                hRcsSB.SetName(sample)
+                hRcsSB.Write()
 
-        tfile.cd("Rcs_MB_W")
-        hRcsMB_data = hRcsSB_data.Clone()
-        hRcsMB_data.Multiply(hKappa)
-        hRcsMB_data.SetName("data")
-        hRcsMB_data.Write()
-
-        wjetsFraction = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction"]
-        wjetsFractionErr = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction_err"]
-        hWJetsFraction = tfile.Get("CR_SB/WJets").Clone()
-        hWJetsFraction.SetBinContent(1,2,wjetsFraction); hWJetsFraction.SetBinError(1,2,wjetsFractionErr) # mu sele
-        hWJetsFraction.SetBinContent(2,2,wjetsFraction); hWJetsFraction.SetBinError(2,2,wjetsFractionErr) # lep sele
-        hWJetsFraction.SetBinContent(3,2,wjetsFraction); hWJetsFraction.SetBinError(3,2,wjetsFractionErr) # ele sele
-
-        hWJetsFraction.SetBinContent(1,1,wjetsFraction); hWJetsFraction.SetBinError(1,1,wjetsFractionErr) # mu sele
-        hWJetsFraction.SetBinContent(2,1,wjetsFraction); hWJetsFraction.SetBinError(2,1,wjetsFractionErr) # lep sele
-        hWJetsFraction.SetBinContent(3,1,wjetsFraction); hWJetsFraction.SetBinError(3,1,wjetsFractionErr) # ele sele
-
-        tfile.cd("SR_MB")
-        hWJetsPred = tfile.Get("CR_MB/data")
-        hWJetsPred.Multiply(hRcsSB_data)
-        hWJetsPred.Multiply(hKappa)
-        hWJetsPred.Multiply(hWJetsFraction)
-        hWJetsPred.SetName("WJets_pred")
-        hWJetsPred.Write()
+                tfile.cd("KappaW")
+                hKappa.SetName(sample)
+                hKappa.Write()
 
         tfile.Close()
+    return 1
+
+def makePredictTTHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_2016_EXT_nominal.csv"):
+
+    # get process names from file
+    if samples == []: samples = [sample for sample in getSamples(fileList[0],'SR_MB') if "TTJets" in sample]
+
+    print "Making predictions for", samples
+
+    for fname in fileList:
+        tfile = TFile(fname,"UPDATE")
+
+        ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin")
+
+        #tfile.cd("SR_MB_predict")
+        for sample in samples:
+            # Read in the relevant histograms
+            hRcsSB_NB1i_data = tfile.Get("Rcs_SB_NB1i_TT/data_QCDsubtr")
+            hKappaB = tfile.Get("KappaB/" + sample)
+            hKappaTT = tfile.Get("KappaTT/" + sample)
+
+            tfile.cd("Rcs_SB_NB0_TT")
+            hRcsSB_NB0_data = hRcsSB_NB1i_data.Clone()
+            hRcsSB_NB0_data.Multiply(hKappaB)
+            hRcsSB_NB0_data.SetName("data_QCDsubtr")
+            hRcsSB_NB0_data.Write()
+
+            tfile.cd("Rcs_MB_TT")
+            hRcsMB_data = hRcsSB_NB1i_data.Clone()
+            hRcsMB_data.Multiply(hKappaB)
+            hRcsMB_data.Multiply(hKappaTT)
+            hRcsMB_data.SetName("data_QCDsubtr")
+            hRcsMB_data.Write()
+
+            binNameMB = tfile.Get("SR_MB/binName").GetTitle().replace("_SR", "")
+            ttbarFraction = ttbarFractionDf.loc[binNameMB, "TTJetsIncl_fraction"]
+            ttbarFractionErr = ttbarFractionDf.loc[binNameMB, "TTJetsIncl_fraction_err"]
+            hTTbarFraction = tfile.Get("CR_SB/TTJets")
+            hTTbarFraction.SetBinContent(1,2,ttbarFraction); hTTbarFraction.SetBinError(1,2,ttbarFractionErr) # mu sele
+            hTTbarFraction.SetBinContent(2,2,ttbarFraction); hTTbarFraction.SetBinError(2,2,ttbarFractionErr) # lep sele
+            hTTbarFraction.SetBinContent(3,2,ttbarFraction); hTTbarFraction.SetBinError(3,2,ttbarFractionErr) # ele sele
+
+            tfile.cd("SR_MB")
+            hTTJetsPred = tfile.Get("CR_MB/data_QCDsubtr")
+            hTTJetsPred.Multiply(hRcsSB_NB1i_data)
+            hTTJetsPred.Multiply(hKappaB)
+            hTTJetsPred.Multiply(hKappaTT)
+            hTTJetsPred.Multiply(hTTbarFraction)
+            hTTJetsPred.SetName(sample + "_pred")
+            hTTJetsPred.Write()
+        tfile.Close()
+
+    return 1
+
+def makePredictWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_2016_EXT_nominal.csv"):
+
+    # get process names from file
+    if samples == []: samples = [sample for sample in getSamples(fileList[0],'SR_MB') if "WJets" in sample]
+
+    print "Making predictions for", samples
+
+    for fname in fileList:
+        tfile = TFile(fname,"UPDATE")
+
+        ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin")
+
+        # create Rcs/Kappa dir struct
+        #tfile.mkdir("SR_MB_predict")
+        #tfile.mkdir("Rcs_SB_NB0_W")
+        #tfile.mkdir("Rcs_MB_W")
+
+        binNameMB = tfile.Get("SR_MB/binName").GetTitle().replace("_SR", "")
+        binNameSB = tfile.Get("SR_SB/binName").GetTitle().replace("_SR", "")
+        for sample in samples:
+            # Read in the relevant histograms
+            hRcsSB_data = tfile.Get("Rcs_SB_W/data")
+            hKappa = tfile.Get("KappaW/" + sample)
+
+            wjetsFraction = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction"]
+            wjetsFractionErr = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction_err"]
+            hWJetsFraction = tfile.Get("CR_SB/WJets").Clone()
+            hWJetsFraction.SetBinContent(1,2,wjetsFraction); hWJetsFraction.SetBinError(1,2,wjetsFractionErr) # mu sele
+            hWJetsFraction.SetBinContent(2,2,wjetsFraction); hWJetsFraction.SetBinError(2,2,wjetsFractionErr) # lep sele
+            hWJetsFraction.SetBinContent(3,2,wjetsFraction); hWJetsFraction.SetBinError(3,2,wjetsFractionErr) # ele sele
+
+            tfile.cd("SR_MB")
+            hWJetsPred = tfile.Get("CR_MB/data")
+            hWJetsPred.Multiply(hRcsSB_data)
+            hWJetsPred.Multiply(hKappa)
+            hWJetsPred.Multiply(hWJetsFraction)
+            hWJetsPred.SetName(sample + "_pred")
+            hWJetsPred.Write()
+
+        tfile.Close()
+
     return 1
 
 def makePredictHists(fileList, samples = []):
@@ -737,8 +780,7 @@ def makePredictHists(fileList, samples = []):
     print "Making predictions for", samples
 
     for fname in fileList:
-        tfile = TFile(fname.replace("merged", outDir).replace("_forWJets", "").replace("_neg", "").replace("_pos", ""), "UPDATE")
-        #tfile = TFile(fname,"UPDATE")
+        tfile = TFile(fname,"UPDATE")
 
         # create Rcs/Kappa dir struct
         if not tfile.GetDirectory("SR_MB_predict"):
@@ -848,9 +890,20 @@ if __name__ == "__main__":
     #replaceEmptyDataBinsWithMC(fileList)
     blindDataBins(fileList)
 
-    ttbarCsvFile =  "TemplateFit/templateFits_0b_2016_EXT_nominal.csv"
+    year = ""
+    if "2016" in pattern:
+        year = "2016_EXT"
+    elif "2017" in pattern:
+        year = "2017"
+    elif "2018" in pattern:
+        year = "2018"
+    else:
+        print "The year is not part of your pattern but this is needed for getting the correct csv file"
+        exit()
+
+    ttbarCsvFile =  "TemplateFit/templateFits_0b_" + year + "_nominal.csv"
     if "grid-dilep" in pattern:
-        ttbarCsvFile =  "TemplateFit/templateFits_0b_2016_EXT_dilep-corr.csv"
+        ttbarCsvFile =  "TemplateFit/templateFits_0b_" + year + "_dilep-corr.csv"
 
     #makePoissonErrors(fileList, poisSamps)
     makeQCDsubtraction(fileList, qcdPredSamps)
@@ -858,10 +911,12 @@ if __name__ == "__main__":
         exit()
     print "QCD Estimate done!"
 
-    makeKappaTTHists(fileList, ttbarFractionCsv = ttbarCsvFile)#, predSamps)
+    makeKappaTTHists(fileList)#, predSamps)
+    makePredictTTHists(fileList, ttbarFractionCsv = ttbarCsvFile)#, predSamps)
     print "Rcs Calculation for TTJets prediciton done!"
 
     makeKappaWHists(fileList, ttbarFractionCsv = ttbarCsvFile)#, predSamps)
+    makePredictWHists(fileList, ttbarFractionCsv = ttbarCsvFile)#, predSamps)
     print "Rcs Calculation for WJets prediciton done!"
 
     print 'Finished'
