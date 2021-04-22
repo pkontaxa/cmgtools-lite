@@ -67,13 +67,37 @@ if __name__ == "__main__":
     ydsMuon.addFromFiles(pattern,("mu","sele"))
     #ydsMuon.showStats()
 
-    ##TESTING
-    #storeDict = True
-    #pckname = "pickles_{}/allSigCentral.pckz".format(year)
+    #signalYds = yp.YieldStore("Signal")
+    #pathSig = pattern2
+    #signalYds.addFromFiles(pathSig,("lep","sele"))
+    ## Define storage
+    ### Store dict in pickle file
+    pckname = "pickles/lep/" + str(year) + "/allSigCentral.pckz"
+    if not os.path.exists("pickles"):
+        os.makedirs("pickles")
+    if not os.path.exists("pickles/lep"):
+        os.makedirs("pickles/lep")
+    if not os.path.exists("pickles/lep/" + str(year)):
+        os.makedirs("pickles/lep/" + str(year))
 
-    signalYds = yp.YieldStore("Signal")
-    pathSig = pattern2
-    signalYds.addFromFiles(pathSig,("lep","sele"))
+
+    loadDict = "--redo-pickle" not in sys.argv
+    if loadDict and os.path.exists(pckname):
+        print "#Loading saved yields from pickle:", pckname
+        import cPickle as pickle
+        import gzip
+        signalYds = pickle.load( gzip.open( pckname, "rb" ) )
+    else:
+        signalYds = yp.YieldStore("Signal")
+        pathSig = pattern2
+        signalYds.addFromFiles(pathSig,("lep","sele"))
+
+        print "#Saving yields to pickle:", pckname
+        # save to pickle
+        import cPickle as pickle
+        import gzip
+        pickle.dump( signalYds, gzip.open( pckname, "wb" ) )
+
 
     mcSamps = ['VV','DY','TTV','SingleT']#,'WJets','TTJets']#
     #mcSamps = ['VV','DY','TTV','SingleT','WJets','TTJets']#
@@ -93,12 +117,9 @@ if __name__ == "__main__":
     # Totals
     hData = yp.makeSampHisto(yds,"data_QCDsubtr",cat,"Data"); hData.SetTitle("Data")
 
-    hWnegPred = yp.makeSampHisto(yds,"WJets_pred_neg", "SR_MB", "W+jets (Pred)", useRcs = True); hWnegPred.SetTitle("WJets (Pred)");
-    hWposPred = yp.makeSampHisto(yds,"WJets_pred_pos", "SR_MB", "Wpos+jets (Pred)", useRcs = True); hWposPred.SetTitle("WJets (Pred)");
-
-    hWPred = hWnegPred.Clone(hWnegPred.GetTitle().replace("neg", "Jets"))
+    hWPred = yp.makeSampHisto(yds,"WJets_pred", "SR_MB", "W+jets (Pred)", useRcs = True); hWPred.SetTitle("WJets (Pred)");
     hWPred.SetTitle("WJets (Pred)")
-    hWPred.Add(hWposPred)
+    #hWPred.Add(hWposPred)
 
     hTTJetsPred = yp.makeSampHisto(ydsMuon,"TTJets_pred", "SR_MB", "TTJets (Pred)", useRcs = True); hTTJetsPred.SetTitle("TTJets (Pred)");
 

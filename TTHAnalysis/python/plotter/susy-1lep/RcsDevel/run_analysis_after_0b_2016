@@ -17,12 +17,6 @@ exec 2>&1
 # to prevent problems later
 inputfolder="${1%/}"
 
-# Remove pickle files (is this a good idea?)
-#rm -rf pickles
-
-# Create necessary folders
-mkdir -p pickles BinPlots FracPlots FracPlots_TT RCSplots
-
 # Merge bins
 echo Run mergeBins_0b.py
 for folder in "${inputfolder}"/*; do
@@ -34,15 +28,23 @@ for folder in "${inputfolder}"/*; do
 done
 
 ## Append Rcs kappa
-#echo Run appendRcsKappa.py
-#for folder in "${inputfolder}"/*/merged*; do 
-#    if [[ "${folder}" == */scan/* ]]; then
-#        continue
-#    fi
-#    ./appendRcsKappa.py "${folder}"
-#done
-#
-#
+echo Run appendRcsKappa.py
+for folder in "${inputfolder}"/*/merged*; do
+    #Skip signal folder
+    if [[ "${folder}" == */scan/* ]]; then
+        continue
+    fi
+    #Predict backgrounds
+    if [[ "${folder}" == */merged/* ]]; then
+        ./appendRcsKappa.py "${folder}"
+    fi
+    #Only do qcd estimate for SB, this is only needed for plotting and calculating Rcs here does not make sense
+    if [[ "${folder}" == */mergedNJ*/* ]]; then
+        ./appendRcsKappa.py "${folder}" --do-qcd
+    fi
+done
+
+
 ## Calculate the systematic variations
 ## Takes up and down histograms and creates syst histograms
 #echo Run calcSyst.py
@@ -73,7 +75,7 @@ done
 ## Plot data with prediction, with systematics
 #echo Run plotDataPredictWithSyst.py
 ##Pantelis for folder in merged merged4f5 mergedFew; do
-#for folder in merged; do  
+#for folder in merged; do
 #    ./plotDataPredictWithSyst.py -b "${inputfolder}" "${folder}"
 #done
 #
@@ -94,5 +96,5 @@ done
 ## Compare something
 ##python plotCompare.py LT
 #
-##python makeRCSplots.py indir/grid 
+##python makeRCSplots.py indir/grid
 ##python averageSig.py LT

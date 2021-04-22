@@ -3,6 +3,7 @@
 #from searchBins import *
 import glob, os, sys
 from ROOT import *
+from pandas import read_csv
 
 from optparse import OptionParser
 parser = OptionParser()
@@ -17,156 +18,84 @@ parser.add_option("-v","--verbose",  dest="verbose",  default=0,  type="int",   
 
 (options,args) = parser.parse_args()
 
-def matchSB(bname):
-    # Matching main band (MB) bins to side band (SB)
+def findMatchBins(binName):
+    # have to supply SR binName:
 
-    name = bname+'_'
-
-    if 'NJ5_forWJets' in name:
-        name = name.replace('NJ5_forWJets','NJ34_forWJets')
-    elif 'NJ67_forWJets' in name:
-        name = name.replace('NJ67_forWJets','NJ34_forWJets')
-    elif 'NJ8i_forWJets' in name:
-        name = name.replace('NJ8i_forWJets','NJ34_forWJets')
-    elif 'NJ5_forTTJets' in name:
-        name = name.replace('NJ5_forTTJets','NJ45_forTTJets')
-        name = name.replace('NB0_','NB1i_')
-    elif 'NJ67_forTTJets' in name:
-        name = name.replace('NJ67_forTTJets','NJ45_forTTJets')
-        name = name.replace('NB0_','NB1i_')
-    elif 'NJ8i_forTTJets' in name:
-        name = name.replace('NJ8i_forTTJets','NJ45_forTTJets')
-        name = name.replace('NB0_','NB1i_')
-
-    name = name[:-1] #to remove the trailing _
-
-    if options.verbose > 0:
-        if name!= bname:
-            print 'Replaced %s with %s' %(bname,name)
-        else:
-            print 'No replace: %s with %s' %(bname,name)
-
-    return name 
+    binNameSR_MB = binName
+    binNameCR_MB = binNameSR_MB.replace('_SR','_CR')
 
 
-def findMatchBins(binname):
+    binNameSR_SB = binName.replace("NJ5", "NJ34").replace("NJ67", "NJ34").replace("NJ8i", "NJ34")
+    binNameCR_SB = binNameSR_SB.replace('_SR','_CR')
 
-    # have to supply SR binname:
-    # LTx_HTx_NBx_NJx_SR
+    binNameSR_SB_NB0 = binNameSR_SB.replace("NJ34", "NJ45")
+    binNameCR_SB_NB0 = binNameCR_SB.replace("NJ34", "NJ45")
 
-    ## Need 5 yields for RCS
-    # * SB SR: sele
-    # * SB CR: sele & anti
-    # * CR: sele & anti
-    ## QCD:
+    binNameSR_SB_NB1i = binNameSR_SB_NB0.replace("NB0", "NB1i")
+    binNameCR_SB_NB1i = binNameCR_SB_NB0.replace("NB0", "NB1i")
 
-    ## Prediction
-    # SR = (CR-CRqcd) * SB_SR/(SB_CR-SB_CRqcd) * kappa
+    #Empty SB bins with NB0
+    if "LT3" in binNameSR_SB and "HT3i" in binNameSR_SB:
+        binNameSR_SB = binNameSR_SB.replace("NW1i", "NW0i")
+        binNameCR_SB = binNameCR_SB.replace("NW1i", "NW0i")
 
-    # find bin names
-    if '.' in binname:
-        binname = binname[:binname.find('.')]
-    purebname = binname[:binname.find('_NJ')]
+        binNameSR_SB_NB0 = binNameSR_SB_NB0.replace("NW1i", "NW0i")
+        binNameCR_SB_NB0 = binNameCR_SB_NB0.replace("NW1i", "NW0i")
 
-    SR_MBname = binname
-    CR_MBname = binname.replace('_SR','_CR')
-    DLCR_MBname = binname.replace('_SR','_DLCR')
+        binNameSR_SB_NB1i = binNameSR_SB_NB1i.replace("NW1i", "NW0i")
+        binNameCR_SB_NB1i = binNameCR_SB_NB1i.replace("NW1i", "NW0i")
+    elif "LT4i" in binNameSR_SB and "HT3i" in binNameSR_SB:
+        binNameSR_SB = binNameSR_SB.replace("NW1i", "NW0i")
+        binNameCR_SB = binNameCR_SB.replace("NW1i", "NW0i")
 
-    #print 'replace', purebname, 'to', matchSB(purebname)
-
-    if 'NJ5_forTTJets' in binname:
-        njSB = 'NJ45_forTTJets'
-    elif 'NJ67_forTTJets' in binname:
-        njSB = 'NJ45_forTTJets'
-    elif 'NJ8i_forTTJets' in binname:
-        njSB = 'NJ45_forTTJets'
-    elif 'NJ5_forWJets' in binname:
-        njSB = 'NJ34_forWJets'
-    elif 'NJ67_forWJets' in binname:
-        njSB = 'NJ34_forWJets'
-    elif 'NJ8i_forWJets' in binname:
-        njSB = 'NJ34_forWJets'
-    elif 'NJ34_forWJets' in binname:
-        njSB = 'NJ34_forWJets'
-    elif 'NJ45_forTTJets' in binname:
-        njSB = 'NJ45_forTTJets'
-    else:
-        print "No match found:", binname
-        exit(0)
-
-    SBname = matchSB(binname)
-
-    if 'forWJets' in binname:
-        SBname = SBname[:SBname.find('_NJ')] + '_' + njSB + '_' + SBname.split("_")[-3] + '_' + SBname.split("_")[-2]
-    else:
-        SBname = SBname[:SBname.find('_NJ')] + '_' + njSB + '_' + SBname.split("_")[-2]
-
-    SR_SBname = SBname + '_SR'
-    CR_SBname = SBname + '_CR'
-    DLCR_SBname = SBname + '_DLCR'
-
-    if 'Few' in binname:
-        SR_SBname = SR_SBname + '_Few'
-        CR_SBname = CR_SBname + '_Few'
-    ## collect files
-    if options.verbose > 1:
-        print 'Found these bins matching to', binname
-        print 'SR   of MB:', SR_MBname
-        print 'CR   of MB:', CR_MBname
-        print 'DLCR of MB:', DLCR_MBname
-        print 'SR   of SB:', SR_SBname
-        print 'CR   of SB:', CR_SBname
-        print 'SLCR of SB:', DLCR_SBname
-
-    return (SR_MBname, CR_MBname, DLCR_MBname, SR_SBname, CR_SBname, DLCR_SBname)
-
-def getBinName(name, pattern = "NJ68"):
-
-    binname = os.path.basename(name)
-    binname = binname.replace('.yields.root','')
-    #if '.' in binname: binname = binname[:binname.find('.')]
-    #binname = binname[:binname.find('_'+pattern)]
-
-    return binname
-
-def writeBins(ofname, srcdir, binnames):
-
-    # ofname is output fname
-    # binnames is source fnames: SR_MBname, CR_MBname, DLCR_MBname, SR_SBname, CR_SBname, DLCR_SBname
-
-
-    if len(binnames) != 6: print 'Not 6 source names given!'; return 0
+    #Empty SB bins with NB1i
+    if "LT4i" in binNameSR_SB_NB1i and ("HT03" in binNameSR_SB_NB1i or "HT3i" in binNameSR_SB_NB1i):
+        binNameSR_SB_NB1i = binNameSR_SB_NB1i.replace("NW1i", "NW0i")
+        binNameCR_SB_NB1i = binNameCR_SB_NB1i.replace("NW1i", "NW0i")
 
     if options.verbose > 1:
-        print ofname, srcdir, binnames
+        print 'Found these bins matching to', binName
+        print 'SR of MB:', binNameSR_MB
+        print 'CR of MB:', binNameCR_MB
+        print 'SR of SB:', binNameSR_SB
+        print 'CR of SB:', binNameCR_SB
+        print 'SR of SB:', binNameSR_SB_NB0
+        print 'CR of SB:', binNameCR_SB_NB0
+        print 'SR of SB:', binNameSR_SB_NB1i
+        print 'CR of SB:', binNameCR_SB_NB1i
+
+    return (binNameSR_MB, binNameCR_MB, binNameSR_SB, binNameCR_SB, binNameSR_SB_NB0, binNameCR_SB_NB0, binNameSR_SB_NB1i, binNameCR_SB_NB1i)
+
+def getbinName(name):
+    binName = os.path.basename(name)
+    binName = binName.replace('.yields.root','')
+    return binName
+
+def writeBins(mergeFileName, srcDir, binNames):
+
+    if len(binNames) != 8: print 'Not 8 source names given!'; return 0
+
+    if options.verbose > 1:
+        print mergeFile, srcDir, binNames
         #return 0
 
-    ofile = TFile(ofname,"RECREATE")
+    mergeFile = TFile(mergeFileName, "RECREATE")
 
-    #SR_SBdirname = 'SR_SB'; CR_SBdirname = 'CR_SB'
-    #SR_MBdirname = 'SR_MB'; CR_MBdirname = 'CR_MB'
+    dirNames = ['SR_MB', 'CR_MB', 'SR_SB', 'CR_SB', 'SR_SB_NB0', 'CR_SB_NB0', 'SR_SB_NB1i', 'CR_SB_NB1i',]
 
-    dirnames = ['SR_MB','CR_MB','DLCR_MB','SR_SB','CR_SB','DLCR_SB']
+    for binName, dirName in zip(binNames, dirNames):
+        mergeFile.mkdir(dirName)
 
-
-    for idx,dname in enumerate(dirnames):
-
-        ofile.mkdir(dname)
-
-        srcfname = srcdir+binnames[idx]+'.yields.root'
-        if not os.path.exists(srcfname):
-            if 'DL' in dname:
-                continue
-#                print 'DL', os.path.basename(srcfname)
-            else:
-                print 'Could not find src file', os.path.basename(srcfname)
+        fileName = srcDir + "/" + binName + '.yields.root'
+        if not os.path.exists(fileName):
+            print 'Could not find src file', fileName
             continue
 
-        tfile = TFile(srcfname,"READ")
-        ofile.cd(dname)
+        tfile = TFile(fileName,"READ")
+        mergeFile.cd(dirName)
 
         # save bin name
-        name = TNamed("BinName",binnames[idx])
+        name = TNamed("binName", binName)
         name.Write()
 
         for key in tfile.GetListOfKeys():
@@ -176,45 +105,27 @@ def writeBins(ofname, srcdir, binnames):
 
         tfile.Close()
 
-    ofile.Close()
+    mergeFile.Close()
     return 1
 
-def mergeBins(fileList, pattern = 'NJ68', outdir = None):
-
-    print pattern
-    # filter out MB_SR files
-    srList = [fname for fname in fileList if pattern in fname]
-    srList = [fname for fname in srList if '_SR' in fname]
-
-    if len(srList) == 0:
-        print "No files found matching pattern", pattern , "+ SR"
-        return 0
-
-
-    # create outdir
-    if outdir == None: outdir = os.path.dirname(srList[0]) + "/merged/"
-    if not os.path.exists(outdir): os.system("mkdir -p "+outdir)
-
-    srcdir = os.path.dirname(srList[0])+'/'
+def mergeBins(fileList, outdir = None):
+    srcDir = fileList[0].split("/LT")[0]
+    mergeDir = fileList[0].split("/LT")[0] + "/" + outdir
+    if not os.path.exists(mergeDir):
+        os.system("mkdir -p " + mergeDir)
 
     # Loop over files
-    for fname in srList:
-        binname = getBinName(fname, pattern)
-        matchbins = findMatchBins(binname)
+    for fname in fileList:
+        binName = getbinName(fname)
+        matchBins = findMatchBins(binName)
 
         if options.verbose > 0:
-            print 'File bin name is', binname
-            print 'Matching bins are:', matchbins
+            print 'File bin name is', binName
+            print 'Matching bins are:', matchBins
 
-        # strip off "SR" ending
-        if 'Few' in binname:
-            binname = binname[:binname.find("_SR")] + '_Few'
-        else:
-            binname = binname[:binname.find("_SR")]
+        mergeFile = mergeDir + '/' + binName.replace("_SR", "") + '.merge.root'
 
-        ofname = outdir+'/'+binname+'.merge.root'
-
-        writeBins(ofname, srcdir, matchbins)
+        writeBins(mergeFile, srcDir, matchBins)
 
     return 1
 
@@ -235,38 +146,15 @@ if __name__ == "__main__":
 
     # find files matching pattern
     fileList = glob.glob(pattern+"*.root")
+    fileListMB = [fname for fname in fileList if "NJ34" not in fname and "NJ45" not in fname and "SR" in fname]
+    fileListNJ34 = [fname for fname in fileList if "NJ34" in fname and "SR" in fname]
+    fileListNJ45NB0 = [fname for fname in fileList if "NJ45" in fname and "NB0" in fname and "SR" in fname]
+    fileListNJ45NB1i = [fname for fname in fileList if "NJ45" in fname and "NB1i" in fname and "SR" in fname]
 
-    jetBins = ['NJ34_forWJets', 'NJ5_forWJets', 'NJ67_forWJets', 'NJ8i_forWJets', 'NJ45_forTTJets', 'NJ5_forTTJets','NJ67_forTTJets','NJ8i_forTTJets']
-    wBins = ['NW0', 'NW1i', 'NW0i']
-    lepCharges = ['_pos', '_neg', '']
-    
-    for jBin in jetBins:
-        for wBin in wBins:
-	    for charge in lepCharges:
-	        bin = jBin + "_" + wBin + charge
-		print "Merging bin:", bin
-		mergeBins(fileList,bin)
+    mergeBins(fileListMB, "merged")
+    #This will seperate MB and SB but the dirs in SB are probably all identical
+    mergeBins(fileListNJ34, "mergedNJ34")
+    mergeBins(fileListNJ45NB0, "mergedNJ45NB0")
+    mergeBins(fileListNJ45NB1i, "mergedNJ45NB1i")
 
-
-    ##clean up a bit and create separate folders for 4,5 jet cross check and aggregate SR
-
-    #patternList = pattern.split("/")
-    #listMerged = glob.glob(patternList[0]+"/"+patternList[1]+"/merged/*.root")
-
-    #if not os.path.exists(patternList[0]+"/"+patternList[1]+"/merged4f5"):
-    #    os.system("mkdir -p "+patternList[0]+"/"+patternList[1]+"/merged4f5")
-
-    #if not os.path.exists(patternList[0]+"/"+patternList[1]+"/mergedFew"):
-    #    os.system("mkdir -p "+patternList[0]+"/"+patternList[1]+"/mergedFew")
-    #for f in listMerged:
-    #    cmd =""
-    #    if "NJ9" in f:
-    #        cmd = "mv " + f + " " +patternList[0]+"/"+patternList[1]+"/merged4f5/."
-    #    elif "Few" in f:
-    #        cmd = "mv " + f + " " + patternList[0]+"/"+patternList[1]+"/mergedFew/."
-    #    else:
-    #        continue
-    #    print cmd
-    #    os.system(cmd)
-
-    print 'Finished'
+    print 'Files Merged'

@@ -52,6 +52,22 @@ if __name__ == "__main__":
         print "No pattern given!"
         exit(0)
 
+    # Category
+    cat = "CR_MB"
+    if len(sys.argv) > 3:
+        cat = sys.argv[3]
+    if "SB_NB1i" in cat:
+        pattern = pattern.replace("merged", "mergedNJ45NB1i")
+        pattern2 = pattern2.replace("merged", "mergedNJ45NB1i")
+    elif "SB_NB0" in cat:
+        pattern = pattern.replace("merged", "mergedNJ45NB0")
+        pattern2 = pattern2.replace("merged", "mergedNJ45NB0")
+    elif "SB" in cat:
+        pattern = pattern.replace("merged", "mergedNJ34")
+        pattern2 = pattern2.replace("merged", "mergedNJ34")
+
+
+
     #BinMask LTX_HTX_NBX_NJX for canvas names
     basename = os.path.basename(pattern)
     signalBasename = os.path.basename(pattern2)
@@ -69,26 +85,44 @@ if __name__ == "__main__":
         lep = "mu"
         data = "data"
     yds = yp.YieldStore(lep + "Yields")
-    yds.addFromFiles(pattern,("lep","sele"))
+    yds.addFromFiles(pattern,(lep,"sele"))
     yds.showStats()
 
-    signalYds = yp.YieldStore("Signal")
-    pathSig = pattern2
-    signalYds.addFromFiles(pathSig,("lep","sele"))
+    ### Store dict in pickle file
+    pckname = ""
+    pckname = "pickles/" + str(year) + "/" + lep + "/" + cat + "/allSigCentral.pckz"
+    if not os.path.exists("pickles"):
+        os.makedirs("pickles")
+    if not os.path.exists("pickles/" + str(year)):
+        os.makedirs("pickles/" + str(year))
+    if not os.path.exists("pickles/" + str(year) + "/" + lep):
+        os.makedirs("pickles/" + str(year) + "/" + lep)
+    if not os.path.exists("pickles/" + str(year) + "/" + lep + "/" + cat):
+        os.makedirs("pickles/" + str(year) + "/" + lep + "/" + cat)
+
+    loadDict = "--redo-pickle" not in sys.argv
+    if loadDict and os.path.exists(pckname):
+        print "#Loading saved yields from pickle:", pckname
+        import cPickle as pickle
+        import gzip
+        signalYds = pickle.load( gzip.open( pckname, "rb" ) )
+    else:
+        signalYds = yp.YieldStore("Signal")
+        pathSig = pattern2
+        signalYds.addFromFiles(pathSig,(lep,"sele"))
+
+        print "#Saving yields to pickle:", pckname
+        # save to pickle
+        import cPickle as pickle
+        import gzip
+        pickle.dump(signalYds, gzip.open( pckname, "wb" ) )
 
     #mcSamps = ['VV','DY','TTV','SingleT','WJets','TTJets']
     mcSamps = ['VV','DY','TTV','SingleT','TTJets','WJets']
     #mcSamps = ['VV','DY','TTV','SingleT','WJets','TTsemiLep', 'TTdiLep']
     signalSamples = ['T5qqqqWW_Scan_mGo1500_mLSP1000', 'T5qqqqWW_Scan_mGo1900_mLSP100']
 
-    # Category
-    cat = "CR_MB"
-    if len(sys.argv) > 3:
-        cat = sys.argv[3]
-
     canvs = []
-
-    #for cat in cats:
 
     # Totals
     hDataPred = yp.makeSampHisto(yds,dataString,cat,"Data_prediction"); hDataPred.SetTitle("Data (Pred)")
