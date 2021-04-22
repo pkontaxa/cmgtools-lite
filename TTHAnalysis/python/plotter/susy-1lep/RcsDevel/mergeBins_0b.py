@@ -39,12 +39,11 @@ def findMatchBins(binName):
         binNameSR_SB = binNameSR_SB.replace("NW1i", "NW0i")
         binNameCR_SB = binNameCR_SB.replace("NW1i", "NW0i")
 
-        if "NJ67" in binNameSR_MB:
-            binNameSR_SB_NB0 = binNameSR_SB_NB0.replace("NW1i", "NW0i")
-            binNameCR_SB_NB0 = binNameCR_SB_NB0.replace("NW1i", "NW0i")
+        binNameSR_SB_NB0 = binNameSR_SB_NB0.replace("NW1i", "NW0i")
+        binNameCR_SB_NB0 = binNameCR_SB_NB0.replace("NW1i", "NW0i")
 
-            binNameSR_SB_NB1i = binNameSR_SB_NB1i.replace("NW1i", "NW0i")
-            binNameCR_SB_NB1i = binNameCR_SB_NB1i.replace("NW1i", "NW0i")
+        binNameSR_SB_NB1i = binNameSR_SB_NB1i.replace("NW1i", "NW0i")
+        binNameCR_SB_NB1i = binNameCR_SB_NB1i.replace("NW1i", "NW0i")
     elif "LT4i" in binNameSR_SB and "HT3i" in binNameSR_SB:
         binNameSR_SB = binNameSR_SB.replace("NW1i", "NW0i")
         binNameCR_SB = binNameCR_SB.replace("NW1i", "NW0i")

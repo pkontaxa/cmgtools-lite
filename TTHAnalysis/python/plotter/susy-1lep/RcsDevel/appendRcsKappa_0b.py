@@ -86,8 +86,6 @@ def getRcsCorrHist(tfile, hTTbarFraction, hname, band = "SB", merge = True):
     ttFrac = hTTbarFraction.GetBinContent(1, 2)
 
     rcsW = (sr - ttFrac * rcsTT * cr) / (1 - ttFrac) / cr
-    print "rcsW = (sr - ttFrac * rcsTT * cr) / (1 - ttFrac) / cr"
-    print "(%.4f - %.4f * %.4f * %.4f) / (1 - %.4f) / %.4f = %.4f" % (sr, ttFrac, rcsTT, cr, ttFrac, cr, rcsW)
 
     # Using events with only muons in the sideband excludes QCD contamination
     if merge:
@@ -516,7 +514,7 @@ def makeKappaHists(fileList, samples = []):
 
 def makeKappaTTHists(fileList, samples = []):
     # get process names from file if not given
-    if samples == []: samples = [sample for sample in getSamples(fileList[0],'SR_MB') if "TTJets" in sample or "data" in sample]
+    if samples == []: samples = [sample for sample in getSamples(fileList[0],'CR_MB') if "TTJets" in sample or "data" in sample]
 
     print "Making kappa_tt and Rcs tt for:", samples
 
@@ -592,7 +590,7 @@ def makeKappaTTHists(fileList, samples = []):
 
 def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_2016_EXT_nominal.csv"):
     # get process names from file if not given
-    if samples == []: samples = [sample for sample in getSamples(fileList[0],'SR_MB') if "WJets" in sample or "data" in sample]
+    if samples == []: samples = [sample for sample in getSamples(fileList[0],'CR_MB') if "WJets" in sample or "data" in sample]
 
     print "Making Rcs W and KappaW hists for:", samples
 
@@ -660,6 +658,57 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
 
                 hKappa = hRcsMB.Clone()
                 hKappa.Divide(hRcsSB)
+
+                if hKappa.GetBinContent(1, 2) < 1e-5:
+                    fname2017 = fname.replace("2018", "2017")
+                    tfile2017 = TFile(fname2017,"UPDATE")
+                    hKappa2017 = tfile2017.Get("KappaW/" + sample)
+
+                    kappa2017 = hKappa2017.GetBinContent(1, 2)
+                    kappaErr2017 = hKappa2017.GetBinError(1, 2)
+
+                    #kappaDiff = 0.011625170396101147 # This is the weighted average of (kappaW_2017 - kappaW_2018)/kappaW_2017 for all bins
+                    kappaDiff = 0.062799 # This is the peak position of (kappaW_2017 - kappaW_2018)/kappaW_2017 for all bins
+                    kappaErr2017 = (kappaErr2017 * kappaErr2017 + kappaDiff*kappa2017 * kappaDiff*kappa2017)**0.5
+
+                    print "\n\nWarning!!! The bin %s does not have any WJets MC..\nTaking value from 2017 instead!" % binNameMB
+                    print "File changed from:\n", fname, "\nto\n", fname2017
+                    print "Assign additional uncertainty of %.3f * %.3f = %.3f" % (kappa2017, kappaDiff, kappa2017 * kappaDiff)
+                    print "\n\n"
+
+                    hKappa.SetBinContent(1, 2, kappa2017)
+                    hKappa.SetBinContent(2, 2, kappa2017)
+                    hKappa.SetBinContent(3, 2, kappa2017)
+
+                    hKappa.SetBinError(1, 2, kappaErr2017)
+                    hKappa.SetBinError(2, 2, kappaErr2017)
+                    hKappa.SetBinError(3, 2, kappaErr2017)
+
+                    # For plotting, also get the Rcs_MB_W from 2017
+                    hRcsMB2017 = tfile2017.Get("Rcs_MB_W/" + sample)
+
+                    rcsMB2017 = hRcsMB2017.GetBinContent(1, 2)
+                    rcsMBErr2017 = hRcsMB2017.GetBinError(1, 2)
+                    rcsSB2017 = hRcsSB2017.GetBinContent(1, 2)
+                    rcsSBErr2017 = hRcsSB2017.GetBinError(1, 2)
+
+                    hRcsSB.SetBinContent(1, 2, rcsSB2017)
+                    hRcsSB.SetBinContent(2, 2, rcsSB2017)
+                    hRcsSB.SetBinContent(3, 2, rcsSB2017)
+
+                    hRcsSB.SetBinError(1, 2, rcsSBErr2017)
+                    hRcsSB.SetBinError(2, 2, rcsSBErr2017)
+                    hRcsSB.SetBinError(3, 2, rcsSBErr2017)
+
+                    hRcsMB.SetBinContent(1, 2, rcsMB2017)
+                    hRcsMB.SetBinContent(2, 2, rcsMB2017)
+                    hRcsMB.SetBinContent(3, 2, rcsMB2017)
+
+                    hRcsMB.SetBinError(1, 2, rcsMBErr2017)
+                    hRcsMB.SetBinError(2, 2, rcsMBErr2017)
+                    hRcsMB.SetBinError(3, 2, rcsMBErr2017)
+
+                    tfile2017.Close()
                 hKappa.GetYaxis().SetTitle("KappaW")
 
                 tfile.cd("Rcs_MB_W")
@@ -680,7 +729,7 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
 def makePredictTTHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_2016_EXT_nominal.csv"):
 
     # get process names from file
-    if samples == []: samples = [sample for sample in getSamples(fileList[0],'SR_MB') if "TTJets" in sample]
+    if samples == []: samples = [sample for sample in getSamples(fileList[0],'CR_MB') if "TTJets" in sample]
 
     print "Making predictions for", samples
 
@@ -692,7 +741,10 @@ def makePredictTTHists(fileList, samples = [], ttbarFractionCsv = "templateFits_
         #tfile.cd("SR_MB_predict")
         for sample in samples:
             # Read in the relevant histograms
-            hRcsSB_NB1i_data = tfile.Get("Rcs_SB_NB1i_TT/data_QCDsubtr")
+            try:
+                hRcsSB_NB1i_data = tfile.Get("Rcs_SB_NB1i_TT/data_QCDsubtr").Clone()
+            except ReferenceError:
+                continue
             hKappaB = tfile.Get("KappaB/" + sample)
             hKappaTT = tfile.Get("KappaTT/" + sample)
 
@@ -732,7 +784,7 @@ def makePredictTTHists(fileList, samples = [], ttbarFractionCsv = "templateFits_
 def makePredictWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_2016_EXT_nominal.csv"):
 
     # get process names from file
-    if samples == []: samples = [sample for sample in getSamples(fileList[0],'SR_MB') if "WJets" in sample]
+    if samples == []: samples = [sample for sample in getSamples(fileList[0],'CR_MB') if "WJets" in sample]
 
     print "Making predictions for", samples
 
@@ -750,7 +802,10 @@ def makePredictWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0
         binNameSB = tfile.Get("SR_SB/binName").GetTitle().replace("_SR", "")
         for sample in samples:
             # Read in the relevant histograms
-            hRcsSB_data = tfile.Get("Rcs_SB_W/data")
+            try:
+                hRcsSB_data = tfile.Get("Rcs_SB_W/data").Clone()
+            except ReferenceError:
+                continue
             hKappa = tfile.Get("KappaW/" + sample)
 
             wjetsFraction = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction"]
@@ -890,16 +945,13 @@ if __name__ == "__main__":
     #replaceEmptyDataBinsWithMC(fileList)
     blindDataBins(fileList)
 
-    year = ""
+    year = "2016_EXT"
     if "2016" in pattern:
         year = "2016_EXT"
     elif "2017" in pattern:
         year = "2017"
     elif "2018" in pattern:
         year = "2018"
-    else:
-        print "The year is not part of your pattern but this is needed for getting the correct csv file"
-        exit()
 
     ttbarCsvFile =  "TemplateFit/templateFits_0b_" + year + "_nominal.csv"
     if "grid-dilep" in pattern:
