@@ -514,7 +514,7 @@ def makeKappaHists(fileList, samples = []):
 
 def makeKappaTTHists(fileList, samples = []):
     # get process names from file if not given
-    if samples == []: samples = [sample for sample in getSamples(fileList[0],'CR_MB') if "TTJets" in sample or "data" in sample]
+    if samples == []: samples = list(set([sample for sample in getSamples(fileList[0],'CR_MB') if "_syst" not in sample and ("TTJets" in sample or "data" in sample)]))
 
     print "Making kappa_tt and Rcs tt for:", samples
 
@@ -529,6 +529,7 @@ def makeKappaTTHists(fileList, samples = []):
         tfile.mkdir("Rcs_SB_NB1i_TT")
         tfile.mkdir("KappaTT")
         tfile.mkdir("KappaB")
+        tfile.mkdir("KappaBTT")
 
         # store SB/MB names
         sbname = tfile.Get("SR_SB/BinName")
@@ -538,6 +539,8 @@ def makeKappaTTHists(fileList, samples = []):
             sbname.Write()
             tfile.cd("KappaB")
             sbname.Write()
+            tfile.cd("KappaBTT")
+            sbname.Write()
 
         mbname = tfile.Get("SR_MB/BinName")
         if mbname:
@@ -546,10 +549,12 @@ def makeKappaTTHists(fileList, samples = []):
             mbname.Write()
             tfile.cd("KappaB")
             mbname.Write()
+            tfile.cd("KappaBTT")
+            mbname.Write()
 
         for sample in samples:
             if "data" in sample:
-                hRcsSB_NB1i_data = getRcsHist(tfile, "data_QCDsubtr", 'SB_NB0')
+                hRcsSB_NB1i_data = getRcsHist(tfile, "data_QCDsubtr", 'SB_NB1i')
                 tfile.cd("Rcs_SB_NB1i_TT")
                 hRcsSB_NB1i_data.SetName("data_QCDsubtr")
                 hRcsSB_NB1i_data.Write()
@@ -585,12 +590,18 @@ def makeKappaTTHists(fileList, samples = []):
                 tfile.cd("KappaTT")
                 hKappaTT.SetName(sample)
                 hKappaTT.Write()
+
+                hKappaBTT = hKappaB.Clone()
+                hKappaBTT.Multiply(hKappaTT)
+                tfile.cd("KappaBTT")
+                hKappaBTT.SetName(sample)
+                hKappaBTT.Write()
         tfile.Close()
     return 1
 
 def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_2016_EXT_nominal.csv"):
     # get process names from file if not given
-    if samples == []: samples = [sample for sample in getSamples(fileList[0],'CR_MB') if "WJets" in sample or "data" in sample]
+    if samples == []: samples = list(set([sample for sample in getSamples(fileList[0],'CR_MB') if "_syst" not in sample and ("WJets" in sample or "data" in sample)]))
 
     print "Making Rcs W and KappaW hists for:", samples
 
@@ -641,12 +652,6 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
         for sample in samples:
             if "data" in sample:
                 hRcsSB_data = getRcsCorrHist(tfile, hTTbarFraction, "data", 'SB', True)
-                tfile.cd("Rcs_MB_W")
-                hRcsMB_data = hRcsSB_data.Clone()
-                hRcsMB_data.Multiply(hKappa)
-                hRcsMB_data.SetName("data")
-                hRcsMB_data.Write()
-
                 tfile.cd("Rcs_SB_W")
                 hRcsSB_data.SetName("data")
                 hRcsSB_data.Write()
@@ -662,8 +667,8 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
                 if hKappa.GetBinContent(1, 2) < 1e-5:
                     fname2017 = fname.replace("2018", "2017")
                     tfile2017 = TFile(fname2017,"UPDATE")
-                    hKappa2017 = tfile2017.Get("KappaW/" + sample)
 
+                    hKappa2017 = tfile2017.Get("KappaW/" + sample)
                     kappa2017 = hKappa2017.GetBinContent(1, 2)
                     kappaErr2017 = hKappa2017.GetBinError(1, 2)
 
@@ -686,6 +691,7 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
 
                     # For plotting, also get the Rcs_MB_W from 2017
                     hRcsMB2017 = tfile2017.Get("Rcs_MB_W/" + sample)
+                    hRcsSB2017 = tfile2017.Get("Rcs_SB_W/" + sample)
 
                     rcsMB2017 = hRcsMB2017.GetBinContent(1, 2)
                     rcsMBErr2017 = hRcsMB2017.GetBinError(1, 2)
@@ -711,6 +717,8 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
                     tfile2017.Close()
                 hKappa.GetYaxis().SetTitle("KappaW")
 
+                rcssb = hRcsSB.GetBinContent(1, 2)
+                rcsmb = hRcsMB.GetBinContent(1, 2)
                 tfile.cd("Rcs_MB_W")
                 hRcsMB.SetName(sample)
                 hRcsMB.Write()
@@ -807,6 +815,13 @@ def makePredictWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0
             except ReferenceError:
                 continue
             hKappa = tfile.Get("KappaW/" + sample)
+
+            tfile.cd("Rcs_MB_W")
+            hRcsMB_data = hRcsSB_data.Clone()
+            hRcsMB_data.Multiply(hKappa)
+            hRcsMB_data.SetName("data")
+            hRcsMB_data.Write()
+
 
             wjetsFraction = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction"]
             wjetsFractionErr = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction_err"]
