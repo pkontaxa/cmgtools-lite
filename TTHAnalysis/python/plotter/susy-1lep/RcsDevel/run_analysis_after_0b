@@ -24,39 +24,43 @@ for folder in "${inputfolder}"/*; do
     if [[ -d "${folder}"/merged/ ]]; then
         continue
     fi
-    ./mergeBins_0b.py "${folder}"
+    ./mergeBins_0b.py "${folder}/LT"
 done
 
 ## Append Rcs kappa
-echo Run appendRcsKappa.py
+echo Run appendRcsKappa_0b.py
 for folder in "${inputfolder}"/*/merged*; do
+    echo $folder
     #Skip signal folder
     if [[ "${folder}" == */scan/* ]]; then
+        echo "scan"
         continue
     fi
     #Predict backgrounds
-    if [[ "${folder}" == */merged/* ]]; then
-        ./appendRcsKappa.py "${folder}"
+    if [[ "${folder}" == */*/merged ]]; then
+        echo ./appendRcsKappa_0b.py "${folder}/LT"
+        ./appendRcsKappa_0b.py "${folder}"
     fi
     #Only do qcd estimate for SB, this is only needed for plotting and calculating Rcs here does not make sense
-    if [[ "${folder}" == */mergedNJ*/* ]]; then
-        ./appendRcsKappa.py "${folder}" --do-qcd
+    if [[ "${folder}" == */*/mergedNJ* ]]; then
+        echo ./appendRcsKappa_0b.py "${folder}/LT" --do-qcd
+        ./appendRcsKappa_0b.py "${folder}" --do-qcd
     fi
 done
 
 
-## Calculate the systematic variations
-## Takes up and down histograms and creates syst histograms
-#echo Run calcSyst.py
-#for folder in "${inputfolder}"/*/merged*; do
-#    if [[ "${folder}" == */scan/* ]] \
-#        || [[ "${folder}" == */grid/* ]] \
-#        || [[ "${folder}" == */grid-dilep/* ]] \
-#        || [[ "${folder}" == */signal_MET/* ]]; then
-#        continue
-#    fi
-#    ./calcSyst.py "${folder}"
-#done
+# Calculate the systematic variations
+# Takes up and down histograms and creates syst histograms
+echo Run calcSyst.py
+for folder in "${inputfolder}"/*/merged*; do
+    if [[ "${folder}" == */scan/* ]] \
+        || [[ "${folder}" == */grid/* ]] \
+        || [[ "${folder}" == */grid-dilep/* ]] \
+        || [[ "${folder}" == */signal_MET/* ]]; then
+        continue
+    fi
+    ./calcSyst.py "${folder}"
+done
 
 ## Write table with systematic variations that is used by makeYieldTables.py
 #echo Run tableSyst.py
