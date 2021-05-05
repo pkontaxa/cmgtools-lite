@@ -49,11 +49,11 @@ missingBins = [
 doMissingBinsOnly = False
 #doMissingBinsOnly = True
 #filename = "missingBins_scan_charge.md"
-filename = "missingBins_grid_charge.md"
+#filename = "missingBins_grid_charge.md"
 #filename = "missingBins_grid-dilep_charge.md"
-if doMissingBinsOnly:
-    with open(filename) as missingBinsFile:
-        missingBins = missingBinsFile.read().splitlines()
+#if doMissingBinsOnly:
+    #with open(filename) as missingBinsFile:
+        #missingBins = missingBinsFile.read().splitlines()
 
 def getSRcut(nj_bin, lt_bin, sr_bin, blinded):
 
