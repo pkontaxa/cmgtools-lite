@@ -1,7 +1,14 @@
 #!/usr/bin/env python
-from CMGTools.TTHAnalysis.plotter.mcAnalysis_after_ext_scale import *
+#from TTHAnalysis.python.plotter.mcAnalysis_after_ext_scale import *
+# import importlib
+#
+# moduleName = "/nfs/dust/cms/user/frengelk/Code/cmssw/CMSSW_10_4_0/cmgtools-lite/TTHAnalysis/python/plotter/mcAnalysis_after_ext_scale"
+# importlib.import_module(moduleName)
+
 import sys, os, os.path
 
+#sys.path.insert(0, "/nfs/dust/cms/user/frengelk/Code/cmssw/CMSSW_10_4_0/cmgtools-lite/TTHAnalysis/python/plotter/mcAnalysis_after_ext_scale")
+from mcAnalysis_after_ext_scale import *
 
 from math import hypot
 import time

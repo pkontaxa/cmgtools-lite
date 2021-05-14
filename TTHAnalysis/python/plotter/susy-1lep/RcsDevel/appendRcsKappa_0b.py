@@ -27,20 +27,40 @@ def getSamples(fname,tdir):
 
 def getRcsHist(tfile, hname, band = "SB", merge = True):
 
-    hSR = tfile.Get("SR_"+band+"/"+hname)
-    hCR = tfile.Get("CR_"+band+"/"+hname)
+    hSR = tfile.Get("SR_" + band + "/" + hname).Clone()
+    hCR = tfile.Get("CR_" + band + "/" + hname).Clone()
+
+    #Add Rare Files for WJets calculation in the SB
+    if "WJets" in hname and band == "SB":
+        for rareSample in ["DY", "SingleT", "TTV", "VV"]:
+            tmpHSR = tfile.Get("SR_" + band + "/" + hname.replace("WJets", rareSample))
+            tmpHCR = tfile.Get("CR_" + band + "/" + hname.replace("WJets", rareSample))
+            hSR.Add(tmpHSR)
+            hCR.Add(tmpHCR)
 
     hRcs = hSR.Clone(hSR.GetName().replace('x_','Rcs_'))
     hRcs.Divide(hCR)
     hRcs.GetYaxis().SetTitle("Rcs")
 
+    sr = hSR.GetBinContent(2, 2)
+    cr = hCR.GetBinContent(2, 2)
+    rcs = hRcs.GetBinContent(2, 2)
+    rcsErr = hRcs.GetBinError(2, 2)
+    #print "rcs%s(%s) = sr / cr" % (band, hname)
+    #print "rcs%s(%s) = %.4f / %.4f = %.4f +- %.4f" % (band, hname, sr, cr, rcs, rcsErr)
     # merge means ele/mu values are overwritten by the combined Rcs
     if 'data' in hname: merge = True
 
     if merge:
-        rcs = hRcs.GetBinContent(2,2); err = hRcs.GetBinError(2,2) # lep sele
+        rcs = -999; err = -999;
+        #The SB for the WJets Rcs calculation should use the values from muons
+        if "WJets" in hname and band == "SB":
+            rcs = hRcs.GetBinContent(1,2); err = hRcs.GetBinError(1,2) # mu sele
+        else:
+            rcs = hRcs.GetBinContent(2,2); err = hRcs.GetBinError(2,2) # lep sele
 
         hRcs.SetBinContent(1,2,rcs); hRcs.SetBinError(1,2,err) # mu sele
+        hRcs.SetBinContent(2,2,rcs); hRcs.SetBinError(2,2,err) # lep sele
         hRcs.SetBinContent(3,2,rcs); hRcs.SetBinError(3,2,err) # ele sele
 
     return hRcs
@@ -48,7 +68,7 @@ def getRcsHist(tfile, hname, band = "SB", merge = True):
 def getRcsCorrHist(tfile, hTTbarFraction, hname, band = "SB", merge = True):
 
     hSR = tfile.Get("SR_" + band + "/"  +  hname)
-    hCR = tfile.Get("CR_" + band + "/"  +  hname)#tfile.Get("CR_" + band + "/"  +  hname)
+    hCR = tfile.Get("CR_" + band + "/"  +  hname)
 
     hUnity = hSR.Clone("Unity")
     hUnity.SetBinContent(1,2,1); hUnity.SetBinError(1,2,0) # mu sele
@@ -73,22 +93,10 @@ def getRcsCorrHist(tfile, hTTbarFraction, hname, band = "SB", merge = True):
 
     hRcs = hSR.Clone()
     hRcs.Add(hTTPredict, -1)
-    hRcs.Add(hTTPredict, -1)
     hRcs.Divide(hTTbarFractionInverse)
     hRcs.Divide(hCR)
 
     hRcs.GetYaxis().SetTitle("Rcs")
-
-
-    sr = hSR.GetBinContent(1, 2)
-    cr = hCR.GetBinContent(1, 2)
-    rcsTT = hRcsTTJets.GetBinContent(1, 2)
-
-    ttFrac = hTTbarFraction.GetBinContent(1, 2)
-
-    rcsW = (sr - ttFrac * rcsTT * cr) / (1 - ttFrac) / cr
-    print "rcsW = (sr - ttFrac * rcsTT * cr) / (1 - ttFrac) / cr"
-    print "(%.4f - %.4f * %.4f * %.4f) / (1 - %.4f) / %.4f = %.4f" % (sr, ttFrac, rcsTT, cr, ttFrac, cr, rcsW)
 
     # Using events with only muons in the sideband excludes QCD contamination
     if merge:
@@ -170,12 +178,12 @@ def getQCDsystError(binname):
 
     for njbin in qcdSysts.keys():
         if njbin in binname:
-            print binname, njbin, qcdSysts[njbin]
+            #print binname, njbin, qcdSysts[njbin]
             return qcdSysts[njbin]
     # If no bin is found, return 100 % uncertainty
     return 1.0
 
-def getQCDsubtrHistos(tfile, sample = "background", band = "CR_MB/", isMC = True, applySyst = True, lep = "ele"):
+def getQCDsubtrHistos(tfile, sample = "background", band = "CR_MB/", isMC = True, applySyst = True, lep = "ele", year = "2016"):
     ## returns two histograms:
     ## 1. QCD prediction from anti-leptons
     ## 2. Original histo - QCD from prediction
@@ -191,8 +199,8 @@ def getQCDsubtrHistos(tfile, sample = "background", band = "CR_MB/", isMC = True
     Pantelis'''
 
     #TTHAnalysis/python/plotter/susy-1lep/RcsDevel/
-    if isMC: fRatios = readQCDratios("Lp_LTbins_0b_2016_f-ratios_MC.txt")
-    else: fRatios = readQCDratios("Lp_LTbins_0b_2016_f-ratios_MC.txt")
+    if isMC: fRatios = readQCDratios("Lp_LTbins_0b_" + year + "_f-ratios_MC.txt")
+    else: fRatios = readQCDratios("Lp_LTbins_0b_" + year + "_f-ratios_MC.txt")
 
     # read bin name
     binString = tfile.Get(band+"BinName")
@@ -319,7 +327,7 @@ def getQCDsubtrHistos(tfile, sample = "background", band = "CR_MB/", isMC = True
 def replaceEmptyDataBinsWithMC(fileList):
     # hists to make QCD estimation
     bindirs =  ['CR_MB','SR_SB','CR_SB']
-    print ''
+    #print ''
     print "Replacing empty data bins with MC for CR_MB, SR_SB, CR_SB, 100% error"
     for fname in fileList:
         tfile = TFile(fname,"UPDATE")
@@ -350,7 +358,7 @@ def replaceEmptyDataBinsWithMC(fileList):
                     histData.Write("",TObject.kOverwrite)
                 tfile.cd()
         tfile.Close()
-    print ''
+    #print ''
 
 
 
@@ -358,7 +366,7 @@ def blindDataBins(fileList):
     # hists to make QCD estimation
     #bindirs =  ['SR_MB']
     bindirs =  []
-    print ''
+    #print ''
     print "Replacing empty data bins with MC for CR_MB, SR_SB, CR_SB, 100% error"
     for fname in fileList:
         tfile = TFile(fname,"UPDATE")
@@ -384,9 +392,9 @@ def blindDataBins(fileList):
                     histData.Write("",TObject.kOverwrite)
                 tfile.cd()
         tfile.Close()
-    print ''
+    #print ''
 
-def makeQCDsubtraction(fileList, samples):
+def makeQCDsubtraction(fileList, samples, year):
     # hists to make QCD estimation
     bindirs =  ['SR_MB','CR_MB','SR_SB','CR_SB','SR_SB_NB0','CR_SB_NB0','SR_SB_NB1i','CR_SB_NB1i']
 
@@ -405,7 +413,7 @@ def makeQCDsubtraction(fileList, samples):
                 else: isMC = True
 
                 #hNew = getQCDsubtrHisto(tfile,sample,bindir+"/",isMC)
-                ret  = getQCDsubtrHistos(tfile,sample,bindir+"/",isMC, applySyst, "lep")
+                ret  = getQCDsubtrHistos(tfile,sample,bindir+"/",isMC, applySyst, "lep", year)
                 #print ret
 
                 if not ret:
@@ -414,8 +422,8 @@ def makeQCDsubtraction(fileList, samples):
                     (hQCDpred,hQCDsubtr) = ret
                     tfile.cd(bindir)
                     #hNew.Write()
-                    hQCDpred.Write()
-                    hQCDsubtr.Write()
+                    hQCDpred.Write("",TObject.kOverwrite)
+                    hQCDsubtr.Write("",TObject.kOverwrite)
                 tfile.cd()
 
         tfile.Close()
@@ -437,7 +445,7 @@ def makePoissonErrors(fileList, samples = ["background","QCD","EWK"]):
                 if hist:
                     tfile.cd(bindir)
                     # overwrite old hist
-                    hist.Write()#"",TObject.kOverwrite)
+                    hist.Write("",TObject.kOverwrite)#"",TObject.kOverwrite)
                 tfile.cd()
 
         tfile.Close()
@@ -470,18 +478,20 @@ def makeKappaHists(fileList, samples = []):
                 #print sbname
                 sbname.SetName("SBname")
                 tfile.cd("Kappa")
-                sbname.Write()
+                sbname.Write("",TObject.kOverwrite)
 
             mbname = tfile.Get("SR_MB/BinName")
             if mbname:
                 mbname.SetName("MBname")
                 tfile.cd("Kappa")
-                mbname.Write()
+                mbname.Write("",TObject.kOverwrite)
+                #print ""
 
             for sample in samples:
 
                 hRcsMB = getRcsHist(tfile, sample, 'MB')
                 hRcsSB = getRcsHist(tfile, sample, 'SB')
+                #print ""
 
                 # make kappa
                 hKappa = hRcsMB.Clone(hRcsMB.GetName().replace('Rcs','Kappa'))
@@ -490,13 +500,13 @@ def makeKappaHists(fileList, samples = []):
                 hKappa.GetYaxis().SetTitle("Kappa")
 
                 tfile.cd("Rcs_MB")
-                hRcsMB.Write()
+                hRcsMB.Write("",TObject.kOverwrite)
 
                 tfile.cd("Rcs_SB")
-                hRcsSB.Write()
+                hRcsSB.Write("",TObject.kOverwrite)
 
                 tfile.cd("Kappa")
-                hKappa.Write()
+                hKappa.Write("",TObject.kOverwrite)
 
         else:
             pass
@@ -515,129 +525,104 @@ def makeKappaHists(fileList, samples = []):
 
     return 1
 
-def makeKappaTTHists(fileList, samples = [], ttbarFractionCsv = "TemplateFit/templateFits_0b_2016_EXT_nominal.csv"):
+def makeKappaTTHists(fileList, samples = []):
     # get process names from file if not given
-    if samples == []: samples = getSamples(fileList[0],'SR_MB')
+    if samples == []: samples = list(set([sample for sample in getSamples(fileList[0],'CR_MB') if "_syst" not in sample and ("TTJets" in sample or sample == "data_QCDsubtr")]))
 
     print "Making kappa_tt and Rcs tt for:", samples
 
     bindirs = ['SR_MB','CR_MB','SR_SB_NB0','CR_SB_NB0', 'SR_SB_NB1i', 'CR_SB_NB1i']
-    outDir = "RcsKappa"
-    outputDirName = fileList[0].split("/merged")[0] + "/" + outDir
-    if not os.path.exists(outputDirName):
-        os.makedirs(outputDirName)
-
-    ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin")
 
     for fname in fileList:
-        #tfile = TFile(fname.replace("merged", outDir), "RECREATE")
         tfile = TFile(fname, "UPDATE")
 
         #Create direcotry for RCS and Kappa
-        tfile.mkdir("Rcs_MB_TT")
-        tfile.mkdir("Rcs_SB_NB0_TT")
-        tfile.mkdir("Rcs_SB_NB1i_TT")
-        tfile.mkdir("KappaTT")
-        tfile.mkdir("KappaB")
+        if not tfile.GetDirectory("Rcs_MB_TT"):
+            tfile.mkdir("Rcs_MB_TT")
+            tfile.mkdir("Rcs_SB_NB0_TT")
+            tfile.mkdir("Rcs_SB_NB1i_TT")
+            tfile.mkdir("KappaTT")
+            tfile.mkdir("KappaB")
+            tfile.mkdir("KappaBTT")
 
         # store SB/MB names
         sbname = tfile.Get("SR_SB/BinName")
         if sbname:
             sbname.SetName("SBname")
             tfile.cd("KappaTT")
-            sbname.Write()
+            sbname.Write("",TObject.kOverwrite)
             tfile.cd("KappaB")
-            sbname.Write()
+            sbname.Write("",TObject.kOverwrite)
+            tfile.cd("KappaBTT")
+            sbname.Write("",TObject.kOverwrite)
 
         mbname = tfile.Get("SR_MB/BinName")
         if mbname:
             mbname.SetName("MBname")
             tfile.cd("KappaTT")
-            mbname.Write()
+            mbname.Write("",TObject.kOverwrite)
             tfile.cd("KappaB")
-            mbname.Write()
+            mbname.Write("",TObject.kOverwrite)
+            tfile.cd("KappaBTT")
+            mbname.Write("",TObject.kOverwrite)
 
-        hRcsSB_NB1i_data = getRcsHist(tfile, "data_QCDsubtr", 'SB_NB0')
+        for sample in samples:
 
-        hRcsMB = getRcsHist(tfile, "TTJets", 'MB', True)
-        hRcsSB_NB0 = getRcsHist(tfile, "TTJets", 'SB_NB0', True)
-        hRcsSB_NB1i = getRcsHist(tfile, "EWK", 'SB_NB1i', True)
+            if sample == "data_QCDsubtr":
+                hRcsSB_NB1i_data = getRcsHist(tfile, sample, 'SB_NB1i')
 
-        hKappaB = hRcsSB_NB0.Clone(hRcsSB_NB0.GetName().replace('Rcs','KappaB'))
-        hKappaB.Divide(hRcsSB_NB1i)
+                tfile.cd("Rcs_SB_NB1i_TT")
+                hRcsSB_NB1i_data.SetName(sample)
+                hRcsSB_NB1i_data.Write("",TObject.kOverwrite)
+            else:
+                ewkSample = sample.replace("TTJets", "EWK")
 
-        hKappaTT = hRcsMB.Clone(hRcsMB.GetName().replace('Rcs','KappaTT'))
-        hKappaTT.Divide(hRcsSB_NB0)
+                hRcsMB = getRcsHist(tfile, sample, 'MB', True)
+                hRcsSB_NB0 = getRcsHist(tfile, sample, 'SB_NB0', True)
+                hRcsSB_NB1i = getRcsHist(tfile, ewkSample, 'SB_NB1i', True)
+                #print ""
 
-        tfile.cd("Rcs_MB_TT")
-        hRcsMB.SetName("TTJets")
-        hRcsMB.Write()
+                hKappaB = hRcsSB_NB0.Clone(hRcsSB_NB0.GetName().replace('Rcs','KappaB'))
+                hKappaB.Divide(hRcsSB_NB1i)
 
-        tfile.cd("Rcs_SB_NB0_TT")
-        hRcsSB_NB0.SetName("TTJets")
-        hRcsSB_NB0.Write()
+                hKappaTT = hRcsMB.Clone(hRcsMB.GetName().replace('Rcs','KappaTT'))
+                hKappaTT.Divide(hRcsSB_NB0)
 
-        tfile.cd("Rcs_SB_NB1i_TT")
-        hRcsSB_NB1i.SetName("TTJets")
-        hRcsSB_NB1i.Write()
+                tfile.cd("Rcs_MB_TT")
+                hRcsMB.SetName(sample)
+                hRcsMB.Write("",TObject.kOverwrite)
 
-        tfile.cd("KappaB")
-        hKappaB.SetName("TTJets")
-        hKappaB.Write()
+                tfile.cd("Rcs_SB_NB0_TT")
+                hRcsSB_NB0.SetName(sample)
+                hRcsSB_NB0.Write("",TObject.kOverwrite)
 
-        tfile.cd("KappaTT")
-        hKappaTT.SetName("TTJets")
-        hKappaTT.Write()
+                tfile.cd("Rcs_SB_NB1i_TT")
+                hRcsSB_NB1i.SetName(sample)
+                hRcsSB_NB1i.Write("",TObject.kOverwrite)
 
-        tfile.cd("Rcs_SB_NB1i_TT")
-        hRcsSB_NB1i_data.SetName("data_QCDsubtr")
-        hRcsSB_NB1i_data.Write()
+                tfile.cd("KappaB")
+                hKappaB.SetName(sample)
+                hKappaB.Write("",TObject.kOverwrite)
 
-        tfile.cd("Rcs_SB_NB0_TT")
-        hRcsSB_NB0_data = hRcsSB_NB1i_data.Clone()
-        hRcsSB_NB0_data.Multiply(hKappaB)
-        hRcsSB_NB0_data.SetName("data_QCDsubtr")
-        hRcsSB_NB0_data.Write()
+                tfile.cd("KappaTT")
+                hKappaTT.SetName(sample)
+                hKappaTT.Write("",TObject.kOverwrite)
 
-        tfile.cd("Rcs_MB_TT")
-        hRcsMB_data = hRcsSB_NB1i_data.Clone()
-        hRcsMB_data.Multiply(hKappaB)
-        hRcsMB_data.Multiply(hKappaTT)
-        hRcsMB_data.SetName("data_QCDsubtr")
-        hRcsMB_data.Write()
-
-        binNameMB = tfile.Get("SR_MB/binName").GetTitle().replace("_SR", "")
-        ttbarFraction = ttbarFractionDf.loc[binNameMB, "TTJetsIncl_fraction"]
-        ttbarFractionErr = ttbarFractionDf.loc[binNameMB, "TTJetsIncl_fraction_err"]
-        hTTbarFraction = tfile.Get("CR_SB/TTJets")
-        hTTbarFraction.SetBinContent(1,2,ttbarFraction); hTTbarFraction.SetBinError(1,2,ttbarFractionErr) # mu sele
-        hTTbarFraction.SetBinContent(2,2,ttbarFraction); hTTbarFraction.SetBinError(2,2,ttbarFractionErr) # lep sele
-        hTTbarFraction.SetBinContent(3,2,ttbarFraction); hTTbarFraction.SetBinError(3,2,ttbarFractionErr) # ele sele
-
-        tfile.cd("SR_MB")
-        hTTJetsPred = tfile.Get("CR_MB/data_QCDsubtr")
-        hTTJetsPred.Multiply(hRcsSB_NB1i_data)
-        hTTJetsPred.Multiply(hKappaB)
-        hTTJetsPred.Multiply(hKappaTT)
-        hTTJetsPred.Multiply(hTTbarFraction)
-        hTTJetsPred.SetName("TTJets" + "_pred")
-        hTTJetsPred.Write()
-
+                hKappaBTT = hKappaB.Clone()
+                hKappaBTT.Multiply(hKappaTT)
+                tfile.cd("KappaBTT")
+                hKappaBTT.SetName(sample)
+                hKappaBTT.Write("",TObject.kOverwrite)
         tfile.Close()
     return 1
 
 def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_2016_EXT_nominal.csv"):
-
     # get process names from file if not given
-    if samples == []: samples = getSamples(fileList[0],'SR_MB')
+    if samples == []: samples = list(set([sample for sample in getSamples(fileList[0],'CR_MB') if "_syst" not in sample and ("WJets" in sample or sample == "data")]))
 
     print "Making Rcs W and KappaW hists for:", samples
 
     bindirs =  ['SR_MB','CR_MB','SR_SB','CR_SB']
-    outDir = "RcsKappa"
-    outputDirName = fileList[0].split("/merged")[0] + "/" + outDir
-    if not os.path.exists(outputDirName):
-        os.makedirs(outputDirName)
 
     ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin")
 
@@ -645,30 +630,32 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
         tfile = TFile(fname,"UPDATE")
 
         #Create direcotry for RCS and Kappa
-        tfile.mkdir("Rcs_MB_W")
-        tfile.mkdir("Rcs_SB_W")
-        tfile.mkdir("KappaW")
-        tfile.mkdir("Rcs_MB_KappaW")
+        if not tfile.GetDirectory("Rcs_MB_W"):
+            tfile.mkdir("Rcs_MB_W")
+            tfile.mkdir("Rcs_SB_W")
+            tfile.mkdir("KappaW")
+            tfile.mkdir("Rcs_MB_KappaW")
 
         # store SB/MB names
         sbname = tfile.Get("SR_SB/BinName")
         if sbname:
             sbname.SetName("SBname")
             tfile.cd("KappaW")
-            sbname.Write()
+            sbname.Write("",TObject.kOverwrite)
 
         mbname = tfile.Get("SR_MB/BinName")
         if mbname:
             mbname.SetName("MBname")
             tfile.cd("KappaW")
-            mbname.Write()
+            mbname.Write("",TObject.kOverwrite)
 
+        binNameMB = tfile.Get("SR_MB/binName").GetTitle().replace("_SR", "").replace("_CR", "")
+        binNameSB = tfile.Get("SR_SB/binName").GetTitle().replace("_SR", "").replace("_CR", "")
 
-        binNameMB = tfile.Get("SR_MB/binName").GetTitle().replace("_SR", "")
-        binNameSB = tfile.Get("SR_SB/binName").GetTitle().replace("_SR", "")
         ttbarFraction = ttbarFractionDf.loc[binNameSB, "TTJetsIncl_fraction"]
         ttbarFractionErr = ttbarFractionDf.loc[binNameSB, "TTJetsIncl_fraction_err"]
-        hTTbarFraction = tfile.Get("CR_SB/TTJets").Clone()
+
+        hTTbarFraction = tfile.Get("CR_SB/" + sample).Clone()
         hTTbarFraction.SetBinContent(1,2,ttbarFraction); hTTbarFraction.SetBinError(1,2,ttbarFractionErr) # mu sele
         hTTbarFraction.SetBinContent(2,2,ttbarFraction); hTTbarFraction.SetBinError(2,2,ttbarFractionErr) # lep sele
         hTTbarFraction.SetBinContent(3,2,ttbarFraction); hTTbarFraction.SetBinError(3,2,ttbarFractionErr) # ele sele
@@ -677,56 +664,195 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
         hTTbarFraction.SetBinContent(2,1,ttbarFraction); hTTbarFraction.SetBinError(2,1,ttbarFractionErr) # lep sele
         hTTbarFraction.SetBinContent(3,1,ttbarFraction); hTTbarFraction.SetBinError(3,1,ttbarFractionErr) # ele sele
 
-        hRcsMB = getRcsHist(tfile, "WJets", 'MB', True)
-        hRcsSB = getRcsCorrHist(tfile, hTTbarFraction, "EWK", 'SB', True)
-        hRcsSB_data = getRcsCorrHist(tfile, hTTbarFraction, "data", 'SB', True)
+        for sample in samples:
+            if sample == "data":
+                hRcsSB_data = getRcsCorrHist(tfile, hTTbarFraction, "data", 'SB', True)
+                tfile.cd("Rcs_SB_W")
+                hRcsSB_data.SetName("data")
+                hRcsSB_data.Write("",TObject.kOverwrite)
 
-        hKappa = hRcsMB.Clone()
-        hKappa.Divide(hRcsSB)
-        hKappa.GetYaxis().SetTitle("KappaW")
+            else:
+                hRcsMB = getRcsHist(tfile, sample, 'MB', True)
+                hRcsSB = getRcsHist(tfile, sample, 'SB', True)
 
-        tfile.cd("Rcs_MB_W")
-        hRcsMB.SetName("WJets")
-        hRcsMB.Write()
+                hKappa = hRcsMB.Clone()
+                hKappa.Divide(hRcsSB)
 
-        tfile.cd("Rcs_SB_W")
-        hRcsSB.SetName("WJets")
-        hRcsSB.Write()
+                if hKappa.GetBinContent(1, 2) < 1e-5:
+                    fname2017 = fname.replace("2018", "2017")
+                    tfile2017 = TFile(fname2017, "UPDATE")
 
-        tfile.cd("Rcs_SB_W")
-        hRcsSB_data.SetName("data")
-        hRcsSB_data.Write()
+                    hKappa2017 = tfile2017.Get("KappaW/" + sample)
+                    kappa2017 = hKappa2017.GetBinContent(1, 2)
+                    kappaErr2017 = hKappa2017.GetBinError(1, 2)
 
-        tfile.cd("KappaW")
-        hKappa.SetName("WJets")
-        hKappa.Write()
+                    #kappaDiff = 0.011625170396101147 # This is the weighted average of (kappaW_2017 - kappaW_2018)/kappaW_2017 for all bins
+                    kappaDiff = 0.062799 # This is the peak position of (kappaW_2017 - kappaW_2018)/kappaW_2017 for all bins assuming a gaussian distribution
+                    kappaErr2017 = (kappaErr2017 * kappaErr2017 + kappaDiff*kappa2017 * kappaDiff*kappa2017)**0.5
 
-        tfile.cd("Rcs_MB_W")
-        hRcsMB_data = hRcsSB_data.Clone()
-        hRcsMB_data.Multiply(hKappa)
-        hRcsMB_data.SetName("data")
-        hRcsMB_data.Write()
+                    print "\n\nWarning!!! The bin %s does not have any WJets MC..\nTaking value from 2017 instead!" % binNameMB
+                    print "File changed from:\n", fname, "\nto\n", fname2017
+                    print "Assign additional uncertainty of %.3f * %.3f = %.3f" % (kappa2017, kappaDiff, kappa2017 * kappaDiff)
+                    print "\n\n"
 
-        wjetsFraction = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction"]
-        wjetsFractionErr = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction_err"]
-        hWJetsFraction = tfile.Get("CR_SB/WJets").Clone()
-        hWJetsFraction.SetBinContent(1,2,wjetsFraction); hWJetsFraction.SetBinError(1,2,wjetsFractionErr) # mu sele
-        hWJetsFraction.SetBinContent(2,2,wjetsFraction); hWJetsFraction.SetBinError(2,2,wjetsFractionErr) # lep sele
-        hWJetsFraction.SetBinContent(3,2,wjetsFraction); hWJetsFraction.SetBinError(3,2,wjetsFractionErr) # ele sele
+                    hKappa.SetBinContent(1, 2, kappa2017)
+                    hKappa.SetBinContent(2, 2, kappa2017)
+                    hKappa.SetBinContent(3, 2, kappa2017)
 
-        hWJetsFraction.SetBinContent(1,1,wjetsFraction); hWJetsFraction.SetBinError(1,1,wjetsFractionErr) # mu sele
-        hWJetsFraction.SetBinContent(2,1,wjetsFraction); hWJetsFraction.SetBinError(2,1,wjetsFractionErr) # lep sele
-        hWJetsFraction.SetBinContent(3,1,wjetsFraction); hWJetsFraction.SetBinError(3,1,wjetsFractionErr) # ele sele
+                    hKappa.SetBinError(1, 2, kappaErr2017)
+                    hKappa.SetBinError(2, 2, kappaErr2017)
+                    hKappa.SetBinError(3, 2, kappaErr2017)
 
-        tfile.cd("SR_MB")
-        hWJetsPred = tfile.Get("CR_MB/data")
-        hWJetsPred.Multiply(hRcsSB_data)
-        hWJetsPred.Multiply(hKappa)
-        hWJetsPred.Multiply(hWJetsFraction)
-        hWJetsPred.SetName("WJets_pred")
-        hWJetsPred.Write()
+                    # For plotting, also get the Rcs_MB_W(MC) and Rcs_SB_W(MC) from 2017
+
+                    hRcsSB2017 = tfile2017.Get("Rcs_SB_W/" + sample)
+                    rcsSB2017 = hRcsSB2017.GetBinContent(1, 2)
+                    rcsSBErr2017 = hRcsSB2017.GetBinError(1, 2)
+
+                    hRcsSB.SetBinContent(1, 2, rcsSB2017)
+                    hRcsSB.SetBinContent(2, 2, rcsSB2017)
+                    hRcsSB.SetBinContent(3, 2, rcsSB2017)
+
+                    hRcsSB.SetBinError(1, 2, rcsSBErr2017)
+                    hRcsSB.SetBinError(2, 2, rcsSBErr2017)
+                    hRcsSB.SetBinError(3, 2, rcsSBErr2017)
+
+                    hRcsMB2017 = tfile2017.Get("Rcs_MB_W/" + sample)
+                    rcsMB2017 = hRcsMB2017.GetBinContent(1, 2)
+                    rcsMBErr2017 = hRcsMB2017.GetBinError(1, 2)
+
+                    hRcsMB.SetBinContent(1, 2, rcsMB2017)
+                    hRcsMB.SetBinContent(2, 2, rcsMB2017)
+                    hRcsMB.SetBinContent(3, 2, rcsMB2017)
+
+                    hRcsMB.SetBinError(1, 2, rcsMBErr2017)
+                    hRcsMB.SetBinError(2, 2, rcsMBErr2017)
+                    hRcsMB.SetBinError(3, 2, rcsMBErr2017)
+
+                    tfile2017.Close()
+                hKappa.GetYaxis().SetTitle("KappaW")
+
+                tfile.cd("Rcs_MB_W")
+                hRcsMB.SetName(sample)
+                hRcsMB.Write("",TObject.kOverwrite)
+
+                tfile.cd("Rcs_SB_W")
+                hRcsSB.SetName(sample)
+                hRcsSB.Write("",TObject.kOverwrite)
+
+                tfile.cd("KappaW")
+                hKappa.SetName(sample)
+                hKappa.Write("",TObject.kOverwrite)
 
         tfile.Close()
+    return 1
+
+def makePredictTTHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_2016_EXT_nominal.csv"):
+
+    # get process names from file
+    if samples == []: samples = [sample for sample in getSamples(fileList[0],'CR_MB') if "TTJets" in sample]
+
+    print "Making predictions for", samples
+
+    for fname in fileList:
+        tfile = TFile(fname,"UPDATE")
+
+        ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin")
+
+        #tfile.cd("SR_MB_predict")
+        for sample in samples:
+            # Read in the relevant histograms
+            try:
+                hRcsSB_NB1i_data = tfile.Get("Rcs_SB_NB1i_TT/data_QCDsubtr").Clone()
+            except ReferenceError:
+                continue
+            hKappaB = tfile.Get("KappaB/" + sample)
+            hKappaTT = tfile.Get("KappaTT/" + sample)
+
+            tfile.cd("Rcs_SB_NB0_TT")
+            hRcsSB_NB0_data = hRcsSB_NB1i_data.Clone()
+            hRcsSB_NB0_data.Multiply(hKappaB)
+            hRcsSB_NB0_data.SetName("data_QCDsubtr")
+            hRcsSB_NB0_data.Write("",TObject.kOverwrite)
+
+            tfile.cd("Rcs_MB_TT")
+            hRcsMB_data = hRcsSB_NB1i_data.Clone()
+            hRcsMB_data.Multiply(hKappaB)
+            hRcsMB_data.Multiply(hKappaTT)
+            hRcsMB_data.SetName("data_QCDsubtr")
+            hRcsMB_data.Write("",TObject.kOverwrite)
+
+            binNameMB = tfile.Get("SR_MB/binName").GetTitle().replace("_SR", "").replace("_CR", "")
+            ttbarFraction = ttbarFractionDf.loc[binNameMB, "TTJetsIncl_fraction"]
+            ttbarFractionErr = ttbarFractionDf.loc[binNameMB, "TTJetsIncl_fraction_err"]
+            hTTbarFraction = tfile.Get("CR_SB/TTJets")
+            hTTbarFraction.SetBinContent(1,2,ttbarFraction); hTTbarFraction.SetBinError(1,2,ttbarFractionErr) # mu sele
+            hTTbarFraction.SetBinContent(2,2,ttbarFraction); hTTbarFraction.SetBinError(2,2,ttbarFractionErr) # lep sele
+            hTTbarFraction.SetBinContent(3,2,ttbarFraction); hTTbarFraction.SetBinError(3,2,ttbarFractionErr) # ele sele
+
+            tfile.cd("SR_MB")
+            hTTJetsPred = tfile.Get("CR_MB/data_QCDsubtr")
+            hTTJetsPred.Multiply(hRcsSB_NB1i_data)
+            hTTJetsPred.Multiply(hKappaB)
+            hTTJetsPred.Multiply(hKappaTT)
+            hTTJetsPred.Multiply(hTTbarFraction)
+            hTTJetsPred.SetName(sample + "_pred")
+            hTTJetsPred.Write("",TObject.kOverwrite)
+        tfile.Close()
+
+    return 1
+
+def makePredictWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_2016_EXT_nominal.csv"):
+
+    # get process names from file
+    if samples == []: samples = [sample for sample in getSamples(fileList[0],'CR_MB') if "WJets" in sample]
+
+    print "Making predictions for", samples
+
+    for fname in fileList:
+        tfile = TFile(fname,"UPDATE")
+
+        ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin")
+
+        # create Rcs/Kappa dir struct
+        #tfile.mkdir("SR_MB_predict")
+        #tfile.mkdir("Rcs_SB_NB0_W")
+        #tfile.mkdir("Rcs_MB_W")
+
+        binNameMB = tfile.Get("SR_MB/binName").GetTitle().replace("_SR", "")
+        binNameSB = tfile.Get("SR_SB/binName").GetTitle().replace("_SR", "")
+        for sample in samples:
+            # Read in the relevant histograms
+            try:
+                hRcsSB_data = tfile.Get("Rcs_SB_W/data").Clone()
+            except ReferenceError:
+                continue
+            hKappa = tfile.Get("KappaW/" + sample)
+
+            tfile.cd("Rcs_MB_W")
+            hRcsMB_data = hRcsSB_data.Clone()
+            hRcsMB_data.Multiply(hKappa)
+            hRcsMB_data.SetName("data")
+            hRcsMB_data.Write("",TObject.kOverwrite)
+
+
+            wjetsFraction = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction"]
+            wjetsFractionErr = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction_err"]
+            hWJetsFraction = tfile.Get("CR_SB/WJets").Clone()
+            hWJetsFraction.SetBinContent(1,2,wjetsFraction); hWJetsFraction.SetBinError(1,2,wjetsFractionErr) # mu sele
+            hWJetsFraction.SetBinContent(2,2,wjetsFraction); hWJetsFraction.SetBinError(2,2,wjetsFractionErr) # lep sele
+            hWJetsFraction.SetBinContent(3,2,wjetsFraction); hWJetsFraction.SetBinError(3,2,wjetsFractionErr) # ele sele
+
+            tfile.cd("SR_MB")
+            hWJetsPred = tfile.Get("CR_MB/data")
+            hWJetsPred.Multiply(hRcsSB_data)
+            hWJetsPred.Multiply(hKappa)
+            hWJetsPred.Multiply(hWJetsFraction)
+            hWJetsPred.SetName(sample + "_pred")
+            hWJetsPred.Write("",TObject.kOverwrite)
+
+        tfile.Close()
+
     return 1
 
 def makePredictHists(fileList, samples = []):
@@ -737,8 +863,7 @@ def makePredictHists(fileList, samples = []):
     print "Making predictions for", samples
 
     for fname in fileList:
-        tfile = TFile(fname.replace("merged", outDir).replace("_forWJets", "").replace("_neg", "").replace("_pos", ""), "UPDATE")
-        #tfile = TFile(fname,"UPDATE")
+        tfile = TFile(fname,"UPDATE")
 
         # create Rcs/Kappa dir struct
         if not tfile.GetDirectory("SR_MB_predict"):
@@ -748,14 +873,14 @@ def makePredictHists(fileList, samples = []):
             else: binName = tfile.GetName()
             #print binString
             tfile.cd("SR_MB_predict")
-            binString.Write()
+            binString.Write("",TObject.kOverwrite)
             for sample in samples:
 
                 hPredict = getPredHist(tfile,sample)
 
                 if hPredict:
                     tfile.cd("SR_MB_predict")
-                    hPredict.Write()
+                    hPredict.Write("",TObject.kOverwrite)
                     #print "Wrote prediction of", sample
 
                 else:
@@ -793,7 +918,7 @@ def makeClosureHists(fileList, samples = []):
             hDiff.Divide(hObs)
 
             tfile.cd("Closure")
-            hDiff.Write()
+            hDiff.Write("",TObject.kOverwrite)
 
         tfile.Close()
 
@@ -821,6 +946,8 @@ if __name__ == "__main__":
 
     # find files matching pattern
     fileList = glob.glob(pattern+"*merge.root")
+    #fileList = [pattern +"/LT1_HT02_NB0_NJ67_NW1i.merge.root"]
+
 
     if len(fileList) < 1:
         print "Empty file list"
@@ -830,6 +957,7 @@ if __name__ == "__main__":
     # Sample names
     ##################
     # all sample names
+    #from IPython import embed;embed()
     allSamps = getSamples(fileList[0],'SR_MB')
     print 'Found these samples:', allSamps
 
@@ -848,20 +976,33 @@ if __name__ == "__main__":
     #replaceEmptyDataBinsWithMC(fileList)
     blindDataBins(fileList)
 
-    ttbarCsvFile =  "TemplateFit/templateFits_0b_2016_EXT_nominal.csv"
+    if "2016" in pattern:
+        year = "2016_EXT"
+    elif "2017" in pattern:
+        year = "2017"
+    elif "2018" in pattern:
+        year = "2018"
+    else:
+        print "This code expects the year to be part of the pattern!"
+        print "Please rename the input directory to contain information about the year!"
+        exit()
+
+    ttbarCsvFile =  "TemplateFit/templateFits_0b_" + year + "_nominal.csv"
     if "grid-dilep" in pattern:
-        ttbarCsvFile =  "TemplateFit/templateFits_0b_2016_EXT_dilep-corr.csv"
+        ttbarCsvFile =  "TemplateFit/templateFits_0b_" + year + "_dilep-corr.csv"
 
     #makePoissonErrors(fileList, poisSamps)
-    makeQCDsubtraction(fileList, qcdPredSamps)
+    makeQCDsubtraction(fileList, qcdPredSamps, year = year.replace("_EXT", ""))
     if "--do-qcd" in sys.argv:
         exit()
     print "QCD Estimate done!"
 
-    makeKappaTTHists(fileList, ttbarFractionCsv = ttbarCsvFile)#, predSamps)
+    makeKappaTTHists(fileList)#, predSamps)
+    makePredictTTHists(fileList, ttbarFractionCsv = ttbarCsvFile)#, predSamps)
     print "Rcs Calculation for TTJets prediciton done!"
 
     makeKappaWHists(fileList, ttbarFractionCsv = ttbarCsvFile)#, predSamps)
+    makePredictWHists(fileList, ttbarFractionCsv = ttbarCsvFile)#, predSamps)
     print "Rcs Calculation for WJets prediciton done!"
 
     print 'Finished'
