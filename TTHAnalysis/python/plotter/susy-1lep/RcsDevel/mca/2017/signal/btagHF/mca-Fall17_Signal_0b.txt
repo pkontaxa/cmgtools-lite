@@ -1,0 +1,49 @@
+# Nominal
+
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*4624342/susyNgen*btagSF*lepSF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*4195252/susyNgen*btagSF*lepSF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*5010916/susyNgen*btagSF*lepSF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*4994140/susyNgen*btagSF*lepSF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*6167708/susyNgen*btagSF*lepSF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*6629725/susyNgen*btagSF*lepSF;
+
+T1tttt_Scan: SMS_T1tttt_TuneCP2_1 :susyXsec*6506523/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan: SMS_T1tttt_TuneCP2_2 :susyXsec*5586768/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan: SMS_T1tttt_TuneCP2_3 :susyXsec*5736918/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan: SMS_T1tttt_TuneCP2_4 :susyXsec*6717208/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan: SMS_T1tttt_TuneCP2_5 :susyXsec*5808350/susyNgen*btagSF*lepSF*nISRweight;
+T1tttt_Scan: SMS_T1tttt_TuneCP2_6 :susyXsec*5469388/susyNgen*btagSF*lepSF*nISRweight;
+
+# b-tag heavy flavour up
+
+T5qqqqWW_Scan_btagHF-Up: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*4624342/susyNgen*btagSF_b_up*lepSF;
+T5qqqqWW_Scan_btagHF-Up: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*4195252/susyNgen*btagSF_b_up*lepSF;
+T5qqqqWW_Scan_btagHF-Up: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*5010916/susyNgen*btagSF_b_up*lepSF;
+T5qqqqWW_Scan_btagHF-Up: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*4994140/susyNgen*btagSF_b_up*lepSF;
+T5qqqqWW_Scan_btagHF-Up: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*6167708/susyNgen*btagSF_b_up*lepSF;
+T5qqqqWW_Scan_btagHF-Up: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*6629725/susyNgen*btagSF_b_up*lepSF;
+
+T1tttt_Scan_btagHF-Up: SMS_T1tttt_TuneCP2_1 :susyXsec*6506523/susyNgen*btagSF_b_up*lepSF*nISRweight;
+T1tttt_Scan_btagHF-Up: SMS_T1tttt_TuneCP2_2 :susyXsec*5586768/susyNgen*btagSF_b_up*lepSF*nISRweight;
+T1tttt_Scan_btagHF-Up: SMS_T1tttt_TuneCP2_3 :susyXsec*5736918/susyNgen*btagSF_b_up*lepSF*nISRweight;
+T1tttt_Scan_btagHF-Up: SMS_T1tttt_TuneCP2_4 :susyXsec*6717208/susyNgen*btagSF_b_up*lepSF*nISRweight;
+T1tttt_Scan_btagHF-Up: SMS_T1tttt_TuneCP2_5 :susyXsec*5808350/susyNgen*btagSF_b_up*lepSF*nISRweight;
+T1tttt_Scan_btagHF-Up: SMS_T1tttt_TuneCP2_6 :susyXsec*5469388/susyNgen*btagSF_b_up*lepSF*nISRweight;
+
+# b-tag heavy flavour down
+
+
+T5qqqqWW_ScanbtagHF-Down: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*4624342/susyNgen*btagSF_b_down*lepSF;
+T5qqqqWW_ScanbtagHF-Down: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*4195252/susyNgen*btagSF_b_down*lepSF;
+T5qqqqWW_ScanbtagHF-Down: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*5010916/susyNgen*btagSF_b_down*lepSF;
+T5qqqqWW_ScanbtagHF-Down: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*4994140/susyNgen*btagSF_b_down*lepSF;
+T5qqqqWW_ScanbtagHF-Down: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*6167708/susyNgen*btagSF_b_down*lepSF;
+T5qqqqWW_ScanbtagHF-Down: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*6629725/susyNgen*btagSF_b_down*lepSF;
+
+
+T1tttt_Scan_btagHF-Down: SMS_T1tttt_TuneCP2_1 :susyXsec*6506523/susyNgen*btagSF_b_down*lepSF*nISRweight;
+T1tttt_Scan_btagHF-Down: SMS_T1tttt_TuneCP2_2 :susyXsec*5586768/susyNgen*btagSF_b_down*lepSF*nISRweight;
+T1tttt_Scan_btagHF-Down: SMS_T1tttt_TuneCP2_3 :susyXsec*5736918/susyNgen*btagSF_b_down*lepSF*nISRweight;
+T1tttt_Scan_btagHF-Down: SMS_T1tttt_TuneCP2_4 :susyXsec*6717208/susyNgen*btagSF_b_down*lepSF*nISRweight;
+T1tttt_Scan_btagHF-Down: SMS_T1tttt_TuneCP2_5 :susyXsec*5808350/susyNgen*btagSF_b_down*lepSF*nISRweight;
+T1tttt_Scan_btagHF-Down: SMS_T1tttt_TuneCP2_6 :susyXsec*5469388/susyNgen*btagSF_b_down*lepSF*nISRweight;

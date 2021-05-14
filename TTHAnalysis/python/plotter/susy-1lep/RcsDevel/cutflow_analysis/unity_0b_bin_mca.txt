@@ -1,0 +1,107 @@
+# MCA file for Autumn18 samples
+
+# all ttbar, uncomment only for makeBinYields otherwise ttbar will be double counted
+TTJets                 : TTJets_DiLepton             : 1 : lheHTIncoming <= 600; FillColor=ROOT.kBlue, Label="t\#bar{t} ll + jets"
+TTJets                 : TTJets_SingleLeptonFromT    : 1 : lheHTIncoming <= 600; FillColor=ROOT.kBlue-7, Label="t\#bar{t} l + jets"
+TTJets                 : TTJets_SingleLeptonFromTbar : 1 : lheHTIncoming <= 600; FillColor=ROOT.kBlue-7, Label="t\#bar{t} l + jets"
+TTJets                 : TTJets_LO_HT600to800        : 1 : 1; FillColor=ROOT.kBlue, Label="t\#bar{t} ll + jets"
+TTJets                 : TTJets_LO_HT800to1200       : 1 : 1; FillColor=ROOT.kBlue, Label="t\#bar{t} ll + jets"
+TTJets                 : TTJets_LO_HT1200to2500      : 1 : 1; FillColor=ROOT.kBlue, Label="t\#bar{t} ll + jets"
+TTJets                 : TTJets_LO_HT2500toInf       : 1 : 1; FillColor=ROOT.kBlue, Label="t\#bar{t} ll + jets"
+
+# Dileptonic ttbar
+TTdiLep            : TTJets_DiLepton             : 1 : lheHTIncoming <= 600; FillColor=ROOT.kBlue, Label="t\#bar{t} ll + jets"
+TTdiLep            : TTJets_LO_HT600to800        : 1 : Sum$(abs(genTau_grandmotherId)==6&&abs(genTau_motherId)==24)+Sum$(abs(genLep_grandmotherId)==6&&abs(genLep_motherId)==24)==2; FillColor=ROOT.kBlue, Label="t\#bar{t} ll + jets"
+TTdiLep            : TTJets_LO_HT800to1200       : 1 : Sum$(abs(genTau_grandmotherId)==6&&abs(genTau_motherId)==24)+Sum$(abs(genLep_grandmotherId)==6&&abs(genLep_motherId)==24)==2; FillColor=ROOT.kBlue, Label="t\#bar{t} ll + jets"
+TTdiLep            : TTJets_LO_HT1200to2500      : 1 : Sum$(abs(genTau_grandmotherId)==6&&abs(genTau_motherId)==24)+Sum$(abs(genLep_grandmotherId)==6&&abs(genLep_motherId)==24)==2; FillColor=ROOT.kBlue, Label="t\#bar{t} ll + jets"
+TTdiLep            : TTJets_LO_HT2500toInf       : 1 : Sum$(abs(genTau_grandmotherId)==6&&abs(genTau_motherId)==24)+Sum$(abs(genLep_grandmotherId)==6&&abs(genLep_motherId)==24)==2; FillColor=ROOT.kBlue, Label="t\#bar{t} ll + jets"
+
+# Semileptonic ttbar
+TTsemiLep          : TTJets_SingleLeptonFromT                   : 1 : lheHTIncoming <= 600; FillColor=ROOT.kBlue-7, Label="t\#bar{t} l + jets"
+TTsemiLep          : TTJets_SingleLeptonFromTbar                : 1 : lheHTIncoming <= 600; FillColor=ROOT.kBlue-7, Label="t\#bar{t} l + jets"
+TTsemiLep          : TTJets_LO_HT600to800                       : 1 : Sum$(abs(genTau_grandmotherId)==6&&abs(genTau_motherId)==24)+Sum$(abs(genLep_grandmotherId)==6&&abs(genLep_motherId)==24) <2 ; FillColor=ROOT.kBlue-7, Label="t\#bar{t} l + jets"
+TTsemiLep          : TTJets_LO_HT800to1200                      : 1 : Sum$(abs(genTau_grandmotherId)==6&&abs(genTau_motherId)==24)+Sum$(abs(genLep_grandmotherId)==6&&abs(genLep_motherId)==24) <2 ; FillColor=ROOT.kBlue-7, Label="t\#bar{t} l + jets"
+TTsemiLep          : TTJets_LO_HT1200to2500                     : 1 : Sum$(abs(genTau_grandmotherId)==6&&abs(genTau_motherId)==24)+Sum$(abs(genLep_grandmotherId)==6&&abs(genLep_motherId)==24) <2 ; FillColor=ROOT.kBlue-7, Label="t\#bar{t} l + jets"
+TTsemiLep          : TTJets_LO_HT2500toInf                      : 1 : Sum$(abs(genTau_grandmotherId)==6&&abs(genTau_motherId)==24)+Sum$(abs(genLep_grandmotherId)==6&&abs(genLep_motherId)==24) <2 ; FillColor=ROOT.kBlue-7, Label="t\#bar{t} l + jets"
+
+# W+Jets (Note added DiBoson samples for 0b)
+WJets    : WJetsToLNu_HT400to600    : 1 ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets    : WJetsToLNu_HT600to800    : 1 ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets    : WJetsToLNu_HT800to1200   : 1 ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets    : WJetsToLNu_HT1200to2500  : 1 ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets    : WJetsToLNu_HT2500toInf   : 1 ; Label="W+jets", FillColor=ROOT.kGreen-2
+WJets : WWToLNuQQ          : 1 ; Label="W+jets", FillColor=ROOT.kGreen-2
+#WJets : WZTo1L1Nu2Q        : 1 ; Label="W+jets", FillColor=ROOT.kGreen-2
+
+# QCD
+QCD      :QCD_HT500to700  : 1 ; Label ="QCD", FillColor=ROOT.kCyan-6
+QCD      :QCD_HT700to1000 : 1 ; Label ="QCD", FillColor=ROOT.kCyan-6
+QCD      :QCD_HT1000to1500: 1 ; Label ="QCD", FillColor=ROOT.kCyan-6
+QCD      :QCD_HT1500to2000: 1 ; Label ="QCD", FillColor=ROOT.kCyan-6
+QCD      :QCD_HT2000toInf : 1 ; Label ="QCD", FillColor=ROOT.kCyan-6
+
+
+# Single Top
+SingleT : TToLeptons_sch            : 1 ; FillColor = ROOT.kViolet+5, Label= "t/\#bar{t}"
+SingleT : T_tch_powheg              : 1 ; FillColor = ROOT.kViolet+5, Label= "t/\#bar{t}"
+SingleT : TBar_tch_powheg           : 1 ; FillColor = ROOT.kViolet+5, Label= "t/\#bar{t}"
+SingleT : T_tWch_noFullyHad_ext1    : 1 ; FillColor = ROOT.kViolet+5, Label= "t/\#bar{t}"
+SingleT : TBar_tWch_noFullyHad_ext1 : 1 ; FillColor = ROOT.kViolet+5, Label= "t/\#bar{t}"
+
+
+# Drell-Yan
+DY      : DYJetsToLL_M50_HT400to600             : 1 ; Label="DY+jets", FillColor=ROOT.kRed-6, NormSystematic=0.5
+DY      : DYJetsToLL_M50_HT600to800             : 1 ; Label="DY+jets", FillColor=ROOT.kRed-6, NormSystematic=0.5
+DY      : DYJetsToLL_M50_HT800to1200            : 1 ; Label="DY+jets", FillColor=ROOT.kRed-6, NormSystematic=0.5
+DY      : DYJetsToLL_M50_HT1200to2500           : 1 ; Label="DY+jets", FillColor=ROOT.kRed-6, NormSystematic=0.5
+DY      : DYJetsToLL_M50_HT2500toInf            : 1 ; Label="DY+jets", FillColor=ROOT.kRed-6, NormSystematic=0.5
+
+# TTV
+TTV : TTWToLNu      : 1 ; FillColor=ROOT.kOrange-3, Label="ttV(W/Z/H)", NormSystematic=0.2
+TTV : TTWToQQ       : 1 ; FillColor=ROOT.kOrange-3, Label="ttV(W/Z/H)", NormSystematic=0.2
+TTV : TTZToLLNuNu   : 1 ; FillColor=ROOT.kOrange-3, Label="ttV(W/Z/H)", NormSystematic=0.2
+TTV : TTZToQQ       : 1 ; FillColor=ROOT.kOrange-3, Label="ttV(W/Z/H)", NormSystematic=0.2
+
+# DiBoson
+VV : WWTo2L2Nu          : 1 ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
+VV : WZTo1L3Nu          : 1 ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
+VV : WZTo2L2Q           : 1 ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
+VV : ZZTo2L2Nu          : 1 ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
+VV : ZZTo2Q2Nu          : 1 ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
+VV : ZZTo2L2Q           : 1 ; FillColor=ROOT.kRed+3, Label="VV(W/Z/H)"
+
+# # DATA
+#
+# # SingleElectron
+# data: SingleElectron_Run2018A_17Sep2018_1
+# data: SingleElectron_Run2018A_17Sep2018_2
+# data: SingleElectron_Run2018A_17Sep2018_3
+# data: SingleElectron_Run2018B_17Sep2018_1
+# data: SingleElectron_Run2018B_17Sep2018_2
+# data: SingleElectron_Run2018C_17Sep2018_1
+# data: SingleElectron_Run2018C_17Sep2018_2
+# data: SingleElectron_Run2018D_17Sep2018_1
+# data: SingleElectron_Run2018D_17Sep2018_2
+# data: SingleElectron_Run2018D_17Sep2018_3
+# data: SingleElectron_Run2018D_17Sep2018_4
+# data: SingleElectron_Run2018D_17Sep2018_5
+#
+# # SingleMuon
+# data: SingleMuon_Run2018A_17Sep2018_1
+# data: SingleMuon_Run2018A_17Sep2018_2
+# data: SingleMuon_Run2018A_17Sep2018_3
+# data: SingleMuon_Run2018B_17Sep2018_1
+# data: SingleMuon_Run2018B_17Sep2018_2
+# data: SingleMuon_Run2018C_17Sep2018_1
+# data: SingleMuon_Run2018C_17Sep2018_2
+# data: SingleMuon_Run2018D_17Sep2018_1
+# data: SingleMuon_Run2018D_17Sep2018_2
+# data: SingleMuon_Run2018D_17Sep2018_3
+# data: SingleMuon_Run2018D_17Sep2018_4
+# data: SingleMuon_Run2018D_17Sep2018_5
+#
+# # MET
+# data: MET_Run2018A_17Sep2018
+# data: MET_Run2018B_17Sep2018
+# data: MET_Run2018C_17Sep2018
+# data: MET_Run2018D_17Sep2018

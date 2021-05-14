@@ -36,6 +36,10 @@ for folder in "${inputfolder}"/*/merged*; do
         echo "scan"
         continue
     fi
+    if [[ "${folder}" == */grid/* ]]; then
+        echo "scan"
+        continue
+    fi
     #Predict backgrounds
     if [[ "${folder}" == */*/merged ]]; then
         echo ./appendRcsKappa_0b.py "${folder}/LT"
@@ -48,24 +52,18 @@ for folder in "${inputfolder}"/*/merged*; do
     fi
 done
 
-
 # Calculate the systematic variations
 # Takes up and down histograms and creates syst histograms
 echo Run calcSyst.py
-for folder in "${inputfolder}"/*/merged*; do
-    if [[ "${folder}" == */scan/* ]] \
-        || [[ "${folder}" == */grid/* ]] \
-        || [[ "${folder}" == */grid-dilep/* ]] \
-        || [[ "${folder}" == */signal_MET/* ]]; then
-        continue
-    fi
-    ./calcSyst.py "${folder}"
-done
+./calcSyst_0b.py "${inputfolder}"
 
-## Write table with systematic variations that is used by makeYieldTables.py
-#echo Run tableSyst.py
-#./tableSyst.py "${inputfolder}"
-#
+# Write table with systematic variations that is used by makeYieldTables.py
+echo Run tableSyst.py
+./tableSyst_0b.py "${inputfolder}"
+
+echo Run plotSysts
+./plotSyst_0b.py "${inputfolder}"
+
 ## Write tables
 #echo Run makeYieldTables.py
 #./makeYieldTables.py "${inputfolder}"

@@ -42,6 +42,12 @@ def getRcsHist(tfile, hname, band = "SB", merge = True):
     hRcs.Divide(hCR)
     hRcs.GetYaxis().SetTitle("Rcs")
 
+    sr = hSR.GetBinContent(2, 2)
+    cr = hCR.GetBinContent(2, 2)
+    rcs = hRcs.GetBinContent(2, 2)
+    rcsErr = hRcs.GetBinError(2, 2)
+    #print "rcs%s(%s) = sr / cr" % (band, hname)
+    #print "rcs%s(%s) = %.4f / %.4f = %.4f +- %.4f" % (band, hname, sr, cr, rcs, rcsErr)
     # merge means ele/mu values are overwritten by the combined Rcs
     if 'data' in hname: merge = True
 
@@ -91,9 +97,6 @@ def getRcsCorrHist(tfile, hTTbarFraction, hname, band = "SB", merge = True):
     hRcs.Divide(hCR)
 
     hRcs.GetYaxis().SetTitle("Rcs")
-
-
-
 
     # Using events with only muons in the sideband excludes QCD contamination
     if merge:
@@ -324,7 +327,7 @@ def getQCDsubtrHistos(tfile, sample = "background", band = "CR_MB/", isMC = True
 def replaceEmptyDataBinsWithMC(fileList):
     # hists to make QCD estimation
     bindirs =  ['CR_MB','SR_SB','CR_SB']
-    print ''
+    #print ''
     print "Replacing empty data bins with MC for CR_MB, SR_SB, CR_SB, 100% error"
     for fname in fileList:
         tfile = TFile(fname,"UPDATE")
@@ -355,7 +358,7 @@ def replaceEmptyDataBinsWithMC(fileList):
                     histData.Write("",TObject.kOverwrite)
                 tfile.cd()
         tfile.Close()
-    print ''
+    #print ''
 
 
 
@@ -363,7 +366,7 @@ def blindDataBins(fileList):
     # hists to make QCD estimation
     #bindirs =  ['SR_MB']
     bindirs =  []
-    print ''
+    #print ''
     print "Replacing empty data bins with MC for CR_MB, SR_SB, CR_SB, 100% error"
     for fname in fileList:
         tfile = TFile(fname,"UPDATE")
@@ -389,7 +392,7 @@ def blindDataBins(fileList):
                     histData.Write("",TObject.kOverwrite)
                 tfile.cd()
         tfile.Close()
-    print ''
+    #print ''
 
 def makeQCDsubtraction(fileList, samples, year):
     # hists to make QCD estimation
@@ -482,11 +485,13 @@ def makeKappaHists(fileList, samples = []):
                 mbname.SetName("MBname")
                 tfile.cd("Kappa")
                 mbname.Write("",TObject.kOverwrite)
+                #print ""
 
             for sample in samples:
 
                 hRcsMB = getRcsHist(tfile, sample, 'MB')
                 hRcsSB = getRcsHist(tfile, sample, 'SB')
+                #print ""
 
                 # make kappa
                 hKappa = hRcsMB.Clone(hRcsMB.GetName().replace('Rcs','Kappa'))
@@ -562,8 +567,10 @@ def makeKappaTTHists(fileList, samples = []):
             mbname.Write("",TObject.kOverwrite)
 
         for sample in samples:
+
             if sample == "data_QCDsubtr":
                 hRcsSB_NB1i_data = getRcsHist(tfile, sample, 'SB_NB1i')
+
                 tfile.cd("Rcs_SB_NB1i_TT")
                 hRcsSB_NB1i_data.SetName(sample)
                 hRcsSB_NB1i_data.Write("",TObject.kOverwrite)
@@ -573,6 +580,7 @@ def makeKappaTTHists(fileList, samples = []):
                 hRcsMB = getRcsHist(tfile, sample, 'MB', True)
                 hRcsSB_NB0 = getRcsHist(tfile, sample, 'SB_NB0', True)
                 hRcsSB_NB1i = getRcsHist(tfile, ewkSample, 'SB_NB1i', True)
+                #print ""
 
                 hKappaB = hRcsSB_NB0.Clone(hRcsSB_NB0.GetName().replace('Rcs','KappaB'))
                 hKappaB.Divide(hRcsSB_NB1i)
@@ -938,6 +946,8 @@ if __name__ == "__main__":
 
     # find files matching pattern
     fileList = glob.glob(pattern+"*merge.root")
+    #fileList = [pattern +"/LT1_HT02_NB0_NJ67_NW1i.merge.root"]
+
 
     if len(fileList) < 1:
         print "Empty file list"
@@ -947,6 +957,7 @@ if __name__ == "__main__":
     # Sample names
     ##################
     # all sample names
+    #from IPython import embed;embed()
     allSamps = getSamples(fileList[0],'SR_MB')
     print 'Found these samples:', allSamps
 

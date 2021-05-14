@@ -10,12 +10,13 @@ def readSystFile(systFile='sysTable.dat'):
     systDict = {}
     with open(systFile,"r") as xfile:
         lines = xfile.readlines()
+        #from IPython import embed;embed()
         systs = lines[0].replace(' ','').replace('\n','').split('|')
         print systs
         for line in lines[1:]:
             values = line.replace(' ','').replace('\n','').split('|')
             binMB = values[0]
-            binSB = values[1]
+            binSB = binMB + "_CR" #values[1]
             singleSysts = {}
             for val, syst in zip(values[2:],systs[2:]):
                 singleSysts[(binSB,syst)] = val
@@ -149,7 +150,6 @@ class YieldStore:
                     for pat in ignpattern:
                         if pat in sample: skip = True; break
 
-                #if "syst" in sample and ("Up" in sample or "Down" in sample): continue
                 #if "syst" in sample and ("up" in sample or "down" in sample): continue
 
                 if pattern not in sample: skip == True
@@ -230,8 +230,10 @@ class YieldStore:
 
     def getSampDict(self,samp,cat):
 
+        #from IPython import embed;embed()
         if samp in self.samples and cat in self.categories:
             # fill empty bins
+            print(self.yields[samp].keys())
             dct = self.yields[samp][cat]
             for bin in self.bins:
                 if bin not in dct:
@@ -549,7 +551,8 @@ if __name__ == "__main__":
 
     print [s for s in yds.samples if "1500" in s]
 
-    sysClass = "JEC"
+    sysClass = "
+    JEC"
     samp = "TT"
     cat = "Kappa"
 
