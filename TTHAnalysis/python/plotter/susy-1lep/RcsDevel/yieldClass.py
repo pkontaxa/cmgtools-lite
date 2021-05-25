@@ -218,7 +218,7 @@ class YieldStore:
     ###########################
 
     def getBinYield(self,samp,cat,bin, verbose=False):
-
+        
         if samp in self.yields:
             if cat in self.yields[samp]:
                 if bin in self.yields[samp][cat]:
@@ -232,14 +232,12 @@ class YieldStore:
 
         if samp in self.samples and cat in self.categories:
             # fill empty bins
-            #from IPython import embed;embed()
-            if cat in self.yields[samp]:
-                dct = self.yields[samp][cat]
-                for bin in self.bins:
-                    if bin not in dct:
-                        dct[bin] = BinYield(samp, cat, (0, 0))
-                return dct
-                #return self.yields[samp][cat]
+            dct = self.yields[samp][cat]
+            for bin in self.bins:
+                if bin not in dct:
+                    dct[bin] = BinYield(samp, cat, (0, 0))
+            return dct
+            #return self.yields[samp][cat]
         else:
             print 'Either {} is not in {} or {} is not in {}. Something\'s wrong here.'.format(samp, self.samples, cat, self.categories)
             return 0
@@ -346,7 +344,7 @@ class YieldStore:
                 f.write('  &  &  &' + LTbin +', ' + HTbin + ', ' + Bbin)
 
             for i,yd in enumerate(yds[bin]):
-
+                
                 precision = 2
                 if yd == 0:
                     f.write((' & %.'+str(precision)+'f $\pm$ %.'+str(precision)+'f') % (0.0, 0.0))
@@ -414,7 +412,7 @@ class YieldStore:
                     c2Y = self.getBinYield(samp,catTwo,bin, False)
                     if sampleOne!=None and sampleTwo!=None:
 #                        if catOne in self.yields[sampleOne] and catTwo in self.yields[sampleTwo] and catOne==catTwo:
-#
+#                            
                         if catOne in self.yields[sampleOne] and catTwo in self.yields[sampleTwo]:
                             c1Y = self.getBinYield(sampleOne,catOne,bin, False)
                             c2Y = self.getBinYield(sampleTwo,catTwo,bin, False)
@@ -449,7 +447,7 @@ class YieldStore:
                             self.addYield(sampleOne, cat+"_RTo_"+sampleTwo,bin,yd)
                         else:
                             print "not implemented yet, no return defined"
-
+                    
 
 
 
