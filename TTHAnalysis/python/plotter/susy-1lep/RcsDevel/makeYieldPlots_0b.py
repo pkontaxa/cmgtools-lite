@@ -290,7 +290,7 @@ def getCleanLabel(binLabel):
 
     return binLabel
 
-def makeSampHisto(yds, samp, cat, hname = "", ind = 0, useRcs = True): # False
+def makeSampHisto(yds, samp, cat, hname = "", ind = 0, useRcs = False):
 
     # yield dict
     ydict = yds.getSampDict(samp,cat)
@@ -303,7 +303,6 @@ def makeSampHisto(yds, samp, cat, hname = "", ind = 0, useRcs = True): # False
     #binList = sorted(ydict.keys())
     binList = []
     # sort bins by NJ
-    #from IPython import embed;embed()
     if "MB" in cat or useRcs:
         for njbin in ['NJ5','NJ67','NJ8i']:
             for bbin in ['NB0']:
@@ -875,7 +874,7 @@ def plotHists(cname, histList, ratio = None, legPos = "TM", width = 800, height 
             ymax = 0.2
             ymin = 0
     elif "Kappa" in cname:
-        ymax = 1
+        ymax = 10
         ymin = 0
     elif "CR" in cname:
         ymax = 1e6

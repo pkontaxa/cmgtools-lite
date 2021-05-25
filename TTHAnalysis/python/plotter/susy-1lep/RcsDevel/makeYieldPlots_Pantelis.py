@@ -44,7 +44,7 @@ def getDataPoissonErrors(h, drawZeroBins=False, drawXbars=False):
         N = h.GetBinContent(i+1);
         dN = h.GetBinError(i+1);
         if drawZeroBins or N > 0:
-            if N > 0 and dN > 0 and abs(dN**2/N-1) > 1e-4:
+            if N > 0 and dN > 0 and abs(dN**2/N-1) > 1e-4: 
                 #print "Hey, this is not Poisson to begin with! %.2f, %.2f, neff = %.2f, yscale = %.5g" % (N, dN, (N/dN)**2, (dN**2/N))
                 yscale = (dN**2/N)
                 N = (N/dN)**2
@@ -97,7 +97,7 @@ def doLegend(pos = "TM",nEntr = None):
         leg = TLegend(gStyle.GetPadLeftMargin(),0.5,gStyle.GetPadLeftMargin()+0.35,1-gStyle.GetPadTopMargin())
     elif pos == "Square":
         leg = TLegend(0.4632107,0.6017643,0.9899666,0.9269061)
-
+    
     else:
         leg = TLegend(1-gStyle.GetPadRightMargin()-0.35,0.55,1-gStyle.GetPadRightMargin(),1-gStyle.GetPadTopMargin())
 
@@ -314,10 +314,10 @@ def makeSampHisto(yds, samp, cat, hname = "", ind = 0):
         ####Pantelis#####
         elif nbins == 5:
             newLabel = "#splitline{%s}{#splitline{%s}{#splitline{%s}{#splitline{%s}{%s}}}}" %(splitbins[0],splitbins[1],splitbins[2],splitbins[3],splitbins[4])
-        ################
+        ################  
         else:
             newLabel = binLabel
-
+   
         #print newLabel
         hist.GetXaxis().SetBinLabel(ibin+1,newLabel)
 
@@ -390,7 +390,7 @@ def getMarks(hist):
 
     for bin in range(1,hist.GetNbinsX()+1):
         # for vertical lines
-        #Pantelis binLabel = hist.GetXaxis().GetBinLabel(bin)[0]
+        #Pantelis binLabel = hist.GetXaxis().GetBinLabel(bin)[0]       
         binLabel = hist.GetXaxis().GetBinLabel(bin)
         #print binLabel
 
@@ -400,11 +400,11 @@ def getMarks(hist):
         elif ltmark != ltbin:
             ltmark = ltbin
             marks.append(bin)
-        #print ltbin, ltmark
+        #print ltbin, ltmark  
         #if not binLabel == binLabelOld:
         #    marks.append(bin)
         #binLabelOld = binLabel
-
+   
     return marks
 
 def prepRatio(hist, keepStyle = False):
@@ -871,10 +871,10 @@ def plotHists(cname, histList, ratio = None, legPos = "TM", width = 800, height 
         # remove axis label with ratio
         if i == 0 and ratio != None:
             hist.GetXaxis().SetLabelOffset(1)
-
+       
         if i == 0:
             # do vertical lines
-            marks = getMarks(hist)
+            marks = getMarks(hist)        
             if len(marks) != 0:
                 #print marks
                 axis = hist.GetXaxis()
