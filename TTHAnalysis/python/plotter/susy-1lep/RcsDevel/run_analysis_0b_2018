@@ -171,17 +171,17 @@ outputdir="${1}"
     # --cuts trig_base_HEM.txt \
     # --od "${outputdir}"/signal_ISR
 #
-# Signal systematic: JEC
-./makeBinYields_0b_2018.py \
-    --mca mca/2018/signal/JEC/mca-Autumn18_Signal_0b.txt  \
-    --signal \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/signal_JEC
-
+# # Signal systematic: JEC
+# ./makeBinYields_0b_2018.py \
+    # --mca mca/2018/signal/JEC/mca-Autumn18_Signal_0b.txt  \
+    # --signal \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/signal_JEC
+#
 # Signal systematic: btag heavy flavour
 ./makeBinYields_0b_2018.py \
     --mca mca/2018/signal/btagHF/mca-Autumn18_Signal_0b.txt  \

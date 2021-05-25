@@ -238,7 +238,6 @@ def makeSystHists(fileList): #direc,
     # systematic alawys first subdirectory
     systNames = [path.split("/")[1].split("_")[1]]
 
-
     #bindirs =  ['SR_MB','CR_MB','SR_SB','CR_SB']
     #bindirs =  ['SR_MB','CR_MB','SR_SB','CR_SB','Kappa','Rcs_MB','Rcs_SB']
 
@@ -313,6 +312,30 @@ def makeSystHists(fileList): #direc,
         #from IPython import embed;embed()
     return 1
 
+def combineOtherBkgs(fileList):
+    # hardcode MC hists to avoid kappa or repition errors
+    bindirs =  ['SR_MB','CR_MB','SR_SB','CR_SB', "SR_SB_NB1i", "CR_SB_NB1i", "SR_SB_NB0", "CR_SB_NB0"]
+    other_bkgs = ["DY", "SingleT", "TTV", "VV"]
+
+    for fname in fileList:
+        tfile = TFile(fname,"UPDATE")
+        for bind in bindirs:
+            # start with EWK always, so we have a tObject to add onto
+
+            systNames = [path.split("/")[1].split("_")[1]]
+            assert len(systNames)==1
+            DY_syst = tfile.Get(bind+"/DY_"+systNames[0]+"_syst").Clone()
+            for other in other_bkgs[1:]:
+                other_syst = tfile.Get(bind+"/{}_{}_syst".format(other,systNames[0])).Clone()
+                #from IPython import embed; embed()
+                DY_syst.Add(other_syst)
+
+            tfile.cd(bind)
+            DY_syst.SetName("other_bkg_{}_syst".format(systNames[0]))
+            DY_syst.Write("",TObject.kOverwrite)
+        tfile.Close()
+    return 1
+
 
 if __name__ == "__main__":
 
@@ -348,7 +371,7 @@ if __name__ == "__main__":
 
         #print(root, dirs)
         for direc in dirs:
-            if "syst" in direc or "signal_" in direc:
+            if "signal_" in direc: #"syst" in direc:# or
                 path = pattern +"/"+ direc
                 for ro,di,fi in os.walk(path):
                     for d in di:
@@ -364,6 +387,10 @@ if __name__ == "__main__":
                             #print(len(fileList), fileList[0])
                             #from IPython import embed;embed()
                             makeSystHists(fileList)
+
+                            # combine other backgrounds for limit extraction for systs
+                            if "syst" in direc:
+                                combineOtherBkgs(fileList)
 
     #from IPython import embed;embed()
     #makeSystHists(fileList_NJ34)

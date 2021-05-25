@@ -9,146 +9,146 @@ lumi=41.9
 outputdir="${1}"
 
 
-# Signal
-./makeBinYields_0b_2017.py \
-    --mca mca/2017/mca-Fall17_Signal_0b.txt \
-    --signal \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/scan
+# # Signal
+# ./makeBinYields_0b_2017.py \
+    # --mca mca/2017/mca-Fall17_Signal_0b.txt \
+    # --signal \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/scan
+#
+# #Background
+# ./makeBinYields_0b_2017.py \
+    # --mca mca/2017/mca-Fall17_0b.txt \
+    # --grid \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/grid
+#
+# # Background with dilepton nJet correction
+# ./makeBinYields_0b_2017.py \
+    # --mca mca/2017/mca-Fall17_0b_dilep-corr.txt \
+    # --grid \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/grid-dilep
 
-#Background
-./makeBinYields_0b_2017.py \
-    --mca mca/2017/mca-Fall17_0b.txt \
-    --grid \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/grid
-
-# Background with dilepton nJet correction
-./makeBinYields_0b_2017.py \
-    --mca mca/2017/mca-Fall17_0b_dilep-corr.txt \
-    --grid \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/grid-dilep
-
-# Systematic: dilepton constant
-./makeBinYields.py \
-    --mca ../systs/2017/DLConst/mca-Fall17_0b.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_DLConst
-
-# Systematic: dilepton slope
-./makeBinYields.py \
-    --mca ../systs/2017/DLSlope/mca-Fall17_0b.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_DLSlope
-
-# Systematic: JEC
-./makeBinYields.py \
-    --mca ../systs/2017/JEC/mca-Fall17_0b.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_JEC
-
-# Systematic: W polarization
-./makeBinYields.py \
-    --mca ../systs/2017/Wpol/mca-Fall17_0b.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_Wpol
-
-# Systematic: W cross section
-./makeBinYields.py \
-    --mca ../systs/2017/Wxsec/mca-Fall17_0b.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_Wxsec
-
-# Systematic: b-tagging heavy flavour
-./makeBinYields.py \
-    --mca ../systs/2017/btagHF/mca-Fall17_0b.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_btagHF
-
-# Systematic: b-tagging
-./makeBinYields.py \
-    --mca ../systs/2017/btagLF/mca-Fall17_0b.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_btagLF
-
-# Systematic: lepton SF
-./makeBinYields.py \
-    --mca ../systs/2017/lepSF/mca-Fall17_0b.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_lepSF
-
-# Systematic: pileup
-./makeBinYields.py \
-    --mca ../systs/2017/PU/mca-Fall17_0b.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_PU
-
-# Systematic: TTV cross section
-./makeBinYields.py \
-    --mca ../systs/2017/TTVxsec/mca-Fall17_0b.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_TTVxsec
-
-# Systematic: TT cross section
-./makeBinYields.py \
-    --mca ../systs/2017/TTxsec/mca-Fall17_0b.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_TTxsec
+# # Systematic: dilepton constant
+# ./makeBinYields_0b_2017.py \
+    # --mca ../systs/2017/DLConst/mca-Fall17_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/syst_DLConst
+#
+# # Systematic: dilepton slope
+# ./makeBinYields_0b_2017.py \
+    # --mca ../systs/2017/DLSlope/mca-Fall17_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/syst_DLSlope
+#
+# # Systematic: JEC
+# ./makeBinYields_0b_2017.py \
+    # --mca ../systs/2017/JEC/mca-Fall17_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/syst_JEC
+#
+# # Systematic: W polarization
+# ./makeBinYields_0b_2017.py \
+    # --mca ../systs/2017/Wpol/mca-Fall17_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/syst_Wpol
+#
+# # Systematic: W cross section
+# ./makeBinYields_0b_2017.py \
+    # --mca ../systs/2017/Wxsec/mca-Fall17_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/syst_Wxsec
+#
+# # Systematic: b-tagging heavy flavour
+# ./makeBinYields_0b_2017.py \
+    # --mca ../systs/2017/btagHF/mca-Fall17_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/syst_btagHF
+#
+# # Systematic: b-tagging
+# ./makeBinYields_0b_2017.py \
+    # --mca ../systs/2017/btagLF/mca-Fall17_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/syst_btagLF
+#
+# # Systematic: lepton SF
+# ./makeBinYields_0b_2017.py \
+    # --mca ../systs/2017/lepSF/mca-Fall17_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/syst_lepSF
+#
+# # Systematic: pileup
+# ./makeBinYields_0b_2017.py \
+    # --mca ../systs/2017/PU/mca-Fall17_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/syst_PU
+#
+# # Systematic: TTV cross section
+# ./makeBinYields_0b_2017.py \
+    # --mca ../systs/2017/TTVxsec/mca-Fall17_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/syst_TTVxsec
+#
+# # Systematic: TT cross section
+# ./makeBinYields_0b_2017.py \
+    # --mca ../systs/2017/TTxsec/mca-Fall17_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/syst_TTxsec
 
 
 # # Signal systematic: Gluino ISR
-# ./makeBinYields.py \
+# ./makeBinYields_0b_2017.py \
     # --mca ../systs/2017/signal/ISR/mca-Fall17_Signal.txt \
     # --signal \
     # --systs True \
@@ -157,18 +157,18 @@ outputdir="${1}"
     # -b \
     # --od "${outputdir}"/signal_ISR
 
-# Signal systematic: JEC
-./makeBinYields.py \
-    --mca mca/2017/signal/JEC/mca-Fall17_Signal_0b.txt  \
-    --signal \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/signal_JEC
+# # Signal systematic: JEC
+# ./makeBinYields_0b_2017.py \
+    # --mca mca/2017/signal/JEC/mca-Fall17_Signal_0b.txt  \
+    # --signal \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/signal_JEC
 
 # Signal systematic: btag heavy flavour
-./makeBinYields.py \
+./makeBinYields_0b_2017.py \
     --mca mca/2017/signal/btagHF/mca-Fall17_Signal_0b.txt  \
     --signal \
     --systs True \
@@ -178,7 +178,7 @@ outputdir="${1}"
     --od "${outputdir}"/signal_btagHF
 
 # Signal systematic: btag light flavour
-./makeBinYields.py \
+./makeBinYields_0b_2017.py \
     --mca mca/2017/signal/btagLF/mca-Fall17_Signal_0b.txt  \
     --signal \
     --systs True \

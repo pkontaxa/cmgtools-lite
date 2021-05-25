@@ -27,9 +27,9 @@ if __name__ == "__main__":
     yds5 = YieldStore("Sele")
     yds6 = YieldStore("Sele")
     yds8 = YieldStore("Sele")
-    ydsFew5 = YieldStore("lepYields")
-    ydsFew6 = YieldStore("lepYields")
-    ydsFew8 = YieldStore("lepYields")
+    # ydsFew5 = YieldStore("lepYields")
+    # ydsFew6 = YieldStore("lepYields")
+    # ydsFew8 = YieldStore("lepYields")
     paths = []
 
     # Add files
@@ -81,8 +81,8 @@ if __name__ == "__main__":
     systsprint = systs
 
     # Sample and variable
-    samp = "WJets"
-    var = "KappaW"
+    #samp = "WJets"
+    #var = "KappaW"
     sv_list = [("WJets", "KappaW"), ("TTJets", "KappaBTT")]
 
     # canvs and hists
@@ -130,11 +130,53 @@ if __name__ == "__main__":
         f_dat.close()
 
 
-    #from IPython import embed;embed()
 
-    '''Pantelis
-    f =  open('sysTable_fewbins.dat','w')
-    ydsFew6.printTable(samps, systs, label,f)
-    ydsFew9.printTable(samps, systs, label,f)
-    f.close()
-    Pantelis'''
+    #######################
+    # syst other backgrounds
+    # first collect all to be able to track for irregularities
+
+    bindirs =  ['SR_MB','CR_MB','SR_SB','CR_SB', "SR_SB_NB1i", "CR_SB_NB1i", "SR_SB_NB0", "CR_SB_NB0"]
+    other_bkgs = ["EWK", "DY", "SingleT", "TTV", "VV"]
+
+    bkg_systs = [(other+"_"+syst+"_syst",b)
+        for b in bindirs
+        for other in other_bkgs
+        for syst in systs
+    ]
+
+    bkg_samps =[b+"_"+other+"_syst_"+ syst
+            for b in bindirs
+            for other in other_bkgs
+            for syst in systs
+    ]
+
+    f_bkg =  open('sysTable_otherBKG_{}.dat'.format(year),'w')
+
+    #f_bkg.write(samp + "|" + var + "\n")
+    yds5.printTable(bkg_systs, bkg_samps, label,f_bkg)
+    yds6.printTable(bkg_systs, bkg_samps, label,f_bkg)
+    yds8.printTable(bkg_systs, bkg_samps, label,f_bkg)
+
+    f_bkg.close()
+
+    # now do it for the combined hists
+
+    comb_systs = [("other_bkg_"+syst+"_syst",b)
+        for b in bindirs
+        for syst in systs
+    ]
+
+    comb_samps =[b+"_syst_"+ syst
+            for b in bindirs
+            for syst in systs
+    ]
+
+    f_comb =  open('sysTable_combinedBKG_{}.dat'.format(year),'w')
+
+    #f_bkg.write(samp + "|" + var + "\n")
+    yds5.printTable(comb_systs, comb_samps, label,f_comb)
+    yds6.printTable(comb_systs, comb_samps, label,f_comb)
+    yds8.printTable(comb_systs, comb_samps, label,f_comb)
+
+    f_comb.close()
+
