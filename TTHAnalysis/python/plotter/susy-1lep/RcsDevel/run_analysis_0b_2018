@@ -10,181 +10,181 @@ outputdir="${1}"
 
 
 # Signal
-./makeBinYields_0b_2018.py \
-    --mca mca/2018/mca-Autumn18_Signal_0b.txt \
-    --signal \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/scan
+# ./makeBinYields_0b_2018.py \
+    # --mca mca/2018/mca-Autumn18_Signal_0b.txt \
+    # --signal \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/scan
+#
+# # Background
+# ./makeBinYields_0b_2018.py \
+    # --mca mca/2018/mca-Autumn18_0b.txt \
+    # --grid \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/grid
+#
+# # Background with dilepton nJet correction
+# ./makeBinYields_0b_2018.py \
+    # --mca mca/2018/mca-Autumn18_0b_dilep-corr.txt \
+    # --grid \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/grid-dilep
 
-# Background
-./makeBinYields_0b_2018.py \
-    --mca mca/2018/mca-Autumn18_0b.txt \
-    --grid \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/grid
+# # Systematic: dilepton constant
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/DLConst/mca-Autumn18_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/syst_DLConst
+#
+# # Systematic: dilepton slope
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/DLSlope/mca-Autumn18_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/syst_DLSlope
+#
+# # Systematic: JEC
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/JEC/mca-Autumn18_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/syst_JEC
+#
+# # Systematic: W polarization
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/Wpol/mca-Autumn18_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/syst_Wpol
+#
+# # Systematic: W cross section
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/Wxsec/mca-Autumn18_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/syst_Wxsec
+#
+# # Systematic: b-tagging heavy flavour
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/btagHF/mca-Autumn18_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/syst_btagHF
+#
+# # Systematic: b-tagging
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/btagLF/mca-Autumn18_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/syst_btagLF
+#
+# # Systematic: lepton SF
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/lepSF/mca-Autumn18_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/syst_lepSF
+#
+# # Systematic: pileup
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/PU/mca-Autumn18_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/syst_PU
+#
+# # Systematic: TTV cross section
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/TTVxsec/mca-Autumn18_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/syst_TTVxsec
+#
+# # Systematic: TT cross section
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/TTxsec/mca-Autumn18_0b.txt \
+    # --grid \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/syst_TTxsec
 
-# Background with dilepton nJet correction
-./makeBinYields_0b_2018.py \
-    --mca mca/2018/mca-Autumn18_0b_dilep-corr.txt \
-    --grid \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/grid-dilep
-
-# Systematic: dilepton constant
-./makeBinYields.py \
-    --mca ../systs/2018/DLConst/mca-Autumn18.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/syst_DLConst
-
-# Systematic: dilepton slope
-./makeBinYields.py \
-    --mca ../systs/2018/DLSlope/mca-Autumn18.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/syst_DLSlope
-
-# Systematic: JEC
-./makeBinYields.py \
-    --mca ../systs/2018/JEC/mca-Autumn18.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/syst_JEC
-
-# Systematic: W polarization
-./makeBinYields.py \
-    --mca ../systs/2018/Wpol/mca-Autumn18.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/syst_Wpol
-
-# Systematic: W cross section
-./makeBinYields.py \
-    --mca ../systs/2018/Wxsec/mca-Autumn18.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/syst_Wxsec
-
-# Systematic: b-tagging heavy flavour
-./makeBinYields.py \
-    --mca ../systs/2018/btagHF/mca-Autumn18.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/syst_btagHF
-
-# Systematic: b-tagging
-./makeBinYields.py \
-    --mca ../systs/2018/btagLF/mca-Autumn18.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/syst_btagLF
-
-# Systematic: lepton SF
-./makeBinYields.py \
-    --mca ../systs/2018/lepSF/mca-Autumn18.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/syst_lepSF
-
-# Systematic: pileup
-./makeBinYields.py \
-    --mca ../systs/2018/PU/mca-Autumn18.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/syst_PU
-
-# Systematic: TTV cross section
-./makeBinYields.py \
-    --mca ../systs/2018/TTVxsec/mca-Autumn18.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/syst_TTVxsec
-
-# Systematic: TT cross section
-./makeBinYields.py \
-    --mca ../systs/2018/TTxsec/mca-Autumn18.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/syst_TTxsec
-
-# Signal systematic: Gluino ISR
-./makeBinYields.py \
-    --mca ../systs/2018/signal/ISR/mca-Autumn18_Signal.txt \
-    --signal \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/signal_ISR
-
-# Signal systematic: JEC
-./makeBinYields.py \
-    --mca ../systs/2018/signal/JEC/mca-Autumn18_Signal.txt  \
-    --signal \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --cuts trig_base_HEM.txt \
-    --od "${outputdir}"/signal_JEC
-
+# # Signal systematic: Gluino ISR
+# ./makeBinYields_0b_2018.py \
+    # --mca ../systs/2018/signal/ISR/mca-Autumn18_Signal.txt \
+    # --signal \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/signal_ISR
+#
+# # Signal systematic: JEC
+# ./makeBinYields_0b_2018.py \
+    # --mca mca/2018/signal/JEC/mca-Autumn18_Signal_0b.txt  \
+    # --signal \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --cuts trig_base_HEM.txt \
+    # --od "${outputdir}"/signal_JEC
+#
 # Signal systematic: btag heavy flavour
-./makeBinYields.py \
-    --mca ../systs/2018/signal/btagHF/mca-Autumn18_Signal.txt  \
+./makeBinYields_0b_2018.py \
+    --mca mca/2018/signal/btagHF/mca-Autumn18_Signal_0b.txt  \
     --signal \
     --systs True \
     -v 2 \
@@ -194,8 +194,8 @@ outputdir="${1}"
     --od "${outputdir}"/signal_btagHF
 
 # Signal systematic: btag light flavour
-./makeBinYields.py \
-    --mca ../systs/2018/signal/btagLF/mca-Autumn18_Signal.txt  \
+./makeBinYields_0b_2018.py \
+    --mca mca/2018/signal/btagLF/mca-Autumn18_Signal_0b.txt  \
     --signal \
     --systs True \
     -v 2 \

@@ -8,87 +8,66 @@ fi
 lumi=35.9
 outputdir="${1}"
 
-### Signal
-./makeBinYields_0b.py \
-    --mca mca/2016_EXT/mca-Spring16_Signal_0b.txt \
-    --signal \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/scan
+##Signal
+# ./makeBinYields_0b.py \
+ # --mca mca/2016_EXT/mca-Spring16_Signal_0b.txt \
+  # --signal \
+  # -v 2 \
+  # -l "${lumi}" \
+  # -b \
+  # --od "${outputdir}"/scan
+#
+# ### Background
+# ./makeBinYields_0b.py \
+ # --mca mca/2016_EXT/mca-Summer16_0b.txt \
+  # --grid \
+  # -v 2 \
+  # -l "${lumi}" \
+  # -b \
+  # --od "${outputdir}"/grid
+#
+# #### Background with dilepton nJet correction
+# ./makeBinYields_0b.py \
+ # --mca mca/2016_EXT/mca-Summer16_0b_dilep-corr.txt \
+  # --grid \
+  # -v 2 \
+  # -l "${lumi}" \
+  # -b \
+  # --od "${outputdir}"/grid-dilep
 
-### Background
+#Systematic: dilepton constant
 ./makeBinYields_0b.py \
-    --mca mca/2016_EXT/mca-Summer16_0b.txt \
-    --grid \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/grid
-
-#### Background with dilepton nJet correction
-./makeBinYields_0b.py \
-    --mca mca/2016_EXT/mca-Summer16_0b_dilep-corr.txt \
-    --grid \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/grid-dilep
-
-# Systematic: dilepton constant
-./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/DLConst/mca-Summer16.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_DLConst
+ --mca ../systs/2016_EXT/DLConst/mca-Summer16_0b.txt \
+  --grid \
+  --systs True \
+  -v 2 \
+  -l "${lumi}" \
+  -b \
+  --od "${outputdir}"/syst_DLConst
 
 # Systematic: dilepton slope
 ./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/DLSlope/mca-Summer16.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_DLSlope
+ --mca ../systs/2016_EXT/DLSlope/mca-Summer16_0b.txt \
+  --grid \
+  --systs True \
+  -v 2 \
+  -l "${lumi}" \
+  -b \
+  --od "${outputdir}"/syst_DLSlope
 
 # Systematic: JEC
 ./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/JEC/mca-Summer16.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_JEC
-
-# Systematic: PDF
-./makeBinYields_0b.py \
-    --mca ../systs/PDFUnc-RMS/mca-Summer16_Moriond17.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_PDFUnc-RMS
-
-# Systematic: scale match
-./makeBinYields_0b.py \
-    --mca ../systs/ScaleMatchVar/mca-Summer16_Moriond17.txt \
-    --grid \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/syst_ScaleMatchVar
-
+ --mca ../systs/2016_EXT/JEC/mca-Summer16_0b.txt \
+  --grid \
+  --systs True \
+  -v 2 \
+  -l "${lumi}" \
+  -b \
+  --od "${outputdir}"/syst_JEC
 
 # Systematic: W polarization
 ./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/Wpol/mca-Summer16.txt \
+    --mca ../systs/2016_EXT/Wpol/mca-Summer16_0b.txt \
     --grid \
     --systs True \
     -v 2 \
@@ -98,7 +77,7 @@ outputdir="${1}"
 
 # Systematic: W cross section
 ./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/Wxsec/mca-Summer16.txt \
+    --mca ../systs/2016_EXT/Wxsec/mca-Summer16_0b.txt \
     --grid \
     --systs True \
     -v 2 \
@@ -108,7 +87,7 @@ outputdir="${1}"
 
 # Systematic: b-tagging heavy flavour
 ./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/btagHF/mca-Summer16.txt \
+    --mca ../systs/2016_EXT/btagHF/mca-Summer16_0b.txt \
     --grid \
     --systs True \
     -v 2 \
@@ -118,7 +97,7 @@ outputdir="${1}"
 
 # Systematic: b-tagging
 ./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/btagLF/mca-Summer16.txt \
+    --mca ../systs/2016_EXT/btagLF/mca-Summer16_0b.txt \
     --grid \
     --systs True \
     -v 2 \
@@ -128,7 +107,7 @@ outputdir="${1}"
 
 # Systematic: lepton SF
 ./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/lepSF/mca-Summer16.txt \
+    --mca ../systs/2016_EXT/lepSF/mca-Summer16_0b.txt \
     --grid \
     --systs True \
     -v 2 \
@@ -138,7 +117,7 @@ outputdir="${1}"
 
 # Systematic: pileup
 ./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/PU/mca-Summer16.txt \
+    --mca ../systs/2016_EXT/PU/mca-Summer16_0b.txt \
     --grid \
     --systs True \
     -v 2 \
@@ -148,7 +127,7 @@ outputdir="${1}"
 
 # Systematic: TTV cross section
 ./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/TTVxsec/mca-Summer16.txt \
+    --mca ../systs/2016_EXT/TTVxsec/mca-Summer16_0b.txt \
     --grid \
     --systs True \
     -v 2 \
@@ -158,7 +137,7 @@ outputdir="${1}"
 
 # Systematic: TT cross section
 ./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/TTxsec/mca-Summer16.txt \
+    --mca ../systs/2016_EXT/TTxsec/mca-Summer16_0b.txt \
     --grid \
     --systs True \
     -v 2 \
@@ -166,9 +145,9 @@ outputdir="${1}"
     -b \
     --od "${outputdir}"/syst_TTxsec
 
-# Systematic: nISR reweighting
+Systematic: nISR reweighting
 ./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/nISR/mca-Summer16.txt \
+    --mca ../systs/2016_EXT/nISR/mca-Summer16_0b.txt \
     --grid \
     --systs True \
     -v 2 \
@@ -176,47 +155,47 @@ outputdir="${1}"
     -b \
     --od "${outputdir}"/syst_nISR
 
-# Signal systematic: Gluino ISR
-./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/signal/ISR/mca-Spring16_Signal.txt \
-    --signal \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/signal_ISR
-
-# Signal systematic: JEC
-./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/signal/JEC/mca-Spring16_Signal.txt  \
-    --signal \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/signal_JEC
-
-# Signal systematic: btag heavy flavour
-./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/signal/btagHF/mca-Spring16_Signal.txt  \
-    --signal \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/signal_btagHF
-
-# Signal systematic: btag light flavour
-./makeBinYields_0b.py \
-    --mca ../systs/2016_EXT/signal/btagLF/mca-Spring16_Signal.txt  \
-    --signal \
-    --systs True \
-    -v 2 \
-    -l "${lumi}" \
-    -b \
-    --od "${outputdir}"/signal_btagLF
-
-
+# #Signal systematic: Gluino ISR
+# ./makeBinYields_0b.py \
+    # --mca ../systs/2016_EXT/signal/ISR/mca-Spring16_Signal.txt \
+    # --signal \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/signal_ISR
+#
+# # Signal systematic: JEC
+# ./makeBinYields_0b.py \
+    # --mca mca/2016_EXT/signal/JEC/mca-Spring16_Signal_0b.txt  \
+    # --signal \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/signal_JEC
+#
+# # Signal systematic: btag heavy flavour
+# ./makeBinYields_0b.py \
+    # --mca mca/2016_EXT/signal/btagHF/mca-Spring16_Signal_0b.txt  \
+    # --signal \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/signal_btagHF
+#
+# # Signal systematic: btag light flavour
+# ./makeBinYields_0b.py \
+    # --mca mca/2016_EXT/signal/btagLF/mca-Spring16_Signal_0b.txt  \
+    # --signal \
+    # --systs True \
+    # -v 2 \
+    # -l "${lumi}" \
+    # -b \
+    # --od "${outputdir}"/signal_btagLF
+#
+#
 
 
 

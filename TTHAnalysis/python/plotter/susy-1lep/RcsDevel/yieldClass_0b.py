@@ -10,12 +10,13 @@ def readSystFile(systFile='sysTable.dat'):
     systDict = {}
     with open(systFile,"r") as xfile:
         lines = xfile.readlines()
+        #from IPython import embed;embed()
         systs = lines[0].replace(' ','').replace('\n','').split('|')
         print systs
         for line in lines[1:]:
             values = line.replace(' ','').replace('\n','').split('|')
             binMB = values[0]
-            binSB = values[1]
+            binSB = binMB + "_CR" #values[1]
             singleSysts = {}
             for val, syst in zip(values[2:],systs[2:]):
                 singleSysts[(binSB,syst)] = val
@@ -149,15 +150,16 @@ class YieldStore:
                     for pat in ignpattern:
                         if pat in sample: skip = True; break
 
-                #if "syst" in sample and ("Up" in sample or "Down" in sample): continue
                 #if "syst" in sample and ("up" in sample or "down" in sample): continue
 
                 if pattern not in sample: skip == True
                 # Skip unneeded samples
                 if skip: continue
 
+                from IPython import embed;embed()
+
                 if ('Scan' not in sample) and ('scan' not in sample):
-                    # get normal sample yield
+                # get normal sample yield
                     yd = BinYield(sample, category, getLepYield(hist, leptype))
                     yd.label = binLabel; yd.sbname = sbname; yd.mbname = mbname
                     self.addYield(sample,category,binName,yd)
@@ -165,15 +167,19 @@ class YieldStore:
                     # get yields from scan
                     yds = getScanYields(hist,leptype)
                     # loop over mass points
+
                     for mGo,mLSP in yds:
                         # selected key type: mass point string or tuple
                         point = sample + "_mGo%i_mLSP%i" %(mGo,mLSP)
                         #point = (mGo,mLSP)
-
+                        #from IPython import embed;embed()
                         yd = BinYield(point, category, yds[(mGo,mLSP)])
                         yd.label = binLabel; yd.sbname = sbname; yd.mbname = mbname
                         self.addYield(point,category,binName,yd)
 
+
+        #print("in add Bin Yield")
+        #from IPython import embed;embed()
         tfile.Close()
         return 1
 
@@ -219,6 +225,7 @@ class YieldStore:
 
     def getBinYield(self,samp,cat,bin, verbose=False):
 
+        #from IPython import embed;embed()
         if samp in self.yields:
             if cat in self.yields[samp]:
                 if bin in self.yields[samp][cat]:
@@ -226,12 +233,16 @@ class YieldStore:
                     return self.yields[samp][cat][bin]
             # return zero if sample is in dict (for scans)
             return BinYield(samp, cat, (0, 0))
+        #print("in getBinYield")
         return 0
+        #return BinYield(samp, cat, (0, 0))
 
     def getSampDict(self,samp,cat):
 
+        #from IPython import embed;embed()
         if samp in self.samples and cat in self.categories:
             # fill empty bins
+            print(self.yields[samp].keys())
             dct = self.yields[samp][cat]
             for bin in self.bins:
                 if bin not in dct:
@@ -274,6 +285,7 @@ class YieldStore:
 #                    print "doing OutPutHelper approach"
                     yds[bin].append(self.getBinYield(sample.sample,sample.cat,bin))
                 else: print "sample is of type ", type(sample)
+        #from IPython import embed;embed()
         return yds
 
     def printBins(self, samp,cat):
@@ -458,25 +470,67 @@ class YieldStore:
 
     def printTable(self, samps, printSamps, label, f):
         yds = self.getMixDict(samps)
-        ydsNorm = self.getMixDict([('EWK', 'Kappa'),])
+        #ydsNorm = self.getMixDict([('EWK', 'Kappa'),])
 
         nSource = len(samps)
         nCol = nSource + 4
         bins = sorted(yds.keys())
-        precision = 3
-        f.write('bin                |  SBin |' +  ' %s ' % '     |   '.join(map(str, printSamps)) + ' \n')
+        precision = 5  # |  SBin
+        f.write('bin                 |' +  ' %s ' % '     |   '.join(map(str, printSamps)) + ' \n')
         for i,bin in enumerate(bins):
             f.write(bin + '')
             for i,yd in enumerate(yds[bin]):
+
                 val =yd.val
                 if i == 0:
-                    f.write((' | ' + yd.sbname.replace('_SR','') + '  |    %.'+str(precision)+'f   ' ) % (1+val))
+                    f.write((  ' |    %.'+str(precision)+'f   ' ) % (1+val))
                 else:
                     f.write(('  |    %.'+str(precision)+'f   ' ) % (1+val))
             f.write('\n')
         return 1
 
 
+    def printSignalTable(self, samps, header_names,dirName , file_name, var, systs):
+
+        yds = self.getMixDict(samps)
+        #ydsNorm = self.getMixDict([('EWK', 'Kappa'),])
+
+        mLSP_list = [   0,  100,  200,  300,  400,  450,  475,  500,  525,  550,  575,
+            600,  625,  650,  675,  700,  725,  750,  775,  800,  825,  850,
+            875,  900,  950,  975, 1000, 1050, 1075, 1100, 1125, 1150, 1175,
+           1200, 1250, 1300, 1350, 1400, 1425, 1450, 1500, 1550, 1600, 1650,
+           1700, 1750, 1800, 1850, 1900]
+
+
+        for mGo in range(600, 2600, 50):
+            for mLSP in mLSP_list:
+                if mGo >= mLSP:
+                    f =  open(dirName+"/"+file_name+"mGo{}_mLSP{}.dat".format(mGo, mLSP),'w')
+                    bins = sorted(yds.keys())
+                    precision = 5  # |  SBin
+                    f.write('bin                 |' +  ' %s ' % '     |   '.join(map(str, header_names)) + ' \n')
+                    for i,bin in enumerate(bins):
+                        bin_yds = [i for i in yds[bin] if i != 0]
+                        vals = [v
+                            for v in bin_yds
+                            if v.name.endswith("mGo{}_mLSP{}".format(mGo, mLSP))
+                            ]
+                        #from IPython import embed;embed()
+                        f.write(bin + '')
+                        for i,yd in enumerate(vals):
+
+                            if yd ==0:
+                                val=0
+                            else:
+                                val =yd.val
+                            #    from IPython import embed;embed()
+                            #if i == 0:
+                            #    f.write((  ' |    %.'+str(precision)+'f   ' ) % (1+val))
+                            #else:
+                            f.write(('  |    %.'+str(precision)+'f   ' ) % (1+val))
+                        f.write('\n')
+                    f.close()
+        return 1
 
 if __name__ == "__main__":
 
@@ -549,7 +603,8 @@ if __name__ == "__main__":
 
     print [s for s in yds.samples if "1500" in s]
 
-    sysClass = "JEC"
+    sysClass = "
+    JEC"
     samp = "TT"
     cat = "Kappa"
 
