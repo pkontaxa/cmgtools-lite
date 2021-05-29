@@ -18,7 +18,7 @@ T5qqqqWW_Scan_btagLF-Up: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*5041374/susyNgen*btagS
 
 # b-tag light flavour down
 
-T5qqqqWW_Scan_btagLF-Down SMS_T5qqqqVV_TuneCP2_1 :susyXsec*6209940/susyNgen*btagSF_l_down*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan_btagLF-Down: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*6209940/susyNgen*btagSF_l_down*lepSF*HEM_MC_SF;
 T5qqqqWW_Scan_btagLF-Down: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*10180285/susyNgen*btagSF_l_down*lepSF*HEM_MC_SF;
 T5qqqqWW_Scan_btagLF-Down: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*8079473/susyNgen*btagSF_l_down*lepSF*HEM_MC_SF;
 T5qqqqWW_Scan_btagLF-Down: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*11781067/susyNgen*btagSF_l_down*lepSF*HEM_MC_SF;

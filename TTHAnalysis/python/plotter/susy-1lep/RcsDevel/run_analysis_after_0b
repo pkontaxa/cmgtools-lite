@@ -61,8 +61,12 @@ echo Run calcSyst.py
 echo Run tableSyst.py
 ./tableSyst_0b.py "${inputfolder}"
 
+echo Run signal_tableSyst.py
+./signal_tableSyst_0b.py "${inputfolder}"
+
 echo Run plotSysts
-./plotSyst_0b.py "${inputfolder}"
+echo better run separatly
+#./plotSyst_0b.py "${inputfolder}"
 
 ## Write tables
 #echo Run makeYieldTables.py

@@ -10,7 +10,6 @@ def readSystFile(systFile='sysTable.dat'):
     systDict = {}
     with open(systFile,"r") as xfile:
         lines = xfile.readlines()
-        #from IPython import embed;embed()
         systs = lines[0].replace(' ','').replace('\n','').split('|')
         print systs
         for line in lines[1:]:
@@ -156,8 +155,6 @@ class YieldStore:
                 # Skip unneeded samples
                 if skip: continue
 
-                from IPython import embed;embed()
-
                 if ('Scan' not in sample) and ('scan' not in sample):
                 # get normal sample yield
                     yd = BinYield(sample, category, getLepYield(hist, leptype))
@@ -172,7 +169,6 @@ class YieldStore:
                         # selected key type: mass point string or tuple
                         point = sample + "_mGo%i_mLSP%i" %(mGo,mLSP)
                         #point = (mGo,mLSP)
-                        #from IPython import embed;embed()
                         yd = BinYield(point, category, yds[(mGo,mLSP)])
                         yd.label = binLabel; yd.sbname = sbname; yd.mbname = mbname
                         self.addYield(point,category,binName,yd)
