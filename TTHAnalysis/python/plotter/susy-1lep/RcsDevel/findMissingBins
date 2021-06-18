@@ -1,0 +1,14 @@
+#!/bin/sh
+INPUT=$1
+YEAR=$2
+# List all current search bins
+python searchBins_0b_with_NW.py | sort | uniq > missingBins/searchBins.md
+# Get a list of all missing bins in target output DIREctory
+#for DIR in grid scan;
+#for DIR in syst_btagHF  syst_btagLF signal_ISR ;
+#for DIR in grid grid-dilep scan signal_ISR signal_JEC signal_btagHF signal_btagLF syst_DLConst syst_DLSlope syst_JEC syst_PU syst_TTVxsec syst_TTxsec syst_Wpol syst_Wxsec syst_btagHF syst_btagLF syst_lepSF;
+for DIR in `ls ${INPUT}`
+do
+	ls ${INPUT}/${DIR} | grep ".root" | sed "s@.yields.root@@g" |sort |uniq > missingBins/producedBins_${DIR}_${YEAR}.md
+	grep -v -x -f missingBins/producedBins_${DIR}_${YEAR}.md missingBins/searchBins.md | sed "s@_SR@@g" | sed "s@_CR@@g" | sort | uniq > missingBins/missingBins_${DIR}_${YEAR}.md
+done
