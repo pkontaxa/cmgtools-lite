@@ -115,33 +115,28 @@ if __name__ == "__main__":
     #for cat in cats:
 
     # Totals
-    hData = yp.makeSampHisto(yds,"data_QCDsubtr",cat,"Data"); hData.SetTitle("Data")
+    hEWK = yp.makeSampHisto(yds,"EWK",cat,"EWK"); hEWK.SetTitle("EWK")
+    hEWK.SetMarkerColor(46)
+    hEWK.SetLineColor(46)
 
-    #hWPred = yp.makeSampHisto(ydsMuon,"WJets_pred", "SR_MB", "W+jets (Pred)", useRcs = True); hWPred.SetTitle("WJets (Pred)");
+    canvName = "Prediction"
+
     hWPred = yp.makeSampHisto(yds,"WJets_pred", "SR_MB", "W+jets (Pred)", useRcs = True); hWPred.SetTitle("WJets (Pred)");
-    hWPred.SetTitle("WJets (Pred)")
-    #hWPred.Add(hWposPred)
-
-    #hTTJetsPred = yp.makeSampHisto(ydsMuon,"TTJets_pred", "SR_MB", "TTJets (Pred)", useRcs = True); hTTJetsPred.SetTitle("TTJets (Pred)");
     hTTJetsPred = yp.makeSampHisto(yds,"TTJets_pred", "SR_MB", "TTJets (Pred)", useRcs = True); hTTJetsPred.SetTitle("TTJets (Pred)");
+    if "--do-validation" in sys.argv:
+        hWPred = yp.makeSampHisto(yds,"WJets_validate", "SR_MB", "W+jets (Validation)", useRcs = True); hWPred.SetTitle("WJets (Validation)");
+        hTTJetsPred = yp.makeSampHisto(yds,"TTJets_validate", "SR_MB", "TTJets (Validation)", useRcs = True); hTTJetsPred.SetTitle("TTJets (Validation)");
+        canvName = "Validation"
 
     ##### MC samps
     samps = [(samp,cat) for samp in mcSamps]
     mcHists = yp.makeSampHists(yds,samps)
-    #mcHists = mcHists + [hTTsemiLepPred, hTTdiLepPred, hWPred]
     mcHists = mcHists + [hTTJetsPred, hWPred]
-
-    #signalSamps = [(samp,"SR_MB") for samp in signalSamples]
-    #signalHists = yp.makeSampHists(signalYds,signalSamps)
-    #signalStack = yp.getStack(signalHists)
 
     signalCat = cat.replace("_pos", "").replace("_neg", "")
     signalSamps = [(samp,signalCat) for samp in signalSamples]
     signalHists = yp.makeSampHists(signalYds,signalSamps)
     signalStack = yp.getStack(signalHists)
-
-    # Scale MC hists to Prediction
-    #scaleToHist(mcHists,hDataPred)
 
     mcStack = yp.getStack(mcHists)
     hMCPred = mcHists[0].Clone()
@@ -156,63 +151,20 @@ if __name__ == "__main__":
     yp.setUnc(hUncert)
 
     # Ratio
-    ratio = yp.getRatio(hData,hMCPred)
-
-    doPoisErr = True
-    if doPoisErr:
-        from CMGTools.TTHAnalysis.plotter.mcPlots import getDataPoissonErrors
-        hDataPois = getDataPoissonErrors(hData,True,True)
-        hDataPois.SetName("DataPois")
-        hDataPois.SetTitle("Data")
-
-        hMCPois = getDataPoissonErrors(hData,True,True)
-        hMCPois.SetName("DataPois")
-        hMCPois.SetTitle("Data")
-
-        #ratioPois = yp.getRatio(hMCPois,hMCPred)
-        ratioPois = yp.getRatio(hMCPois,hMCPred)
-
-        hPredUnc = yp.getRatio(hMCPred,hMCPred)
-        col = yp.kGray
-        hPredUnc.SetName("PredictionUncertainty")
-        hPredUnc.SetLineColor(1)
-        hPredUnc.SetFillColor(col)
-        hPredUnc.SetFillStyle(3244)
-        hPredUnc.SetMarkerColor(col)
-        hPredUnc.SetMarkerStyle(0)
-        hPredUnc.GetYaxis().SetTitle(ratio.GetYaxis().GetTitle())
-        hPredUnc.GetYaxis().SetRangeUser(0,3.9)
-
-        # set error
-        for i in xrange(1,hPredUnc.GetNbinsX()+1):
-            try:
-                hPredUnc.SetBinError(i,hMCPred.GetBinError(i)/hMCPred.GetBinContent(i))
-            except ZeroDivisionError:
-                hPredUnc.SetBinError(i, 0.)
-
+    ratio = yp.getRatio(hEWK,hMCPred)
+    ratio.SetMarkerColor(46)
+    ratio.SetLineColor(46)
     width = 2000 #Previous 1200 Pantelis
     height = 600
     legPos = "Long"
 
-    doPoisErr = True
-    if doPoisErr:
-        if "SR" in cat:
-            histsToPlot = [mcStack] + signalHists + [hUncert]
-            ratio = None
-        else:
-            histsToPlot = [mcStack]  + signalHists + [hUncert,hDataPois]
-            ratio = [hPredUnc,ratioPois]
-        canv = yp.plotHists(cat + "_Prediction_",histsToPlot,ratio,legPos, width, height, logY = True, nCols = len(mcSamps) + 4)
-    else:
-        if "SR" in cat:
-            histsToPlot = [mcStack] + signalHists
-            ratio = None
-        else:
-            histsToPlot = [mcStack] + signalHists + [hData]
-            ratio = [ratio]
-        canv = yp.plotHists(cat + "_Prediction_",histsToPlot,ratio,legPos, width, height, logY = True, nCols = len(mcSamps) + 2)
+    histsToPlot = [mcStack] + signalHists + [hEWK]
+    ratio = [ratio]
+    print histsToPlot
+    canv = yp.plotHists(cat + canvName,histsToPlot,ratio,legPos, width, height, logY = True, nCols = len(mcSamps) + 4)
+    #canv = yp.plotHists(cat + "_Validation",histsToPlot,ratio,legPos, width, height, logY = True, nCols = len(mcSamps) + 2)
 
-    cname = "MC_" + cat + "_" +lum.replace('.','p')+"_"+mask
+    cname = canvName + "_" + cat + "_" +lum.replace('.','p')+"_"+mask
 
     if doPoisErr: cname += "poisErr_"
 

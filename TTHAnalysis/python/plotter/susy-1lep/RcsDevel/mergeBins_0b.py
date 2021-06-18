@@ -34,35 +34,35 @@ def findMatchBins(binName):
     binNameSR_SB_NB1i = binNameSR_SB_NB0.replace("NB0", "NB1i")
     binNameCR_SB_NB1i = binNameCR_SB_NB0.replace("NB0", "NB1i")
 
-    #Empty SB bins with NB0
-    if "LT3" in binNameSR_SB and "HT3i" in binNameSR_SB:
-        binNameSR_SB = binNameSR_SB.replace("NW1i", "NW0i")
-        binNameCR_SB = binNameCR_SB.replace("NW1i", "NW0i")
+    ##Empty SB bins with NB0
+    #if "LT3" in binNameSR_SB and "HT3i" in binNameSR_SB:
+    #    binNameSR_SB = binNameSR_SB.replace("NW1i", "NW0i")
+    #    binNameCR_SB = binNameCR_SB.replace("NW1i", "NW0i")
 
-        binNameSR_SB_NB0 = binNameSR_SB_NB0.replace("NW1i", "NW0i")
-        binNameCR_SB_NB0 = binNameCR_SB_NB0.replace("NW1i", "NW0i")
+    #    binNameSR_SB_NB0 = binNameSR_SB_NB0.replace("NW1i", "NW0i")
+    #    binNameCR_SB_NB0 = binNameCR_SB_NB0.replace("NW1i", "NW0i")
 
-        binNameSR_SB_NB1i = binNameSR_SB_NB1i.replace("NW1i", "NW0i")
-        binNameCR_SB_NB1i = binNameCR_SB_NB1i.replace("NW1i", "NW0i")
-    elif "LT4i" in binNameSR_SB and "HT3i" in binNameSR_SB:
-        binNameSR_SB = binNameSR_SB.replace("NW1i", "NW0i")
-        binNameCR_SB = binNameCR_SB.replace("NW1i", "NW0i")
+    #    binNameSR_SB_NB1i = binNameSR_SB_NB1i.replace("NW1i", "NW0i")
+    #    binNameCR_SB_NB1i = binNameCR_SB_NB1i.replace("NW1i", "NW0i")
+    #elif "LT4i" in binNameSR_SB and "HT3i" in binNameSR_SB:
+    #    binNameSR_SB = binNameSR_SB.replace("NW1i", "NW0i")
+    #    binNameCR_SB = binNameCR_SB.replace("NW1i", "NW0i")
 
-    #Empty SB bins with NB1i
-    if "LT4i" in binNameSR_SB_NB1i and ("HT03" in binNameSR_SB_NB1i or "HT3i" in binNameSR_SB_NB1i):
-        binNameSR_SB_NB1i = binNameSR_SB_NB1i.replace("NW1i", "NW0i")
-        binNameCR_SB_NB1i = binNameCR_SB_NB1i.replace("NW1i", "NW0i")
+    ##Empty SB bins with NB1i
+    #if "LT4i" in binNameSR_SB_NB1i and ("HT03" in binNameSR_SB_NB1i or "HT3i" in binNameSR_SB_NB1i):
+    #    binNameSR_SB_NB1i = binNameSR_SB_NB1i.replace("NW1i", "NW0i")
+    #    binNameCR_SB_NB1i = binNameCR_SB_NB1i.replace("NW1i", "NW0i")
 
     if options.verbose > 1:
         print 'Found these bins matching to', binName
-        print 'SR of MB:', binNameSR_MB
-        print 'CR of MB:', binNameCR_MB
-        print 'SR of SB:', binNameSR_SB
-        print 'CR of SB:', binNameCR_SB
-        print 'SR of SB:', binNameSR_SB_NB0
-        print 'CR of SB:', binNameCR_SB_NB0
-        print 'SR of SB:', binNameSR_SB_NB1i
-        print 'CR of SB:', binNameCR_SB_NB1i
+        print 'SR of MB:     ', binNameSR_MB
+        print 'CR of MB:     ', binNameCR_MB
+        print 'SR of SB:     ', binNameSR_SB
+        print 'CR of SB:     ', binNameCR_SB
+        print 'SR of SB_NB0: ', binNameSR_SB_NB0
+        print 'CR of SB_NB0: ', binNameCR_SB_NB0
+        print 'SR of SB_NB1i:', binNameSR_SB_NB1i
+        print 'CR of SB_NB1i:', binNameCR_SB_NB1i
 
     return (binNameSR_MB, binNameCR_MB, binNameSR_SB, binNameCR_SB, binNameSR_SB_NB0, binNameCR_SB_NB0, binNameSR_SB_NB1i, binNameCR_SB_NB1i)
 
@@ -76,7 +76,7 @@ def writeBins(mergeFileName, srcDir, binNames):
     if len(binNames) != 8: print 'Not 8 source names given!'; return 0
 
     if options.verbose > 1:
-        print mergeFile, srcDir, binNames
+        print mergeFileName, srcDir, binNames
         #return 0
 
     mergeFile = TFile(mergeFileName, "RECREATE")
@@ -145,14 +145,14 @@ if __name__ == "__main__":
     if os.path.isdir(pattern): pattern += "/"
 
     # find files matching pattern
-    fileList = glob.glob(pattern+"*.root")
-    fileListMB = [fname for fname in fileList if "NJ34" not in fname and "NJ45" not in fname and "SR" in fname]
-    fileListNJ34 = [fname for fname in fileList if "NJ34" in fname and "SR" in fname]
-    fileListNJ45NB0 = [fname for fname in fileList if "NJ45" in fname and "NB0" in fname and "SR" in fname]
-    fileListNJ45NB1i = [fname for fname in fileList if "NJ45" in fname and "NB1i" in fname and "SR" in fname]
+    fileList         = glob.glob(pattern+"*.root")
+    fileListMB       = [fname for fname in fileList if "NJ34" not in fname and "NJ45" not in fname and "SR" in fname]
+    fileListNJ34     = [fname for fname in fileList if "NJ34"     in fname                         and "SR" in fname]
+    fileListNJ45NB0  = [fname for fname in fileList if "NJ45"     in fname and "NB0"  in fname     and "SR" in fname]
+    fileListNJ45NB1i = [fname for fname in fileList if "NJ45"     in fname and "NB1i" in fname     and "SR" in fname]
 
     mergeBins(fileListMB, "merged")
-    #This will seperate MB and SB but the dirs in SB are probably all identical
+    # The SB and MB directories in these merged bins are identical and just have the same directory structure for easier code.. This should only be used for plotting
     mergeBins(fileListNJ34, "mergedNJ34")
     mergeBins(fileListNJ45NB0, "mergedNJ45NB0")
     mergeBins(fileListNJ45NB1i, "mergedNJ45NB1i")

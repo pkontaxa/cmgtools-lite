@@ -616,7 +616,7 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
 
     bindirs =  ['SR_MB','CR_MB','SR_SB','CR_SB']
 
-    ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin")
+    ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin").drop_duplicates(keep='first')
 
     for fname in fileList:
         tfile = TFile(fname,"UPDATE")
@@ -670,7 +670,8 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
                 hKappa = hRcsMB.Clone()
                 hKappa.Divide(hRcsSB)
 
-                if hKappa.GetBinContent(1, 2) < 1e-5:
+                # When merging the whole run2, this is not used
+                if hKappa.GetBinContent(1, 2) < 1e-5 and False:
                     fname2017 = fname.replace("2018", "2017")
                     tfile2017 = TFile(fname2017, "UPDATE")
 
@@ -749,7 +750,7 @@ def makePredictTTHists(fileList, samples = [], ttbarFractionCsv = "templateFits_
     for fname in fileList:
         tfile = TFile(fname,"UPDATE")
 
-        ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin")
+        ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin").drop_duplicates(keep='first')
 
         #tfile.cd("SR_MB_predict")
         for sample in samples:
@@ -804,7 +805,8 @@ def makePredictWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0
     for fname in fileList:
         tfile = TFile(fname,"UPDATE")
 
-        ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin")
+        ttbarFractionDf = read_csv(ttbarFractionCsv, index_col = "bin").drop_duplicates(keep='first')
+
 
         # create Rcs/Kappa dir struct
         #tfile.mkdir("SR_MB_predict")
@@ -828,15 +830,15 @@ def makePredictWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0
             hRcsMB_data.Write("",TObject.kOverwrite)
 
 
-            wjetsFraction = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction"]
-            wjetsFractionErr = ttbarFractionDf.loc[binNameSB, "WJetsIncl_fraction_err"]
+            wjetsFraction = ttbarFractionDf.loc[binNameMB, "WJetsIncl_fraction"]
+            wjetsFractionErr = ttbarFractionDf.loc[binNameMB, "WJetsIncl_fraction_err"]
             hWJetsFraction = tfile.Get("CR_SB/WJets").Clone()
             hWJetsFraction.SetBinContent(1,2,wjetsFraction); hWJetsFraction.SetBinError(1,2,wjetsFractionErr) # mu sele
             hWJetsFraction.SetBinContent(2,2,wjetsFraction); hWJetsFraction.SetBinError(2,2,wjetsFractionErr) # lep sele
             hWJetsFraction.SetBinContent(3,2,wjetsFraction); hWJetsFraction.SetBinError(3,2,wjetsFractionErr) # ele sele
 
             tfile.cd("SR_MB")
-            hWJetsPred = tfile.Get("CR_MB/data")
+            hWJetsPred = tfile.Get("CR_MB/data").Clone()
             hWJetsPred.Multiply(hRcsSB_data)
             hWJetsPred.Multiply(hKappa)
             hWJetsPred.Multiply(hWJetsFraction)
@@ -965,7 +967,9 @@ if __name__ == "__main__":
     #replaceEmptyDataBinsWithMC(fileList)
     blindDataBins(fileList)
 
-    if "2016" in pattern:
+    if "run2" in pattern:
+        year = "run2"
+    elif "2016" in pattern:
         year = "2016_EXT"
     elif "2017" in pattern:
         year = "2017"

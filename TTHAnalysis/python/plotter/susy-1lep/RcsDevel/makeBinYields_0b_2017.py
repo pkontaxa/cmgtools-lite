@@ -1,34 +1,27 @@
 #!/usr/bin/env python
-#from TTHAnalysis.python.plotter.mcAnalysis_after_ext_scale import *
-# import importlib
-#
-# moduleName = "/nfs/dust/cms/user/frengelk/Code/cmssw/CMSSW_10_4_0/cmgtools-lite/TTHAnalysis/python/plotter/mcAnalysis_after_ext_scale"
-# importlib.import_module(moduleName)
-
+from CMGTools.TTHAnalysis.plotter.mcAnalysis_after_ext_scale import *
 import sys, os, os.path
 
-#sys.path.insert(0, "/nfs/dust/cms/user/frengelk/Code/cmssw/CMSSW_10_4_0/cmgtools-lite/TTHAnalysis/python/plotter/mcAnalysis_after_ext_scale")
-from mcAnalysis_after_ext_scale import *
 
 from math import hypot
 import time
 
 ## Trees -- skimmed with trig_base
 
-Tdir = ["SampLinks2016_V3/"] #important needs this format
+Tdir = ["SampLinks2017_V2/"] #important needs this format
 # MC
-mcFTdir = "SampLinks2016_V3/Friends/"
-sigFTdir = "SampLinks2016_V3/Friends/"
+mcFTdir = "SampLinks2017_V2/Friends/"
+sigFTdir = "SampLinks2017_V2/Friends/"
 
 # new data
-dataFTdir = "SampLinks2016_V3/Friends/"
+dataFTdir = "SampLinks2017_V2/Friends/"
 
 def findMissingBins(binList, outDir, doOnlyMissingBins = False):
     doOnlyMissingBins = True
     outDir = outDir.replace("//", "/")
     targetDir = outDir.split("/")[1]
     year = ""
-    filename = "missingBins/missingBins_" + outDir.split("/")[1] + "_2016.md"
+    filename = "missingBins/missingBins_" + outDir.split("/")[1] + "_2017.md"
     if not os.path.exists(filename):
         return binList
     if doOnlyMissingBins:
@@ -52,7 +45,7 @@ def addOptions(options):
     options.friendTreesData = [("sf/t",dataFTdir+"/evVarFriend_{cname}.root")]
     options.tree = "treeProducerSusySingleLepton"
 
-    #print "????",options.path
+    print "????",options.path
     # extra options
     options.doS2V = True
     options.weight = True
