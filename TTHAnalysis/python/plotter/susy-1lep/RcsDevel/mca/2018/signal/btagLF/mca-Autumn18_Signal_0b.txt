@@ -1,0 +1,26 @@
+# Nominal
+
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*6209940/susyNgen*btagSF*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*10180285/susyNgen*btagSF*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*8079473/susyNgen*btagSF*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*11781067/susyNgen*btagSF*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*13329865/susyNgen*btagSF*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*5041374/susyNgen*btagSF*lepSF*HEM_MC_SF;
+
+# b-tag light flavour up
+
+T5qqqqWW_Scan_btagLF-Up: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*6209940/susyNgen*btagSF_l_up*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan_btagLF-Up: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*10180285/susyNgen*btagSF_l_up*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan_btagLF-Up: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*8079473/susyNgen*btagSF_l_up*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan_btagLF-Up: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*11781067/susyNgen*btagSF_l_up*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan_btagLF-Up: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*13329865/susyNgen*btagSF_l_up*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan_btagLF-Up: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*5041374/susyNgen*btagSF_l_up*lepSF*HEM_MC_SF;
+
+# b-tag light flavour down
+
+T5qqqqWW_Scan_btagLF-Down: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*6209940/susyNgen*btagSF_l_down*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan_btagLF-Down: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*10180285/susyNgen*btagSF_l_down*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan_btagLF-Down: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*8079473/susyNgen*btagSF_l_down*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan_btagLF-Down: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*11781067/susyNgen*btagSF_l_down*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan_btagLF-Down: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*13329865/susyNgen*btagSF_l_down*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan_btagLF-Down: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*5041374/susyNgen*btagSF_l_down*lepSF*HEM_MC_SF;

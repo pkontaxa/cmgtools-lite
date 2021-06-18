@@ -120,6 +120,7 @@ if __name__ == "__main__":
     #mcSamps = ['VV','DY','TTV','SingleT','WJets','TTJets']
     mcSamps = ['VV','DY','TTV','SingleT','TTJets','WJets']
     #mcSamps = ['VV','DY','TTV','SingleT','WJets','TTsemiLep', 'TTdiLep']
+    #signalSamples = ['T5qqqqWW_Scan_mGo1500_mLSP1000', 'T5qqqqWW_Scan_mGo1900_mLSP100', 'T5qqqqWW_Scan_mGo1500_mLSP0']
     signalSamples = ['T5qqqqWW_Scan_mGo1500_mLSP1000', 'T5qqqqWW_Scan_mGo1900_mLSP100']
 
     canvs = []
@@ -158,7 +159,6 @@ if __name__ == "__main__":
         hPredUnc.SetMarkerColor(col)
         hPredUnc.SetMarkerStyle(0)
         hPredUnc.GetYaxis().SetTitle(ratio.GetYaxis().GetTitle())
-        hPredUnc.GetYaxis().SetRangeUser(0,3.9)
 
         # set error
         for i in xrange(1,hPredUnc.GetNbinsX()+1):
@@ -174,7 +174,8 @@ if __name__ == "__main__":
     signalCat = cat.replace("_pos", "").replace("_neg", "")
     signalSamps = [(samp,signalCat) for samp in signalSamples]
     signalHists = yp.makeSampHists(signalYds,signalSamps)
-    signalStack = yp.getStack(signalHists)
+    print signalHists
+    #signalStack = yp.getStack(signalHists)
     #signalLabel = ["T5qqqqWW (1.5, 1.0)", "T5qqqqWW (1.5, 1.0)"]
     #for hist, sample in zip(signalHists, signalSamples):
         #print "TEST"

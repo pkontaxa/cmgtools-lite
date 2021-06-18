@@ -63,8 +63,8 @@ if __name__ == "__main__":
     yds.addFromFiles(pattern,("lep","sele"))
     #yds.showStats()
 
-    ydsMuon = yp.YieldStore("MuonYields")
-    ydsMuon.addFromFiles(pattern,("mu","sele"))
+    #ydsMuon = yp.YieldStore("MuonYields")
+    #ydsMuon.addFromFiles(pattern,("mu","sele"))
     #ydsMuon.showStats()
 
     #signalYds = yp.YieldStore("Signal")
@@ -117,11 +117,13 @@ if __name__ == "__main__":
     # Totals
     hData = yp.makeSampHisto(yds,"data_QCDsubtr",cat,"Data"); hData.SetTitle("Data")
 
+    #hWPred = yp.makeSampHisto(ydsMuon,"WJets_pred", "SR_MB", "W+jets (Pred)", useRcs = True); hWPred.SetTitle("WJets (Pred)");
     hWPred = yp.makeSampHisto(yds,"WJets_pred", "SR_MB", "W+jets (Pred)", useRcs = True); hWPred.SetTitle("WJets (Pred)");
     hWPred.SetTitle("WJets (Pred)")
     #hWPred.Add(hWposPred)
 
-    hTTJetsPred = yp.makeSampHisto(ydsMuon,"TTJets_pred", "SR_MB", "TTJets (Pred)", useRcs = True); hTTJetsPred.SetTitle("TTJets (Pred)");
+    #hTTJetsPred = yp.makeSampHisto(ydsMuon,"TTJets_pred", "SR_MB", "TTJets (Pred)", useRcs = True); hTTJetsPred.SetTitle("TTJets (Pred)");
+    hTTJetsPred = yp.makeSampHisto(yds,"TTJets_pred", "SR_MB", "TTJets (Pred)", useRcs = True); hTTJetsPred.SetTitle("TTJets (Pred)");
 
     ##### MC samps
     samps = [(samp,cat) for samp in mcSamps]

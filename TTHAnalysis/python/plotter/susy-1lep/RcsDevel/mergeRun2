@@ -1,0 +1,26 @@
+#!/bin/sh
+YIELD16="${1%/}"
+YIELD17="${2%/}"
+YIELD18="${3%/}"
+
+TARGET="${4%/}"
+mkdir $TARGET || { echo "Target direcotry already exists! Make sure to use an empty direcotry as target!"; exit 1; }
+
+#for DIR in grid grid-dilep scan;
+for DIR in grid scan;
+do
+	mkdir ${TARGET}/${DIR}
+	for BIN in `ls ${YIELD16}/${DIR} | grep root`
+	do
+		hadd ${TARGET}/${DIR}/${BIN} ${YIELD16}/${DIR}/${BIN} ${YIELD17}/${DIR}/${BIN} ${YIELD18}/${DIR}/${BIN}
+
+	done
+done
+
+#merge systematics
+#for DIR in signal_ISR signal_JEC signal_btagHF signal_btagLF syst_JEC syst_PDFUnc-RMS syst_PU syst_ScaleMatchVar syst_TTVxsec syst_TTxsec syst_Wpol syst_Wxsec syst_btagHF syst_btagLF syst_lepSF syst_nISR
+#for DIR in signal_JEC syst_JEC #signal_btagHF syst_btagHF #syst_btagLF signal_btagLF
+#for DIR in syst_JEC syst_PU syst_TTVxsec syst_TTxsec syst_Wpol syst_Wxsec syst_btagHF syst_lepSF #syst_btagLF
+do
+	./prepareSystematics_0b.py ${YIELD16}/${DIR}/LT ${TARGET}
+done

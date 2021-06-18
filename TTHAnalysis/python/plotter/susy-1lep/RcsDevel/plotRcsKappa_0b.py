@@ -80,6 +80,13 @@ if __name__ == "__main__":
     hRcsMB_W= yp.makeSampHisto(ydsMuon,"WJets", "Rcs_MB_W", "RCS_MB_W_MC", useRcs = True);
     hKappaW= yp.makeSampHisto(ydsMuon,"WJets", "KappaW", "kappaW", useRcs = True);
 
+    ymin = 0
+    ymax = 3
+    for hRatio in [hKappaB, hKappaTT, hKappaW]:
+        hRatio.GetYaxis().SetRangeUser(ymin,ymax)
+        hRatio.SetMinimum(ymin)
+        hRatio.SetMaximum(ymax)
+
     alpha = 0.7
     hRcsSB_dataTT.SetFillColorAlpha(yp.kBlue-4, alpha)
     hRcsSB_NB1i_TT.SetFillColorAlpha(yp.kMagenta-3, alpha)
@@ -103,19 +110,19 @@ if __name__ == "__main__":
     hKappaTT.SetMarkerColor(yp.kBlue-2)
 
     hRcsSB_dataW.SetFillColorAlpha(yp.kGreen+2, alpha)
-    hRcsSB_dataW.SetLineColor(yp.kGreen+2)
+    hRcsSB_dataW.SetMarkerColor(yp.kGreen+2)
     hRcsSB_dataW.SetLineColor(yp.kGreen+2)
 
     hRcsMB_W.SetFillColorAlpha(yp.kGreen+2, alpha)
-    hRcsMB_W.SetLineColor(yp.kGreen+2)
+    hRcsMB_W.SetMarkerColor(yp.kGreen+2)
     hRcsMB_W.SetLineColor(yp.kGreen+2)
 
     hRcsSB_W.SetFillColorAlpha(yp.kMagenta+2, alpha)
-    hRcsSB_W.SetLineColor(yp.kMagenta+2)
+    hRcsSB_W.SetMarkerColor(yp.kMagenta+2)
     hRcsSB_W.SetLineColor(yp.kMagenta+2)
 
     hKappaW.SetFillColorAlpha(yp.kGreen+2, alpha)
-    hKappaW.SetLineColor(yp.kGreen+2)
+    hKappaW.SetMarkerColor(yp.kGreen+2)
     hKappaW.SetLineColor(yp.kGreen+2)
 
     width = 4000

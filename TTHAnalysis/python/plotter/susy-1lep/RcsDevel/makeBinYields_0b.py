@@ -1,22 +1,42 @@
 #!/usr/bin/env python
-from CMGTools.TTHAnalysis.plotter.mcAnalysis_after_ext_scale import *
+#from TTHAnalysis.python.plotter.mcAnalysis_after_ext_scale import *
+# import importlib
+#
+# moduleName = "/nfs/dust/cms/user/frengelk/Code/cmssw/CMSSW_10_4_0/cmgtools-lite/TTHAnalysis/python/plotter/mcAnalysis_after_ext_scale"
+# importlib.import_module(moduleName)
+
 import sys, os, os.path
 
+#sys.path.insert(0, "/nfs/dust/cms/user/frengelk/Code/cmssw/CMSSW_10_4_0/cmgtools-lite/TTHAnalysis/python/plotter/mcAnalysis_after_ext_scale")
+from mcAnalysis_after_ext_scale import *
 
 from math import hypot
 import time
 
 ## Trees -- skimmed with trig_base
 
-Tdir = ["SampLinks2016_V2/"] #important needs this format
+Tdir = ["SampLinks2016_V3/"] #important needs this format
 # MC
-mcFTdir = "SampLinks2016_V2/Friends/"
-sigFTdir = "SampLinks2016_V2/Friends/"
+mcFTdir = "SampLinks2016_V3/Friends/"
+sigFTdir = "SampLinks2016_V3/Friends/"
 
 # new data
-dataFTdir = "SampLinks2016_V2/Friends/"
+dataFTdir = "SampLinks2016_V3/Friends/"
 
-
+def findMissingBins(binList, outDir, doOnlyMissingBins = False):
+    doOnlyMissingBins = True
+    outDir = outDir.replace("//", "/")
+    targetDir = outDir.split("/")[1]
+    year = ""
+    filename = "missingBins/missingBins_" + outDir.split("/")[1] + "_2016.md"
+    if not os.path.exists(filename):
+        return binList
+    if doOnlyMissingBins:
+        with open(filename) as missingBinsFile:
+            binList = missingBinsFile.read().splitlines()
+    binListSR = [bin + "_SR" for bin in binList]
+    binListCR = [bin + "_CR" for bin in binList]
+    return binListSR + binListCR
 
 def addOptions(options):
 
@@ -561,8 +581,9 @@ if __name__ == "__main__":
         if doDLCR: cDict.update(cutDictDLCRf9)
 
     binList = sorted(cDict.keys())
+    binList = findMissingBins(binList, options.outdir)
 
-#    doBtagMeth1b = True
+    #doBtagMeth1b = True
 
     if options.batch or options.lxbatch:
         print "Going to prepare batch jobs..."
