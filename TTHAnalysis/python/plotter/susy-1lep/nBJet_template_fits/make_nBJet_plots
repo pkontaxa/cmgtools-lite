@@ -21,8 +21,14 @@ lumi=${luminosity}
 
 base_path=$CMSSW_BASE/src/CMGTools/TTHAnalysis/python/plotter/susy-1lep/nBJet_template_fits
 mca=$base_path/mca/${year}/${mca_file}
-cuts=$base_path/cuts/1l_basicCuts_0b_templateFit_${cut_selection}.txt
 plots=$base_path/nBJet_distributions/nBJet_plots_0b_templateFit.txt 
+
+if [ "$year" == "2018" ]
+then
+    cuts=$base_path/cuts/1l_basicCuts_0b_templateFit_${cut_selection}_2018.txt
+else
+    cuts=$base_path/cuts/1l_basicCuts_0b_templateFit_${cut_selection}.txt
+fi
 
 print_dir=$base_path/nBJet_distributions/${year}/${systematic}/${cut_selection}
 out_file=$print_dir/nBJets_${year}_${systematic}_${cut_selection}.root
@@ -55,4 +61,5 @@ python $base_path/../../mcPlots_after_ext_scale.py \
     --scaleBkgToData WJets \
     --scaleBkgToData QCD \
     --scaleBkgToData Other
+
 
