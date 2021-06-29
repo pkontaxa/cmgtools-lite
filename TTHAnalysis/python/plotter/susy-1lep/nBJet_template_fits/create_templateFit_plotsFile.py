@@ -1,3 +1,5 @@
+from searchBins_0b_with_NW import *
+
 file_path = 'nBJet_distributions/nBJet_plots_0b_templateFit.txt'
 
 cond_LT = {}
@@ -67,131 +69,27 @@ def get_output_string(lt_bin, ht_bin, nj_bin, nw_bin):
 
     return (output_string + '\n')
 
+with open(file_path, 'w') as f:
+    for bin in (sorted(cutDictf34.keys())):
+        lt_bin, ht_bin, nb_bin, nj_bin, nw_bin = bin.split('_')
+        f.write(get_output_string(lt_bin, ht_bin, nj_bin, nw_bin))
 
-bins_34 = []
-bins_45 = []
-bins_5 = []
-bins_67 = []
-bins_8i = []
+    # Special treatment for nJet45 because of potential differences in NB0 and NB1i bins
+    bins_45 = []
+    for bin in (sorted(cutDictf45.keys())):
+        lt_bin, ht_bin, nb_bin, nj_bin, nw_bin = bin.split('_')
+        if lt_bin+'_'+ht_bin+'_'+nj_bin+'_'+nw_bin not in bins_45:
+            bins_45.append(lt_bin+'_'+ht_bin+'_'+nj_bin+'_'+nw_bin)
+            f.write(get_output_string(lt_bin, ht_bin, nj_bin, nw_bin))
 
-counter_nJet34 = 0
-counter_nJet45 = 0
-counter_nJet5 = 0
-counter_nJet67 = 0
-counter_nJet8i = 0
+    for bin in (sorted(cutDictf5.keys())):
+        lt_bin, ht_bin, nb_bin, nj_bin, nw_bin = bin.split('_')
+        f.write(get_output_string(lt_bin, ht_bin, nj_bin, nw_bin))
 
-with open(file_path, "w") as f:
-    for nj_bin in ['NJ34']:
-        for lt_bin in ['LT1','LT2','LT3','LT4i']:
-            htbins = []
-            if lt_bin in ['LT1', 'LT2']:
-                htbins+= ['HT0', 'HT1i', 'HT02', 'HT2i']
-            elif lt_bin in ['LT3']:
-                htbins+= ['HT0', 'HT1', 'HT03', 'HT3i']
-            elif lt_bin in ['LT4i']:
-                htbins+= ['HT03', 'HT3i']
-            for ht_bin in htbins:
-                if lt_bin == 'LT2' and ht_bin == 'HT2i':
-                    nwbins = ['NW0', 'NW0i']
-                elif lt_bin == 'LT3' and ht_bin == 'HT3i':
-                    nwbins = ['NW0', 'NW0i']
-                elif lt_bin == 'LT4i' and (ht_bin == 'HT03' or ht_bin == 'HT3i'):
-                    nwbins = ['NW0', 'NW0i']
-                else:
-                    nwbins = ['NW0', 'NW1i']
-                for nw_bin in nwbins:
-                    f.write(get_output_string(lt_bin, ht_bin, nj_bin, nw_bin))
-                    bins_34.append(lt_bin+'_'+ht_bin+'_NB0_'+nj_bin+'_forWJets_'+nw_bin+'_neg_CR')
-                    counter_nJet34 += 1
-    
-    f.write('\n')
+    for bin in (sorted(cutDictf67.keys())):
+        lt_bin, ht_bin, nb_bin, nj_bin, nw_bin = bin.split('_')
+        f.write(get_output_string(lt_bin, ht_bin, nj_bin, nw_bin))
 
-    for nj_bin in ['NJ45']:
-        for lt_bin in ['LT1','LT2','LT3','LT4i']:
-            lt_bin_temp = lt_bin
-            htbins = []
-            if lt_bin in ['LT1', 'LT2']:
-                htbins+= ['HT0', 'HT1i', 'HT02', 'HT2i']
-            elif lt_bin in ['LT3']:
-                htbins+= ['HT0', 'HT1', 'HT03', 'HT3i']
-            elif lt_bin in ['LT4i']:
-                htbins+= ['HT03', 'HT3i']
-            for ht_bin in htbins:
-                nwbins = ['NW0', 'NW0i', 'NW1i']
-                for nw_bin in nwbins:
-                    f.write(get_output_string(lt_bin, ht_bin, nj_bin, nw_bin))
-                    bins_45.append(lt_bin+'_'+ht_bin+'_NB0_'+nj_bin+'_forTTJets_'+nw_bin+'_CR')
-                    lt_bin = lt_bin_temp
-                    counter_nJet45 += 1
-    
-    f.write('\n')
-
-    for nj_bin in ['NJ5']:
-        for nw_bin in ['NW0','NW1i']:
-            for lt_bin in ['LT1','LT2','LT3','LT4i']:
-                htbins = []
-                if lt_bin in ['LT1', 'LT2']:
-                    htbins+= ['HT0', 'HT1i']
-                elif lt_bin in ['LT3']:
-                    htbins+= ['HT0', 'HT1', 'HT3i']
-                elif lt_bin in ['LT4i']:
-                    htbins+= ['HT03', 'HT3i']
-                for ht_bin in htbins:
-                    f.write(get_output_string(lt_bin, ht_bin, nj_bin, nw_bin))
-                    bins_5.append(lt_bin+'_'+ht_bin+'_NB0_'+nj_bin+'_forTTJets_'+nw_bin+'_CR')
-                    counter_nJet5 += 1
-
-    f.write('\n')
-    
-    for nj_bin in ['NJ67']:
-        for nw_bin in ['NW0','NW1i']:
-            for lt_bin in ['LT1','LT2','LT3','LT4i']:
-                htbins = []
-                if lt_bin in ['LT1', 'LT2']:
-                    htbins += ['HT02','HT2i']
-                elif lt_bin in ['LT3']:
-                    htbins += ['HT0', 'HT1','HT3i']
-                elif lt_bin in ['LT4i']:
-                    htbins += ['HT03', 'HT3i']
-                for ht_bin in htbins:
-                    f.write(get_output_string(lt_bin, ht_bin, nj_bin, nw_bin))
-                    bins_67.append(lt_bin+'_'+ht_bin+'_NB0_'+nj_bin+'_forTTJets_'+nw_bin+'_CR')
-                    counter_nJet67 += 1
-    
-    f.write('\n')
-
-    for nj_bin in ['NJ8i']:
-        for lt_bin in ['LT1','LT2','LT3','LT4i']:
-            htbins = []
-            if lt_bin in ['LT1', 'LT2']:
-                htbins+= ['HT02','HT2i']
-            elif lt_bin in ['LT3', 'LT4i']:
-                htbins+= ['HT03','HT3i']
-            for ht_bin in htbins:
-                nwbins = []
-                if lt_bin in ['LT4i'] and (ht_bin == 'HT03' or ht_bin == 'HT3i'):
-                    nwbins = ['NW0i']
-                else:
-                    nwbins = ['NW0','NW1i']
-                for nw_bin in nwbins:
-                    f.write(get_output_string(lt_bin, ht_bin, nj_bin, nw_bin))
-                    bins_8i.append(lt_bin+'_'+ht_bin+'_NB0_'+nj_bin+'_forTTJets_'+nw_bin+'_CR')
-                    counter_nJet8i += 1
-    
-#for bin in sorted(bins_34):
-#    print bin
-#for bin in sorted(bins_45):
-#    print bin
-#for bin in sorted(bins_5):
-#    print bin
-#for bin in sorted(bins_67):
-#    print bin
-#for bin in sorted(bins_8i):
-#    print bin
-
-#print 'nJet_34: ', counter_nJet34
-#print 'nJet_45: ', counter_nJet45
-#print 'nJet_5: ', counter_nJet5
-#print 'nJet_67: ', counter_nJet67
-#print 'nJet_8i: ', counter_nJet8i 
-#print 'Total: ', counter_nJet34 + counter_nJet45 + counter_nJet5 + counter_nJet67 + counter_nJet8i
+    for bin in (sorted(cutDictf8.keys())):
+        lt_bin, ht_bin, nb_bin, nj_bin, nw_bin = bin.split('_')
+        f.write(get_output_string(lt_bin, ht_bin, nj_bin, nw_bin))
