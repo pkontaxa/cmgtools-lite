@@ -4,8 +4,8 @@ import sys,os
 import glob
 
 #from makeYieldPlots import *
-#from makeYieldTables_0b import *
-from yieldClass_0b import *
+from makeYieldTables_0b import *
+#from yieldClass import *
 
 if __name__ == "__main__":
 
@@ -32,7 +32,6 @@ if __name__ == "__main__":
         year = "2018"
 
     dirName = "signal_syst_tables_{}".format(year)
-    file_name = 'signalTablev1_{}_'.format(year)
     if not os.path.exists(dirName):
         os.mkdir(dirName)
         print("Directory " , dirName ,  " Created ")
@@ -56,11 +55,6 @@ if __name__ == "__main__":
 
     systs = glob.glob('{}/signal_*'.format(pattern))
     systs = [syst[syst.find('signal_')+7:] for syst in systs]
-
-    # systs= [
-     # 'btagHF',
-     # 'btagLF',
-     # 'JEC']
     systsprint = systs
 
     #FIXME

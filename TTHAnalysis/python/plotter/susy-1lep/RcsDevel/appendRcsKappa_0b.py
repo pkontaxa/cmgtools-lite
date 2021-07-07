@@ -30,11 +30,6 @@ def getRcsHist(tfile, hname, band = "SB", merge = True):
     hSR = tfile.Get("SR_" + band + "/" + hname).Clone()
     hCR = tfile.Get("CR_" + band + "/" + hname).Clone()
 
-    sr = hSR.GetBinContent(2, 2)
-    cr = hCR.GetBinContent(2, 2)
-
-    #print "sr = %.4f, cr = %.4f" % (sr, cr)
-
     #Add Rare Files for WJets calculation in the SB
     if "WJets" in hname and band == "SB":
         for rareSample in ["DY", "SingleT", "TTV", "VV"]:
@@ -46,13 +41,6 @@ def getRcsHist(tfile, hname, band = "SB", merge = True):
     hRcs = hSR.Clone(hSR.GetName().replace('x_','Rcs_'))
     hRcs.Divide(hCR)
     hRcs.GetYaxis().SetTitle("Rcs")
-
-    sr = hSR.GetBinContent(2, 2)
-    cr = hCR.GetBinContent(2, 2)
-    rcs = hRcs.GetBinContent(2, 2)
-    rcsErr = hRcs.GetBinError(2, 2)
-    #print "rcs%s(%s) = sr / cr" % (band, hname)
-    #print "rcs%s(%s) = %.4f / %.4f = %.4f +- %.4f" % (band, hname, sr, cr, rcs, rcsErr)
 
     # merge means ele/mu values are overwritten by the combined Rcs
     if 'data' in hname: merge = True
@@ -86,7 +74,6 @@ def getRcsCorrHist(tfile, hTTbarFraction, hname, band = "SB", merge = True):
     hUnity.SetBinContent(3,1,1); hUnity.SetBinError(3,1,0) # ele sele
 
     if "data" not in hname:
-        print "Are you sure you want to use the corrected Rcs formula? This is intended to be used with data only!"
         hRcsTTJets = tfile.Get("Rcs_SB_NB0_TT/TTJets")
     else:
         hRcsTTJets = tfile.Get("Rcs_SB_NB0_TT/data_QCDsubtr")
@@ -105,16 +92,8 @@ def getRcsCorrHist(tfile, hTTbarFraction, hname, band = "SB", merge = True):
 
     hRcs.GetYaxis().SetTitle("Rcs")
 
-    #sr = hSR.GetBinContent(1, 2)
-    #cr = hCR.GetBinContent(1, 2)
-    #rcsTT = hRcsTTJets.GetBinContent(1, 2)
 
-    #ttFrac = hTTbarFraction.GetBinContent(1, 2)
 
-    #rcsW = (sr - ttFrac * rcsTT * cr) / (1 - ttFrac) / cr
-    #rcsWErr = hRcs.GetBinError(1, 2)
-    #print "rcs%s(%s) = (sr      - ttFrac *  rcsTT *       cr) / (1 - ttFrac) /        cr" % (band, hname)
-    #print "rcs%s(%s) = (%.4f - %.4f * %.4f * %.4f) / (1 - %.4f) / %.4f = %.4f +- %.4f" % (band, hname, sr, ttFrac, rcsTT, cr, ttFrac, cr, rcsW, rcsWErr)
 
     # Using events with only muons in the sideband excludes QCD contamination
     if merge:
@@ -503,13 +482,11 @@ def makeKappaHists(fileList, samples = []):
                 mbname.SetName("MBname")
                 tfile.cd("Kappa")
                 mbname.Write("",TObject.kOverwrite)
-                print ""
 
             for sample in samples:
 
                 hRcsMB = getRcsHist(tfile, sample, 'MB')
                 hRcsSB = getRcsHist(tfile, sample, 'SB')
-                print ""
 
                 # make kappa
                 hKappa = hRcsMB.Clone(hRcsMB.GetName().replace('Rcs','Kappa'))
@@ -670,8 +647,6 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
         ttbarFraction = ttbarFractionDf.loc[binNameSB, "TTJetsIncl_fraction"]
         ttbarFractionErr = ttbarFractionDf.loc[binNameSB, "TTJetsIncl_fraction_err"]
 
-        #from IPython import embed;embed()
-        #print(binNameMB, sample)
         hTTbarFraction = tfile.Get("CR_SB/" + sample).Clone()
         hTTbarFraction.SetBinContent(1,2,ttbarFraction); hTTbarFraction.SetBinError(1,2,ttbarFractionErr) # mu sele
         hTTbarFraction.SetBinContent(2,2,ttbarFraction); hTTbarFraction.SetBinError(2,2,ttbarFractionErr) # lep sele
@@ -695,6 +670,7 @@ def makeKappaWHists(fileList, samples = [], ttbarFractionCsv = "templateFits_0b_
                 hKappa = hRcsMB.Clone()
                 hKappa.Divide(hRcsSB)
 
+                # When merging the whole run2, this is not used
                 if hKappa.GetBinContent(1, 2) < 1e-5 and False:
                     fname2017 = fname.replace("2018", "2017")
                     tfile2017 = TFile(fname2017, "UPDATE")
@@ -999,8 +975,6 @@ if __name__ == "__main__":
         year = "2017"
     elif "2018" in pattern:
         year = "2018"
-    elif "run2" in pattern:
-        year = "2017"
     else:
         print "This code expects the year to be part of the pattern!"
         print "Please rename the input directory to contain information about the year!"

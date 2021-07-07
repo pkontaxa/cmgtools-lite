@@ -56,8 +56,8 @@ def getSystHist(tfile, hname, syst = "Xsec"):
         return 0
     else:
 
-        upName = hname + '_' + syst +  year + '-Up'
-        dnName = hname + '_' + syst +  year + '-Down'
+        upName = hname + '_' + syst + '-Up'
+        dnName = hname + '_' + syst + '-Down'
 
         hNorm = tfile.Get(hname)
         hUp = tfile.Get(upName)
@@ -73,12 +73,12 @@ def getSystHist(tfile, hname, syst = "Xsec"):
             return (1,2,3)
 
 
-        hSyst = hNorm.Clone(hNorm.GetName() + '_' + syst + year + '_syst')
+        hSyst = hNorm.Clone(hNorm.GetName() + '_' + syst + '_syst')
 
-        hUpVar = hNorm.Clone(hNorm.GetName() + '_' + syst + year + '_upVar')
+        hUpVar = hNorm.Clone(hNorm.GetName() + '_' + syst + '_upVar')
         hUpVar.Add(hUp,-1)
 
-        hDownVar = hNorm.Clone(hNorm.GetName() + '_' + syst + year + '_downVar')
+        hDownVar = hNorm.Clone(hNorm.GetName() + '_' + syst + '_downVar')
         hDownVar.Add(hDown,-1)
 
         # find maximum deviations
@@ -106,10 +106,10 @@ def getSystHist(tfile, hname, syst = "Xsec"):
 
         return (hSyst,hUpVar,hDownVar)
 
+
 def makeSystHists(fileList): #direc,
     if 'signal_' in path:
 	    hnames = ["T5qqqqWW_Scan"] # process name
-
     else:
         hnames = ['EWK', 'DY', 'QCD', 'SingleT', 'TTJets', 'TTV', 'VV', 'WJets']
 
@@ -120,9 +120,6 @@ def makeSystHists(fileList): #direc,
         systNames = [path.split("/")[1].split("_")[1] + "_" + path.split("/")[1].split("_")[2]]
     else:
         systNames = [path.split("/")[1].split("_")[1]]
-
-    #THIS ONLY FOR RUN2
-    #systNames2 = [path.split("/")[1].split("_")[1] + "_" + path.split("/")[1].split("_")[2]]
 
     #bindirs =  ['SR_MB','CR_MB','SR_SB','CR_SB']
     #bindirs =  ['SR_MB','CR_MB','SR_SB','CR_SB','Kappa','Rcs_MB','Rcs_SB']
@@ -152,7 +149,6 @@ def makeSystHists(fileList): #direc,
 
             for hname in hnames:
                 for syst in systNames:
-                    #from IPython import embed;embed()
                     #if "xsec" in syst and "TTJets" in hname and "Kappa" in bindir:
                     #if "Kappa" in bindir and "xsec" in syst:
                     #print(bindir, hname, syst)
@@ -245,7 +241,7 @@ if __name__ == "__main__":
         exit(0)
 
     # find files matching pattern
-    #fList = glob.glob(pattern+"*.root")
+    fList = glob.glob(pattern+"*.root")
 
     for root, dirs, files in os.walk(pattern):
 
@@ -253,7 +249,6 @@ if __name__ == "__main__":
         for direc in dirs:
             #if "signal" in direc:
             if "signal" in direc or "syst" in direc:
-
                 path = pattern +"/"+ direc
                 for ro,di,fi in os.walk(path):
                     for d in di:
@@ -261,17 +256,12 @@ if __name__ == "__main__":
                             fileList=[]
                             path = path +"/"+ d
                             print("doing systs for:",path)
-                            year=""
-                            if "run2" in pattern:
-                                year="_" + direc.split("_")[-1]
-                            #from IPython import embed;embed()
                             for r,d,f in os.walk(path):
                                 for file in f:
                                     if ".root" in file:
                                         fileList.append(path+"/"+file)
 
-                            makeSystHists(fileList) #, year)
-
+                            makeSystHists(fileList)
 
                             if "syst" in direc:
                                 combineOtherBkgs(fileList)
