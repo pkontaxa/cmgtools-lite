@@ -170,12 +170,6 @@ for nj_bin, cutDict, cutDictSR, cutDictCR in zip(njbins, cutDicts, cutDictsCR, c
                 #Expections in the NJ34 SB
                 if nj_bin in ["NJ34", "NJ45"]:
                     nwbins = ["NW0", "NW0i", "NW1i"]
-                elif nj_bin == "NJ67":
-                    if lt_bin in ['LT4i']:# and ht_bin == "HT3i":
-                        #nwbins = ['NW0i']
-                        nwbins = ["NW0", "NW0i", "NW1i"]
-                elif nj_bin == "NJ8i":
-                    nwbins = ["NW0", "NW0i", "NW1i"]
 
                 for nw_bin in nwbins:
                     nw_cut = binsNW[nw_bin][0]

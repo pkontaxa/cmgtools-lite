@@ -1,0 +1,35 @@
+# Nominal
+
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*4624342/susyNgen*lepSF*btagSF; FillColor=ROOT.kBlack
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*4195252/susyNgen*lepSF*btagSF; FillColor=ROOT.kBlack
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*5010916/susyNgen*lepSF*btagSF; FillColor=ROOT.kBlack
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*4994140/susyNgen*lepSF*btagSF; FillColor=ROOT.kBlack
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*6167708/susyNgen*lepSF*btagSF; FillColor=ROOT.kBlack
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*6629725/susyNgen*lepSF*btagSF; FillColor=ROOT.kBlack
+
+# Nominal ISR Scan
+
+T5qqqqWW_Scan_nISRweight+: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*4624342/susyNgen*lepSF*btagSF*nISRweight; FillColor=ROOT.kMagenta
+T5qqqqWW_Scan_nISRweight+: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*4195252/susyNgen*lepSF*btagSF*nISRweight; FillColor=ROOT.kMagenta
+T5qqqqWW_Scan_nISRweight+: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*5010916/susyNgen*lepSF*btagSF*nISRweight; FillColor=ROOT.kMagenta
+T5qqqqWW_Scan_nISRweight+: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*4994140/susyNgen*lepSF*btagSF*nISRweight; FillColor=ROOT.kMagenta
+T5qqqqWW_Scan_nISRweight+: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*6167708/susyNgen*lepSF*btagSF*nISRweight; FillColor=ROOT.kMagenta
+T5qqqqWW_Scan_nISRweight+: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*6629725/susyNgen*lepSF*btagSF*nISRweight; FillColor=ROOT.kMagenta
+
+# Gluino ISR variation up
+
+T5qqqqWW_Scan_nISRweight_up+: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*4624342/susyNgen*lepSF*btagSF*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+T5qqqqWW_Scan_nISRweight_up+: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*4195252/susyNgen*lepSF*btagSF*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+T5qqqqWW_Scan_nISRweight_up+: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*5010916/susyNgen*lepSF*btagSF*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+T5qqqqWW_Scan_nISRweight_up+: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*4994140/susyNgen*lepSF*btagSF*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+T5qqqqWW_Scan_nISRweight_up+: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*6167708/susyNgen*lepSF*btagSF*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+T5qqqqWW_Scan_nISRweight_up+: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*6629725/susyNgen*lepSF*btagSF*nISRweightsyst_up; FillColor=ROOT.kAzure+8
+
+# Gluino ISR variation down
+
+T5qqqqWW_Scan_nISRweight_down+: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*4624342/susyNgen*lepSF*btagSF*nISRweightsyst_down; FillColor=ROOT.kRed
+T5qqqqWW_Scan_nISRweight_down+: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*4195252/susyNgen*lepSF*btagSF*nISRweightsyst_down; FillColor=ROOT.kRed
+T5qqqqWW_Scan_nISRweight_down+: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*5010916/susyNgen*lepSF*btagSF*nISRweightsyst_down; FillColor=ROOT.kRed
+T5qqqqWW_Scan_nISRweight_down+: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*4994140/susyNgen*lepSF*btagSF*nISRweightsyst_down; FillColor=ROOT.kRed
+T5qqqqWW_Scan_nISRweight_down+: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*6167708/susyNgen*lepSF*btagSF*nISRweightsyst_down; FillColor=ROOT.kRed
+T5qqqqWW_Scan_nISRweight_down+: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*6629725/susyNgen*lepSF*btagSF*nISRweightsyst_down; FillColor=ROOT.kRed
