@@ -1,29 +1,33 @@
 # Nominal
 
-T1tttt_Scan: SMS_T1tttt_TuneCP2_1 :susyXsec*5412491/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
-T1tttt_Scan: SMS_T1tttt_TuneCP2_2 :susyXsec*8158264/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
-T1tttt_Scan: SMS_T1tttt_TuneCP2_3 :susyXsec*5901049/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
-T1tttt_Scan: SMS_T1tttt_TuneCP2_4 :susyXsec*8330170/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
-T1tttt_Scan: SMS_T1tttt_TuneCP2_5 :susyXsec*9964202/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
-T1tttt_Scan: SMS_T1tttt_TuneCP2_6 :susyXsec*11432061/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF;
-T1tttt_Scan: SMS_T1tttt_TuneCP2_7 :susyXsec*2662762/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF; 
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*6209940/susyNgen*btagSF*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*10180285/susyNgen*btagSF*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*8079473/susyNgen*btagSF*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*11781067/susyNgen*btagSF*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*13329865/susyNgen*btagSF*lepSF*HEM_MC_SF;
+T5qqqqWW_Scan+: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*5041374/susyNgen*btagSF*lepSF*HEM_MC_SF;
+
+T5qqqqWW_Scan_ISR: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*6209940/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF;
+T5qqqqWW_Scan_ISR: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*10180285/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF;
+T5qqqqWW_Scan_ISR: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*8079473/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF;
+T5qqqqWW_Scan_ISR: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*11781067/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF;
+T5qqqqWW_Scan_ISR: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*13329865/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF;
+T5qqqqWW_Scan_ISR: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*5041374/susyNgen*btagSF*lepSF*nISRweight*HEM_MC_SF;
 
 # Gluino ISR variation up
 
-T1tttt_Scan_ISR-Up: SMS_T1tttt_TuneCP2_1 :susyXsec*5412491/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF; 
-T1tttt_Scan_ISR-Up: SMS_T1tttt_TuneCP2_2 :susyXsec*8158264/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF; 
-T1tttt_Scan_ISR-Up: SMS_T1tttt_TuneCP2_3 :susyXsec*5901049/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF; 
-T1tttt_Scan_ISR-Up: SMS_T1tttt_TuneCP2_4 :susyXsec*8330170/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF; 
-T1tttt_Scan_ISR-Up: SMS_T1tttt_TuneCP2_5 :susyXsec*9964202/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF; 
-T1tttt_Scan_ISR-Up: SMS_T1tttt_TuneCP2_6 :susyXsec*11432061/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF;
-T1tttt_Scan_ISR-Up: SMS_T1tttt_TuneCP2_7 :susyXsec*2662762/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF; 
+T5qqqqWW_Scan_ISR-Up: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*6209940/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF;
+T5qqqqWW_Scan_ISR-Up: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*10180285/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF;
+T5qqqqWW_Scan_ISR-Up: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*8079473/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF;
+T5qqqqWW_Scan_ISR-Up: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*11781067/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF;
+T5qqqqWW_Scan_ISR-Up: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*13329865/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF;
+T5qqqqWW_Scan_ISR-Up: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*5041374/susyNgen*btagSF*lepSF*nISRweightsyst_up*HEM_MC_SF;
 
 # Gluino ISR variation down
 
-T1tttt_Scan_ISR-Down: SMS_T1tttt_TuneCP2_1 :susyXsec*5412491/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF; 
-T1tttt_Scan_ISR-Down: SMS_T1tttt_TuneCP2_2 :susyXsec*8158264/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF; 
-T1tttt_Scan_ISR-Down: SMS_T1tttt_TuneCP2_3 :susyXsec*5901049/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF; 
-T1tttt_Scan_ISR-Down: SMS_T1tttt_TuneCP2_4 :susyXsec*8330170/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF; 
-T1tttt_Scan_ISR-Down: SMS_T1tttt_TuneCP2_5 :susyXsec*9964202/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF; 
-T1tttt_Scan_ISR-Down: SMS_T1tttt_TuneCP2_6 :susyXsec*11432061/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF;
-T1tttt_Scan_ISR-Down: SMS_T1tttt_TuneCP2_7 :susyXsec*2662762/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF; 
+T5qqqqWW_Scan_ISR-Down: SMS_T5qqqqVV_TuneCP2_1 :susyXsec*6209940/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF;
+T5qqqqWW_Scan_ISR-Down: SMS_T5qqqqVV_TuneCP2_2 :susyXsec*10180285/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF;
+T5qqqqWW_Scan_ISR-Down: SMS_T5qqqqVV_TuneCP2_3 :susyXsec*8079473/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF;
+T5qqqqWW_Scan_ISR-Down: SMS_T5qqqqVV_TuneCP2_4 :susyXsec*11781067/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF;
+T5qqqqWW_Scan_ISR-Down: SMS_T5qqqqVV_TuneCP2_5 :susyXsec*13329865/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF;
+T5qqqqWW_Scan_ISR-Down: SMS_T5qqqqVV_TuneCP2_6 :susyXsec*5041374/susyNgen*btagSF*lepSF*nISRweightsyst_down*HEM_MC_SF;
